@@ -8,7 +8,7 @@
     "test": "bun run --filter '*' test",
     "lint": "biome check .",
     "format": "biome check --write .",
-    "conformance": "bun packages/domain/scripts/write-scenario.ts tmp/conformance && cd tools/conformance && go run . ../../tmp/conformance",
+    "conformance": "bun packages/domain/scripts/write-scenario.ts tmp/conformance && bun apps/server/scripts/write-scenario.ts tmp/conformance-server && cd tools/conformance && go run . ../../tmp/conformance && go run . ../../tmp/conformance-server",
     "golden": "cd tools/conformance && go run ./golden ../../packages/domain/test/fixtures/go"
   },
   "devDependencies": {
