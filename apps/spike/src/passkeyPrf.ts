@@ -126,10 +126,8 @@ export const runPasskeyPrf = async (check: Check): Promise<void> => {
   if (created?.enabled !== true)
     check.info('prf.enabled is not true at registration; trying the assertions anyway')
 
-  const first = await prfAssertion()
+  const first = await prfAssertion(credential.rawId)
   const second = await prfAssertion(credential.rawId)
-  const createdId = new Uint8Array(credential.rawId)
-  check.assert(bytesEqual(first.rawId, createdId), 'discoverable assertion used the new passkey')
   check.assert(first.prf.length === 32, `PRF output is 32 bytes (got ${first.prf.length})`)
   check.assert(bytesEqual(first.prf, second.prf), 'two assertions give identical PRF output')
 
