@@ -7,6 +7,7 @@ import { type ChangeLine, reviewCeremony, signCeremony } from '../../lib/ceremon
 import { runEffect } from '../../lib/effect.ts'
 import { deriveMasterSeed, masterKeyLabel } from '../../lib/masterKey.ts'
 import { Link, navigate, searchParam } from '../../lib/router.tsx'
+import { rememberTargetsVersion, seenTargetsVersion } from '../../lib/seenVersions.ts'
 import { trezorClient } from '../../lib/trezor.ts'
 import { useAction, useAsync } from '../../lib/useAsync.ts'
 import { ChangeIcon, TrezorIcon } from '../../ui/icons.tsx'
@@ -134,8 +135,11 @@ export const CeremonyScreen = ({ id }: { readonly id: string }) => {
     ])
     const review =
       ceremony.status === 'awaiting-owner'
-        ? await Effect.runPromise(Effect.result(reviewCeremony(ceremony, team.members)))
+        ? await Effect.runPromise(
+            Effect.result(reviewCeremony(ceremony, team.members, seenTargetsVersion(company.slug))),
+          )
         : undefined
+    if (review?._tag === 'Success') rememberTargetsVersion(company.slug, review.success.baseVersion)
     return { ceremony, review }
   }, [id])
   useEffect(() => {
@@ -159,6 +163,9 @@ export const CeremonyScreen = ({ id }: { readonly id: string }) => {
       )
       setResult(summary)
       setSignedLines(review.success.lines)
+      const signedTargets = review.success.checks.find((check) => check.role === 'targets')
+      if (summary.status === 'applied' && signedTargets)
+        rememberTargetsVersion(company.slug, signedTargets.version)
     } finally {
       wipe(seed)
     }

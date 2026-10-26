@@ -9,6 +9,7 @@ import {
   type Member,
   type Operation,
   type OwnerSignature,
+  type RepoFilesText,
   rebuild,
   repoFilesFromText,
 } from '@keryx-kit/api'
@@ -17,6 +18,7 @@ import {
   decodeItem,
   fromBase64url,
   parseRepoFiles,
+  type Repo,
   type RepoState,
   roleMetadata,
   seedSigner,
@@ -68,6 +70,8 @@ export interface CeremonyReview {
   readonly lines: ReadonlyArray<ChangeLine>
   readonly checks: ReadonlyArray<ByteCheck>
   readonly masterKeyid: string
+  /** The published `targets.json` version the change builds on. */
+  readonly baseVersion: number
   readonly state: RepoState
 }
 
@@ -238,6 +242,7 @@ const describeChange = (
       lines.length === 0
         ? `Renew targets.json until ${formatDate(a.expires)}`
         : `targets.json becomes version ${a.version}, valid until ${formatDate(a.expires)}`,
+    detail: `Built on the published targets.json version ${b.version}.`,
   })
   return lines
 }
@@ -254,20 +259,35 @@ const decodeBase64url = (text: string) =>
     catch: () => refused('The server sent signing bytes that are not base64url.'),
   })
 
+/** The published repo a ceremony or author task builds on, verified as a client would. */
+export const verifiedBase = (base: RepoFilesText): Effect.Effect<Repo, string> =>
+  Effect.gen(function* () {
+    const repo = yield* parseRepoFiles(repoFilesFromText(base)).pipe(
+      Effect.mapError((e) => `The published repo does not load: ${e.message}`),
+    )
+    const [issue] = validateRepo(repo)
+    if (issue) return yield* Effect.fail(`The published repo does not verify: ${issue.message}`)
+    return repo
+  })
+
 /**
  * Rebuilds the change and refuses on any difference with what the server sent. The
  * review carries the browser's own state; only that state is ever signed.
+ * `seenTargetsVersion` is the newest `targets.json` this browser saw for the company:
+ * a base older than that is a rollback.
  */
 export const reviewCeremony = (
   ceremony: CeremonyData,
   members: ReadonlyArray<MemberData>,
+  seenTargetsVersion = 0,
 ): Effect.Effect<CeremonyReview, CeremonyRefused> =>
   Effect.gen(function* () {
-    const base = yield* parseRepoFiles(repoFilesFromText(ceremony.base)).pipe(
-      Effect.mapError((e) => refused(`The published repo does not load: ${e.message}`)),
-    )
-    const [issue] = validateRepo(base)
-    if (issue) return yield* refused(`The published repo does not verify: ${issue.message}`)
+    const base = yield* verifiedBase(ceremony.base).pipe(Effect.mapError(refused))
+    const baseVersion = base.targets.signed.version
+    if (baseVersion < seenTargetsVersion)
+      return yield* refused(
+        `The server built this change on targets.json version ${baseVersion}, older than version ${seenTargetsVersion} this browser already saw. Nothing was signed.`,
+      )
     const masterKeyid = publishedMasterKeyid(base)
     if (masterKeyid === undefined)
       return yield* refused('The published root.json has no single master key.')
@@ -301,7 +321,7 @@ export const reviewCeremony = (
     }
 
     const names = new Map(members.map((member) => [member.keyid, member.name]))
-    return { lines: describeChange(base, state, names), checks, masterKeyid, state }
+    return { lines: describeChange(base, state, names), checks, masterKeyid, baseVersion, state }
   })
 
 /**

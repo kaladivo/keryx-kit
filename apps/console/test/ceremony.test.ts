@@ -78,6 +78,24 @@ describe('ceremony rebuild and compare', () => {
   })
 })
 
+describe('targets.json rollback', () => {
+  it('shows the base version and refuses a base older than one this browser saw', () => {
+    const ceremony = honestCeremony()
+    const seen = Effect.runSync(Effect.result(reviewCeremony(ceremony, members, 2)))
+    expect(seen._tag).toBe('Success')
+    if (seen._tag === 'Success') {
+      expect(seen.success.baseVersion).toBe(2)
+      expect(seen.success.lines.at(-1)?.detail).toBe(
+        'Built on the published targets.json version 2.',
+      )
+    }
+    const rolledBack = Effect.runSync(Effect.result(reviewCeremony(ceremony, members, 3)))
+    expect(rolledBack._tag).toBe('Failure')
+    if (rolledBack._tag === 'Failure')
+      expect(rolledBack.failure.reason).toMatch(/version 2, older than version 3/)
+  })
+})
+
 describe('master keyid check', () => {
   it('signs with the published master key and the signature attaches', () => {
     const ceremony = honestCeremony()
