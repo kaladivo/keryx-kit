@@ -37,7 +37,7 @@ const prfAssertion = async (credentialId?: ArrayBuffer) => {
   if (!(assertion instanceof PublicKeyCredential)) throw new Error('no assertion')
   const extensions = assertion.getClientExtensionResults()
   const prf = asBytes(extensions.prf?.results?.first)
-  if (!prf) throw new Error(`assertion returned no PRF output: ${describe(extensions)}`)
+  if (!prf) throw new Error(`assertion returned no PRF output: ${summarize(extensions)}`)
   return { rawId: new Uint8Array(assertion.rawId), prf }
 }
 
@@ -47,13 +47,13 @@ const prfAssertion = async (credentialId?: ArrayBuffer) => {
  */
 const asBytes = (value: unknown): Uint8Array<ArrayBuffer> | undefined => {
   if (ArrayBuffer.isView(value))
-    return new Uint8Array(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength))
+    return Uint8Array.from(new Uint8Array(value.buffer, value.byteOffset, value.byteLength))
   if (Object.prototype.toString.call(value) === '[object ArrayBuffer]')
     return new Uint8Array(value as ArrayBuffer)
   return undefined
 }
 
-const describe = (extensions: AuthenticationExtensionsClientOutputs): string =>
+const summarize = (extensions: AuthenticationExtensionsClientOutputs): string =>
   JSON.stringify(extensions, (_, v) => {
     const bytes = asBytes(v)
     return bytes ? `<${bytes.length} bytes>` : v
