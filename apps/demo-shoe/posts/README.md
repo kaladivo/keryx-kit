@@ -19,12 +19,13 @@ Each file has front matter followed by the Markdown body. In the post editor:
 2. Title: the `title` value, without the quotes.
 3. Post id: the `id` value. The editor prefills a slug from the title; overwrite it.
 4. Body: everything below the closing `---`.
-5. Preview image: upload the file named in `image` (relative to this folder). The editor resizes it
-   to 1200 px and embeds it.
+5. Preview image: upload the file named in `image` (relative to this folder). The editor embeds it
+   as a JPEG, shrinking anything larger than 1200 px.
 6. Tags: the `tags` values, comma separated.
 7. Language: English.
 
-Every post is under 60 KB including its image, far below the 1 MB limit.
+The images are 1080 × 1080 because the subscriber app crops preview images to a square. Every
+post is under 120 KB including its base64 image, far below the 1 MB limit.
 
 ## Order
 

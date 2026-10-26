@@ -13,6 +13,16 @@ interface Post {
   readonly body: string
 }
 
+const jpegSize = (bytes: Buffer) => {
+  const isFrameHeader = (marker: number) => marker >= 0xc0 && marker <= 0xc3
+  for (let at = 2; at < bytes.length; at += 2 + bytes.readUInt16BE(at + 2)) {
+    if (isFrameHeader(bytes[at + 1] ?? 0)) {
+      return { height: bytes.readUInt16BE(at + 5), width: bytes.readUInt16BE(at + 7) }
+    }
+  }
+  throw new Error('no JPEG frame header')
+}
+
 const unquote = (value: string) => value.replace(/^"(.*)"$/, '$1')
 
 const parsePost = (file: string): Post => {
@@ -59,6 +69,11 @@ describe('posts', () => {
     expect(imageBytes).toBeLessThanOrEqual(MAX_IMAGE_BYTES)
     const base64ImageBytes = Math.ceil(imageBytes / 3) * 4
     expect(base64ImageBytes + Buffer.byteLength(body)).toBeLessThan(MAX_POST_BYTES)
+  })
+
+  it.each(posts)('$file has a square 1080 px image, as the app crops to 1:1', ({ fields }) => {
+    const image = readFileSync(new URL(fields.image ?? '', POSTS_DIR))
+    expect(jpegSize(image)).toEqual({ width: 1080, height: 1080 })
   })
 
   it.each(posts)('$file has no HTML, forms or scripts', ({ body }) => {
