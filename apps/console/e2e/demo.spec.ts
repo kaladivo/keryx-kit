@@ -160,6 +160,13 @@ test('owner logs in again with the Trezor (§5.3)', async () => {
 
 let janaFingerprint = ''
 
+/** The author confirms once that the join origin is their company's website, which pins it. */
+const confirmWebsite = async (page: Page) => {
+  await expect(page.getByText("Is demo-shop.example your company's website?")).toBeVisible()
+  await page.getByRole('button', { name: 'Yes, demo-shop.example is ours' }).click()
+  await expect(page.getByText("Is demo-shop.example your company's website?")).toHaveCount(0)
+}
+
 /** Tries the stored wrapped key with HKDF over 32 zero bytes, the key a wiped PRF buffer gives. */
 const opensWithZeroPrf = (page: Page) =>
   page.evaluate(async () => {
@@ -280,7 +287,11 @@ test('owner removes the first author after the second re-signs (B5)', async () =
   await expect(owner.getByText(/1 published post is signed only by this author/)).toBeVisible()
 
   await petr.goto('/author')
+  await confirmWebsite(petr)
   await expect(petr.getByText(/Re-sign 1 post in offers/)).toBeVisible()
+  await expect(
+    petr.getByText("Re-signing checks your company's keys at demo-shop.example"),
+  ).toBeVisible()
   await petr.getByRole('button', { name: 'Sign now' }).click()
   await expect(petr.getByText('Signed 2 pending tasks')).toBeVisible()
   snapshot('resigned')
@@ -300,6 +311,8 @@ test('owner removes the first author after the second re-signs (B5)', async () =
 
 test('owner signs a removal first; it waits for the re-sign, which needs the company domain (B5)', async () => {
   await register(eva, await invite('Eva, support'), 'Eva Malá')
+  await eva.goto('/author')
+  await confirmWebsite(eva)
   await owner.goto('/owner/channels/offers')
   await owner.getByLabel('Add an author').selectOption({ label: 'Eva Malá (author-3)' })
   await owner.getByRole('button', { name: 'Add with Trezor' }).click()

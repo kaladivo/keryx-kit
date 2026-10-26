@@ -17,11 +17,14 @@ import {
   signatureFor,
   signingBytes,
   type TargetsMetadata,
+  validateRootChain,
   validateTargets,
   verifyItemSignatures,
 } from '@keryx-kit/domain'
 import { Data, Effect } from 'effect'
 import { verifiedBase } from './ceremony.ts'
+import type { CompanyPin } from './companyPin.ts'
+import { publishedMasterKeyid } from './masterKey.ts'
 
 export class TaskRefused extends Data.TaggedError('TaskRefused')<{ readonly reason: string }> {}
 
@@ -91,32 +94,76 @@ const signAuthorsMetadata = (
   })
 
 /**
- * What `ResignItems` is checked against. The task carries no repo and the repo origin
- * belongs to the service, so `targets.json` only counts once it verifies against the root
- * chain from the company's own domain (`/.well-known/keryx/`), which the service cannot
- * change. `roots` is undefined when the domain did not serve it.
+ * The pin for a confirmed company website: its root chain must verify and name one
+ * master key. A string says why it cannot be pinned.
+ */
+export const pinFromAnchor = (
+  joinOrigin: string,
+  roots: ReadonlyArray<RootMetadata> | undefined,
+  now: Date,
+): CompanyPin | string => {
+  const host = new URL(joinOrigin).host
+  if (roots === undefined)
+    return `${host} does not serve your company's keys yet (/.well-known/keryx/root.json). Ask whoever runs the website to upload the join kit, then confirm again.`
+  const [issue] = validateRootChain(roots, now)
+  if (issue) return `The keys ${host} serves do not verify (${issue.message}).`
+  const masterKeyid = publishedMasterKeyid({ roots })
+  if (masterKeyid === undefined) return `The keys ${host} serves name no single master key.`
+  return { joinOrigin, masterKeyid }
+}
+
+/**
+ * What `ResignItems` is checked against. The task carries no repo and the service runs
+ * the repo origin and reports the company's website, so `targets.json` only counts once
+ * it verifies against the root chain from the website the author confirmed (`pin`), whose
+ * master key must still be the pinned one.
  */
 export interface PublishedAuthors {
+  /** The company website as the server reports it now. */
+  readonly joinOrigin: string
+  readonly pin: CompanyPin | undefined
+  /** From the pinned website; undefined when it did not serve them. */
   readonly roots: ReadonlyArray<RootMetadata> | undefined
   readonly targets: TargetsMetadata | undefined
+  /** The newest `targets.json` version this browser has seen for the company. */
+  readonly targetsFloor: number
+  readonly now: Date
 }
 
 const trustedTargets = (
   published: PublishedAuthors | undefined,
 ): Effect.Effect<TargetsMetadata, TaskRefused> =>
   Effect.gen(function* () {
-    if (published?.roots === undefined)
+    if (published?.pin === undefined)
       return yield* refused(
-        "Re-signing needs your company's domain to be live: this browser could not load root.json from its /.well-known/keryx/. Nothing was signed.",
+        "Confirm your company's website in the console first. Re-signing checks its keys. Nothing was signed.",
       )
-    if (published.targets === undefined)
+    const { pin, roots, targets } = published
+    const pinnedHost = new URL(pin.joinOrigin).host
+    if (published.joinOrigin !== pin.joinOrigin)
+      return yield* refused(
+        `The server now names ${new URL(published.joinOrigin).host} as your company's website, but you confirmed ${pinnedHost}. Nothing was signed.`,
+      )
+    if (roots === undefined)
+      return yield* refused(
+        `Re-signing needs your company's domain to be live: this browser could not load root.json from ${pinnedHost}/.well-known/keryx/. Nothing was signed.`,
+      )
+    if (publishedMasterKeyid({ roots }) !== pin.masterKeyid)
+      return yield* refused(
+        `${pinnedHost} now serves a different master key than when you confirmed it. Nothing was signed.`,
+      )
+    if (targets === undefined)
       return yield* refused('Cannot load the published targets.json. Nothing was signed.')
-    const [issue] = validateTargets({ roots: published.roots, targets: published.targets })
+    const [issue] = validateTargets({ roots, targets }, published.now)
     if (issue)
       return yield* refused(
         `The published targets.json does not verify against your company's root.json (${issue.message}). Nothing was signed.`,
       )
-    return published.targets
+    if (targets.signed.version < published.targetsFloor)
+      return yield* refused(
+        `The published targets.json is version ${targets.signed.version}, older than version ${published.targetsFloor} this browser already saw. Nothing was signed.`,
+      )
+    return targets
   })
 
 /**

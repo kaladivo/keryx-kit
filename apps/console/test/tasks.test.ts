@@ -16,11 +16,24 @@ import {
 import { Effect } from 'effect'
 import { describe, expect, it } from 'vitest'
 import { signTasks } from '../src/lib/authorSigning.ts'
-import { completeTask } from '../src/lib/tasks.ts'
+import { completeTask, type PublishedAuthors, pinFromAnchor } from '../src/lib/tasks.ts'
 import { keyidOfName, publicOf, publishedRepo, seedOf } from './repo.ts'
 
 const repo = publishedRepo()
 const jana = seedSigner(seedOf('jana'))
+const WEBSITE = 'https://acme.test'
+const NOW = new Date('2026-10-27T10:00:00Z')
+const confirmed = { joinOrigin: WEBSITE, masterKeyid: keyidOfName('master') }
+/** The company website the author confirmed serves `repo`'s roots. */
+const published = (change: Partial<PublishedAuthors> = {}): PublishedAuthors => ({
+  joinOrigin: WEBSITE,
+  pin: confirmed,
+  roots: repo.roots,
+  targets: repo.targets,
+  targetsFloor: 0,
+  now: NOW,
+  ...change,
+})
 const renew: Operation = {
   _tag: 'renewAuthors',
   now: '2026-10-27T10:00:00.000Z',
@@ -70,9 +83,7 @@ describe('author tasks', () => {
       ceremonyId: 'c1',
       items: [forged],
     }
-    const result = Effect.runSync(
-      Effect.result(completeTask(task, jana, { roots: repo.roots, targets: repo.targets })),
-    )
+    const result = Effect.runSync(Effect.result(completeTask(task, jana, published())))
     expect(result._tag).toBe('Failure')
   })
 
@@ -84,10 +95,7 @@ describe('author tasks', () => {
       ceremonyId: 'c1',
       items: [],
     }
-    const outcomes = await signTasks([items, authorsTask()], jana, {
-      roots: repo.roots,
-      targets: repo.targets,
-    })
+    const outcomes = await signTasks([items, authorsTask()], jana, published())
     expect(outcomes.map((o) => o.task.id)).toEqual(['t-items', 't-authors'])
   })
 })
@@ -134,55 +142,71 @@ const resign = (item: Item): AuthorTask => ({
 })
 
 const petr = seedSigner(seedOf('petr'))
-const resignAs = (
-  item: Item,
-  published: { roots?: RepoState['roots']; targets: TargetsMetadata },
-) =>
-  Effect.runSync(
-    Effect.result(
-      completeTask(resign(item), petr, { roots: published.roots, targets: published.targets }),
-    ),
-  )
+const resignAs = (item: Item, change: Partial<PublishedAuthors>) =>
+  Effect.runSync(Effect.result(completeTask(resign(item), petr, published(change))))
 
-describe('ResignItems against the company domain (trust anchor)', () => {
-  it('re-signs a post by a listed author when targets.json verifies against the anchor', () => {
-    const result = resignAs(signedBy('jana'), {
-      roots: repo.roots,
-      targets: targetsWith('petr', 'master'),
-    })
-    expect(result._tag).toBe('Success')
+const refusal = (result: ReturnType<typeof resignAs>) =>
+  result._tag === 'Failure' ? result.failure.reason : 'signed'
+
+describe('ResignItems against the confirmed company website (trust anchor)', () => {
+  const withPetr = { targets: targetsWith('petr', 'master') }
+
+  it('re-signs a post by a listed author when targets.json verifies against the pinned anchor', () => {
+    expect(resignAs(signedBy('jana'), withPetr)._tag).toBe('Success')
   })
 
   it('refuses a repo origin that adds its own author key without the master signature', () => {
     // The service adds Mallory and Petr; Mallory signed the post it wants Petr to co-sign.
     const lying = (signer?: string) => {
-      const withPetr = Effect.runSync(applyOperation(repo, assignOp('petr')))
-      const state = Effect.runSync(applyOperation(withPetr, assignOp('mallory')))
+      const both = Effect.runSync(applyOperation(repo, assignOp('petr')))
+      const state = Effect.runSync(applyOperation(both, assignOp('mallory')))
       const signatures = signer
         ? [Effect.runSync(signatureFor(state.targets, seedSigner(seedOf(signer))))]
         : []
       return { ...state.targets, signatures }
     }
-    for (const targets of [lying(), lying('mallory'), lying('ops')]) {
-      const result = resignAs(signedBy('mallory'), { roots: repo.roots, targets })
-      expect(result._tag).toBe('Failure')
-      if (result._tag === 'Failure')
-        expect(result.failure.reason).toMatch(/does not verify against your company's root\.json/)
-    }
+    for (const targets of [lying(), lying('mallory'), lying('ops')])
+      expect(refusal(resignAs(signedBy('mallory'), { targets }))).toMatch(
+        /does not verify against your company's root\.json/,
+      )
   })
 
-  it('refuses when the company domain does not serve the anchor', () => {
-    const result = resignAs(signedBy('jana'), { targets: targetsWith('petr', 'master') })
-    expect(result._tag).toBe('Failure')
-    if (result._tag === 'Failure')
-      expect(result.failure.reason).toMatch(/needs your company's domain to be live/)
+  it('refuses when the server reports another website than the one the author confirmed', () => {
+    const result = resignAs(signedBy('jana'), { ...withPetr, joinOrigin: 'https://evil.example' })
+    expect(refusal(result)).toMatch(/names evil\.example .* you confirmed acme\.test/)
+  })
+
+  it('refuses when the pinned website now serves another master key', () => {
+    const pin = { ...confirmed, masterKeyid: keyidOfName('earlier-master') }
+    expect(refusal(resignAs(signedBy('jana'), { ...withPetr, pin }))).toMatch(
+      /different master key/,
+    )
+  })
+
+  it('refuses without a confirmed website, without its anchor, and below the version floor', () => {
+    expect(refusal(resignAs(signedBy('jana'), { ...withPetr, pin: undefined }))).toMatch(
+      /Confirm your company's website/,
+    )
+    expect(refusal(resignAs(signedBy('jana'), { ...withPetr, roots: undefined }))).toMatch(
+      /needs your company's domain to be live/,
+    )
+    const floor = withPetr.targets.signed.version + 1
+    expect(refusal(resignAs(signedBy('jana'), { ...withPetr, targetsFloor: floor }))).toMatch(
+      /older than version/,
+    )
+  })
+
+  it('pins a confirmed website with the master key its root chain names', () => {
+    expect(pinFromAnchor(WEBSITE, repo.roots, NOW)).toEqual(confirmed)
+    expect(pinFromAnchor(WEBSITE, undefined, NOW)).toMatch(/does not serve your company's keys/)
+    expect(pinFromAnchor(WEBSITE, [], NOW)).toMatch(/do not verify/)
   })
 
   it('does not sign the author list of a removal whose posts were not re-signed', async () => {
     const outcomes = await signTasks(
       [{ ...resign(signedBy('jana')), ceremonyId: 'c-removal' }, authorsTaskFor('c-removal')],
       jana,
-      { roots: undefined, targets: repo.targets },
+      published({ roots: undefined }),
     )
     expect(outcomes.map((o) => o.completion)).toEqual([undefined, undefined])
     expect(outcomes[1]?.error).toMatch(/posts of this removal were not re-signed/)

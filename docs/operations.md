@@ -143,6 +143,10 @@ authors' browsers get `https://demo-shop.example/.well-known/keryx/` from the se
 anchor directory, as if the company had uploaded the join kit, because re-signing checks
 `targets.json` against it.
 
+The console CSP allows any `https:` origin in `connect-src`, so the console can read a
+company's root chain from its website. That is acceptable only because `script-src 'self'`
+holds: no script but the console's own bundle runs to send data anywhere.
+
 After every repo change the run copies the repo the server wrote to
 `tmp/e2e/repo-states`. The last test verifies all of them with the Go SDK
 (`tools/conformance`) and with the subscriber app's verifier

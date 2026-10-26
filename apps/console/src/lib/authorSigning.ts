@@ -10,8 +10,10 @@ import { Effect, Schema } from 'effect'
 import { ApiError, call } from './api.ts'
 import { AuthorKeyError, unwrapAuthorKey, wrappedFromWire } from './authorKey.ts'
 import { wipe } from './bytes.ts'
+import { companyPin } from './companyPin.ts'
 import { runEffect } from './effect.ts'
 import { type PrfAssertion, PrfUnsupported, prfAssertion } from './passkey.ts'
+import { seenTargetsVersion } from './seenVersions.ts'
 import { completeTask, describeTask, type PublishedAuthors } from './tasks.ts'
 
 type MeData = typeof Me.Type
@@ -68,13 +70,17 @@ const publishedTargets = (repoBase: string): Promise<TargetsMetadata | undefined
     .then(Schema.decodeUnknownSync(TargetsMetadata))
     .catch(() => undefined)
 
+/** Root versions a company plausibly reaches; more is refused rather than fetched. */
+const MAX_ROOT_VERSION = 32
+
 /** Every root the company's domain serves, `1.root.json` up to the current `root.json`. */
-const anchorRoots = async (
+export const anchorRoots = async (
   joinOrigin: string,
 ): Promise<ReadonlyArray<RootMetadata> | undefined> => {
   const file = (name: string) => fetchJson(new URL(`/.well-known/keryx/${name}`, joinOrigin))
   try {
     const current = decodeRoot(await file('root.json'))
+    if (current.signed.version > MAX_ROOT_VERSION) return undefined
     const versions = Array.from({ length: current.signed.version - 1 }, (_, i) => i + 1)
     const older = await Promise.all(
       versions.map(async (v) => decodeRoot(await file(`${v}.root.json`))),
@@ -95,14 +101,22 @@ export interface TaskOutcome {
 /** What signing pending tasks needs from the network, fetched before the key is opened. */
 export const prepareTasks = async (
   tasks: ReadonlyArray<AuthorTask>,
-  company: Pick<typeof Company.Type, 'joinOrigin' | 'repoBase'>,
+  company: Pick<typeof Company.Type, 'slug' | 'joinOrigin' | 'repoBase'>,
 ): Promise<PublishedAuthors | undefined> => {
   if (!tasks.some((task) => task._tag === 'ResignItems')) return undefined
+  const pin = companyPin(company.slug)
   const [roots, targets] = await Promise.all([
-    anchorRoots(company.joinOrigin),
+    pin ? anchorRoots(pin.joinOrigin) : undefined,
     publishedTargets(company.repoBase),
   ])
-  return { roots, targets }
+  return {
+    joinOrigin: company.joinOrigin,
+    pin,
+    roots,
+    targets,
+    targetsFloor: seenTargetsVersion(company.slug),
+    now: new Date(),
+  }
 }
 
 /**

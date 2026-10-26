@@ -135,13 +135,17 @@ Remove:
 2. Remaining authors now get tasks: `ResignItems` (sign `itemSigningBytes(item)` of each
    item, complete with `{ _tag: 'ItemSignatures', signatures: [{ itemId, signature }] }`)
    and, if needed, `SignAuthorsMetadata` with `reason: 'author-removal'`.
-   `ResignItems` carries no `base`. The console loads the published `targets.json` from
-   `company.repoBase` and the root chain from `<company.joinOrigin>/.well-known/keryx/`
-   (`root.json` and every `N.root.json`), and uses the author keys only when
-   `targets.json` verifies against those roots (`validateTargets`), because the service
-   controls the repo origin but not the company's domain. Without a live domain it refuses
-   the task, and the `SignAuthorsMetadata` of the same removal waits with it. The console
-   CSP allows `https:` in `connect-src` for this.
+   `ResignItems` carries no `base`, and the server reports both the repo and
+   `company.joinOrigin`. So, like a subscriber at pairing, the author confirms once per
+   browser that the join origin is their company's website; the console pins that origin
+   and the master keyid of the root chain it serves. For each `ResignItems` it loads the
+   root chain from the pinned origin's `/.well-known/keryx/` (`root.json` and every
+   `N.root.json`) and the published `targets.json` from `company.repoBase`, and uses the
+   author keys only when the server's `joinOrigin` still equals the pin, the master keyid
+   is unchanged, `targets.json` verifies against those roots and has not expired
+   (`validateTargets`), and its version is not below one this browser saw. Otherwise it
+   refuses the task, and the `SignAuthorsMetadata` of the same removal waits with it. The
+   console CSP allows `https:` in `connect-src` for this.
    `ceremonies.get` shows the impact shrinking as they do.
 3. The owner signs whenever ready. Items still signed only by the removed author are
    unpublished with the revocation. If the authors metadata still needs its re-sign, the

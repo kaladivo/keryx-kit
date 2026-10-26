@@ -2,14 +2,16 @@ import type { AuthorTask, Company, Me } from '@keryx-kit/api'
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react'
 import { call, isUnauthorized } from '../../lib/api.ts'
 import {
+  anchorRoots,
   prepareTasks,
   signTasks,
   submitTasks,
   type TaskOutcome,
   withAuthorKey,
 } from '../../lib/authorSigning.ts'
+import { type CompanyPin, companyPin, pinCompany } from '../../lib/companyPin.ts'
 import { navigate } from '../../lib/router.tsx'
-import { describeTask } from '../../lib/tasks.ts'
+import { describeTask, pinFromAnchor } from '../../lib/tasks.ts'
 import { useAction, useAsync } from '../../lib/useAsync.ts'
 import { PasskeyIcon } from '../../ui/icons.tsx'
 import { Button, Loading, Notice } from '../../ui/kit.tsx'
@@ -83,9 +85,55 @@ const TaskOutcomes = ({
   )
 }
 
+/**
+ * Asks once per browser whether the website the server names is the company's, then pins
+ * it with the master key it serves (like a subscriber confirming the domain at pairing).
+ */
+const CompanyWebsite = ({
+  pin,
+  onPinned,
+}: {
+  readonly pin: CompanyPin | undefined
+  readonly onPinned: (pin: CompanyPin) => void
+}) => {
+  const { company } = useAuthor()
+  const host = new URL(company.joinOrigin).host
+  const confirm = useAction(async () => {
+    const result = pinFromAnchor(
+      company.joinOrigin,
+      await anchorRoots(company.joinOrigin),
+      new Date(),
+    )
+    if (typeof result === 'string') throw new Error(result)
+    pinCompany(company.slug, result)
+    onPinned(result)
+  })
+  if (pin) return null
+  return (
+    <div className="wrap task-strip">
+      <Notice
+        tone="warn"
+        title={`Is ${host} your company's website?`}
+        actions={
+          <Button small busy={confirm.busy} onClick={() => void confirm.run()}>
+            Yes, {host} is ours
+          </Button>
+        }
+      >
+        <p>
+          Your console checks your company's keys on its own website before it re-signs posts.
+          Confirm only if <strong>{host}</strong> is exactly your company's website.
+        </p>
+        {confirm.error && <p className="field-error">{confirm.error}</p>}
+      </Notice>
+    </div>
+  )
+}
+
 /** mvp-spec B3, B5, E3: pending signatures, all done with one passkey prompt. */
 const TaskQueue = () => {
   const { me, company, tasks, refresh } = useAuthor()
+  const [pin, setPin] = useState(() => companyPin(company.slug))
   const [outcomes, setOutcomes] = useState<ReadonlyArray<TaskOutcome>>(() => {
     const shown = pendingOutcomes
     pendingOutcomes = []
@@ -97,9 +145,12 @@ const TaskQueue = () => {
     setOutcomes(await submitTasks(signed))
     await refresh()
   })
-  if (outcomes.length === 0 && tasks.length === 0) return null
+  const resigning = tasks.some((task) => task._tag === 'ResignItems')
+  if (outcomes.length === 0 && tasks.length === 0)
+    return <CompanyWebsite pin={pin} onPinned={setPin} />
   return (
     <div className="wrap task-strip">
+      <CompanyWebsite pin={pin} onPinned={setPin} />
       <TaskOutcomes outcomes={outcomes} onDismiss={() => setOutcomes([])} />
       {tasks.length > 0 && (
         <Notice
@@ -115,6 +166,12 @@ const TaskQueue = () => {
           {tasks.map((task) => (
             <p key={task.id}>{describeTask(task)}</p>
           ))}
+          {resigning && pin && (
+            <p className="small">
+              Re-signing checks your company's keys at{' '}
+              <strong>{new URL(pin.joinOrigin).host}</strong>.
+            </p>
+          )}
           <p className="tiny muted">
             One passkey prompt signs all of them. They also run with your next publish.
           </p>

@@ -181,6 +181,7 @@ test('owner assigns the author to Offers, then removes the original author (B4, 
 
   // Jana's console re-signs Petr's posts (and the author list) with one prompt.
   await author.goto('/author')
+  await author.getByRole('button', { name: 'Yes, shop.example.com is ours' }).click()
   await expect(author.getByText(/Re-sign 2 posts in offers/)).toBeVisible()
   await shoot(author, '19-author-tasks')
   await author.getByRole('button', { name: 'Sign now' }).click()
