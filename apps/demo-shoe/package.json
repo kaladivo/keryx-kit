@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "deploy": "vite build && vercel deploy dist --prod --yes --project keryx-demo-shoe --local-config vercel.json",
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run"
+    "test": "vitest run --fsModuleCachePath node_modules/.vitest-cache"
   },
   "devDependencies": {
     "@types/node": "26.6.5",

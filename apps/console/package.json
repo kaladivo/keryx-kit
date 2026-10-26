@@ -9,7 +9,7 @@
     "dev:stub": "KERYX_TREZOR_STUB=1 vite",
     "build": "bun --bun vite build && bun scripts/check-dist.ts",
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run",
+    "test": "vitest run --fsModuleCachePath node_modules/.vitest-cache",
     "test:e2e": "playwright test",
     "e2e": "playwright test -c playwright.server.config.ts"
   },
