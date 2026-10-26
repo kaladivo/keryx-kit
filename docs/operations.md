@@ -43,6 +43,7 @@ GitHub Actions secrets: `DEPLOY_SSH_KEY` (ed25519 key authorized only for
 | `/srv/keryx-kit/.env` | `KERYX_KIT_TAG=<sha>` of the running release | `deploy` |
 | `/srv/keryx-kit/data/` | Mounted as `/data`: SQLite database and repo directory | `10001` (container user), 0750 |
 | `/srv/keryx-kit/secrets/kek` | 32-byte KEK, mounted read-only at `/run/secrets/kek` (`KERYX_KEK_FILE`) | `root:10001`, 0440 |
+| `/srv/keryx-kit/secrets/operator-token` | Operator login token (hex), mounted read-only at `/run/secrets/operator-token` (`KERYX_OPERATOR_TOKEN_FILE`) | `root:10001`, 0440 |
 | `/srv/keryx-kit/backups/` | `data-<UTC timestamp>.tar.gz`, last 7 kept | `root`, 0700 |
 | Docker volumes `keryx-kit_caddy-data`, `keryx-kit_caddy-config` | Caddy certificates and state | |
 
@@ -56,6 +57,52 @@ the app's port 3000 is reachable only on the compose network. Container logs use
 the `local` driver, capped at 3 × 10 MB per container.
 
 Memory limits: app 512 MB (768 MB with swap), Caddy 128 MB.
+
+Inside `/data`:
+
+| Path | Contents |
+|---|---|
+| `keryx-kit.db` (+ `-wal`, `-shm`) | SQLite: companies, members, sessions, ceremonies, drafts, audit log, sealed server keys |
+| `repos/<slug>/base/` | The repo base served at `https://repo.keryx-kit.roguedave.codes/<slug>/` |
+| `repos/<slug>/anchor/` | `root.json` and every `N.root.json`, for the join kit and the domain check |
+
+The operator logs in at the console with the token: `sudo cat /srv/keryx-kit/secrets/operator-token`
+on the droplet. To rotate it, write a new value to the file (same owner and mode); the
+server reads it on every login.
+
+## Server configuration
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `KERYX_SERVICE_HOST` | `keryx-kit.roguedave.codes` | Landing host; the console and repo hosts are `console.` and `repo.` under it |
+| `KERYX_SCHEME` | `https` | Scheme for the console and repo origins |
+| `KERYX_CONSOLE_ORIGIN` | `<scheme>://console.<host>` | Origin WebAuthn and invite links use (override for a console dev server) |
+| `PORT` | `3000` | Listen port |
+| `KERYX_DATA_DIR` | `/data` | SQLite file and repo directories |
+| `KERYX_KEK_FILE` | `/run/secrets/kek` in the image | 32 raw bytes |
+| `KERYX_OPERATOR_TOKEN_FILE` | `/run/secrets/operator-token` in the image | Operator token |
+| `KERYX_SITE_DIR`, `KERYX_CONSOLE_DIR` | `apps/site/dist`, `apps/console/dist` | Static files |
+| `KERYX_RELEASE_FILE` | `release.json` | Git SHA and console bundle hash, written at image build |
+
+Scheduled jobs run in the server process: timestamp every 12 h, snapshot and channel
+renewal and the domain check every 24 h, each also once at startup.
+
+## Run locally
+
+Port 3000 is often taken; use another one. With the console dev server proxying `/api`
+to `http://console.localhost:3999` (`changeOrigin: true`):
+
+```sh
+mkdir -p tmp/dev && head -c 32 /dev/urandom > tmp/dev/kek && echo dev-token > tmp/dev/operator-token
+bun run --filter @keryx-kit/site build
+KERYX_DATA_DIR=tmp/dev KERYX_KEK_FILE=tmp/dev/kek KERYX_OPERATOR_TOKEN_FILE=tmp/dev/operator-token \
+  KERYX_SERVICE_HOST=localhost:3999 KERYX_SCHEME=http KERYX_CONSOLE_ORIGIN=http://localhost:5173 \
+  PORT=3999 bun apps/server/src/main.ts
+```
+
+The landing page is at `http://localhost:3999`, the repo bases at
+`http://repo.localhost:3999/<slug>/`. Owner login keys are bound to the console origin, so a
+Trezor identity made on localhost never works in production and the other way round.
 
 ## Roll back to a previous release
 
@@ -106,4 +153,6 @@ visibility to public. GitHub has no REST endpoint for this.
   from the database backups.
 - A tested restore drill and backup monitoring.
 - Uptime monitoring and alerting beyond the healthz check in the release job.
-- Publishing the console bundle hash per release (§5.9).
+
+The console bundle hash (§5.9) is in each release job summary and at
+`https://console.keryx-kit.roguedave.codes/api/release`.

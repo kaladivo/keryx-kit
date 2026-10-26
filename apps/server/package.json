@@ -4,17 +4,24 @@
   "license": "GPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/app.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run --passWithNoTests"
+    "test": "bun --bun vitest run",
+    "start": "bun src/main.ts"
   },
   "dependencies": {
     "@effect/platform-bun": "4.0.6",
     "@effect/sql-sqlite-bun": "4.0.6",
+    "@keryx-kit/api": "workspace:*",
     "@keryx-kit/domain": "workspace:*",
-    "effect": "4.0.6"
+    "@keryx-kit/join-kit": "workspace:*",
+    "@noble/curves": "2.4.0",
+    "@noble/hashes": "2.4.0",
+    "@simplewebauthn/server": "14.0.3",
+    "effect": "4.0.6",
+    "fflate": "0.8.3"
   },
   "devDependencies": {
     "@effect/vitest": "4.0.6",

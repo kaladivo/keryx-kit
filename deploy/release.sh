@@ -9,6 +9,15 @@ export KERYX_KIT_TAG="$tag"
 keep_backups=7
 
 docker compose pull
+
+# Docker would mount a missing secret as an empty directory and operator login would break.
+# The deploy user cannot enter secrets/, so look from inside a container.
+if ! docker run --rm --user root --entrypoint sh -v "$PWD/secrets:/secrets:ro" \
+  "ghcr.io/kaladivo/keryx-kit:$tag" -c 'test -f /secrets/operator-token'; then
+  echo "secrets/operator-token is missing; create it before releasing" >&2
+  exit 1
+fi
+
 docker compose stop app
 
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
