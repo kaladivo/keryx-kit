@@ -11,7 +11,17 @@ import { navigate, searchParam } from '../../lib/router.tsx'
 import { useAction, useAsync } from '../../lib/useAsync.ts'
 import { ImagePicker } from '../../ui/ImagePicker.tsx'
 import { PasskeyIcon } from '../../ui/icons.tsx'
-import { Button, Card, ErrorText, Field, formatDate, Loading, Notice, Page } from '../../ui/kit.tsx'
+import {
+  Button,
+  Card,
+  ErrorText,
+  Field,
+  formatDate,
+  formatDateTime,
+  Loading,
+  Notice,
+  Page,
+} from '../../ui/kit.tsx'
 import { reportTaskOutcomes, useAuthor } from './AuthorArea.tsx'
 
 type Content = typeof DraftContent.Type
@@ -405,7 +415,9 @@ export const Editor = ({
                     Save draft
                   </Button>
                 )}
-                {savedAt && <span className="muted small">Draft saved {formatDate(savedAt)}</span>}
+                {savedAt && (
+                  <span className="muted small">Draft saved {formatDateTime(savedAt)}</span>
+                )}
               </div>
               <p className="muted tiny" style={{ margin: 0 }}>
                 One passkey prompt unlocks your key, signs this post and any pending signatures, and

@@ -135,6 +135,7 @@ img {
     flex-basis: 100%;
     margin: 0 calc(-1 * var(--gutter));
     padding: 0 var(--gutter) 0.5rem;
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
   }
 
   .company-chip span {
@@ -407,7 +408,7 @@ img {
   color: var(--muted);
 }
 
-.textarea-code {
+.field .textarea-code {
   font-family: var(--mono);
   font-size: 0.875rem;
   line-height: 1.55;
@@ -695,6 +696,14 @@ img {
   width: 1.5rem;
   height: 1.5rem;
   color: var(--accent);
+}
+
+.change-list svg[data-kind="remove"] {
+  color: var(--danger);
+}
+
+.change-list svg[data-kind="note"] {
+  color: var(--muted);
 }
 
 .change-list strong {
@@ -1107,4 +1116,40 @@ img {
   font-size: 0.75rem;
   color: var(--muted);
   overflow-wrap: anywhere;
+}
+
+/* Wide tables become one block per row on phones. */
+@media (max-width: 40rem) {
+  .table-stack thead {
+    display: none;
+  }
+
+  .table-stack tr {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-stack td {
+    border: 0;
+    padding: 0.1rem 0;
+  }
+
+  .table-stack td:nth-child(n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  .table-stack td:empty {
+    display: none;
+  }
+
+  .table-stack td:nth-child(2) {
+    color: var(--muted);
+  }
+}
+
+.notice-actions .button {
+  white-space: nowrap;
 }

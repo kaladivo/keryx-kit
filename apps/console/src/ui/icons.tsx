@@ -65,10 +65,17 @@ export const InfoIcon = () => (
   </Icon>
 )
 
-export const ChangeIcon = () => (
-  <Icon>
+const changeMarks = {
+  add: 'M12 8v8M8 12h8',
+  edit: 'm9 15 1-3 4.5-4.5 2 2L12 14z',
+  remove: 'M8 12h8',
+  note: 'M12 11v5M12 8h.01',
+} as const
+
+export const ChangeIcon = ({ kind }: { readonly kind: keyof typeof changeMarks }) => (
+  <Icon data-kind={kind}>
     <circle cx="12" cy="12" r="9" />
-    <path d="M12 8v8M8 12h8" />
+    <path d={changeMarks[kind]} />
   </Icon>
 )
 

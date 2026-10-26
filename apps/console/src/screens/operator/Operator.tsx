@@ -58,12 +58,26 @@ const useOperatorData = <A,>(load: () => Promise<A>) => {
 
 const domainTone = { live: 'success', mismatch: 'danger', 'not-set-up': 'warn' } as const
 
-const Expiry = ({ iso }: { readonly iso: string }) => {
+/**
+ * Days left at which a file needs attention: people re-sign targets and authors metadata
+ * (E3 reminds at 60 days); the server renews snapshot and channel metadata daily below 7
+ * and 30 days (mvp-spec §5.8), so only an overdue renewal needs the operator.
+ */
+const attentionDays = { humanSigned: 60, snapshot: 6, channel: 29 } as const
+
+const Expiry = ({
+  iso,
+  signer,
+}: {
+  readonly iso: string
+  readonly signer: keyof typeof attentionDays
+}) => {
   const days = daysUntil(iso)
+  const attention = days <= attentionDays[signer]
   return (
-    <span className={days <= 30 ? 'field-error' : undefined} title={iso}>
+    <span className={attention ? 'field-error' : undefined} title={iso}>
       {formatDate(iso)}
-      {days <= 60 && ` (${days} d)`}
+      {attention && ` (${days} d)`}
     </span>
   )
 }
@@ -135,19 +149,19 @@ export const OperatorDashboard = () => {
                 <tr>
                   <td className="mono">root.json</td>
                   <td>
-                    <Expiry iso={c.expires.root} />
+                    <Expiry iso={c.expires.root} signer="humanSigned" />
                   </td>
                 </tr>
                 <tr>
                   <td className="mono">targets.json</td>
                   <td>
-                    <Expiry iso={c.expires.targets} />
+                    <Expiry iso={c.expires.targets} signer="humanSigned" />
                   </td>
                 </tr>
                 <tr>
                   <td className="mono">snapshot.json</td>
                   <td>
-                    <Expiry iso={c.expires.snapshot} />
+                    <Expiry iso={c.expires.snapshot} signer="snapshot" />
                   </td>
                 </tr>
                 <tr>
@@ -158,13 +172,13 @@ export const OperatorDashboard = () => {
                   <tr key={`${ch.channel}-c`}>
                     <td className="mono">channels.{ch.channel}.json</td>
                     <td>
-                      <Expiry iso={ch.channelMetadata} />
+                      <Expiry iso={ch.channelMetadata} signer="channel" />
                     </td>
                   </tr>,
                   <tr key={`${ch.channel}-a`}>
                     <td className="mono">channels.{ch.channel}.authors.json</td>
                     <td>
-                      <Expiry iso={ch.authorsMetadata} />
+                      <Expiry iso={ch.authorsMetadata} signer="humanSigned" />
                     </td>
                   </tr>,
                 ])}

@@ -1,16 +1,37 @@
+import type { AuditEntry } from '@keryx-kit/api'
 import { call } from '../../lib/api.ts'
 import { useAsync } from '../../lib/useAsync.ts'
-import { Card, formatDateTime, Loading, Notice, Page } from '../../ui/kit.tsx'
+import { Badge, Card, formatDateTime, Loading, Notice, Page } from '../../ui/kit.tsx'
 
-const actorName = (actor: { kind: string; name?: string }) =>
+type Entry = typeof AuditEntry.Type
+
+const actorName = (actor: Entry['actor']) =>
   actor.kind === 'owner'
     ? 'Owner (Trezor)'
     : actor.kind === 'server'
       ? 'Server'
       : (actor.name ?? 'Author')
 
+const actionLabels: Record<Entry['action'], string> = {
+  signup: 'Sign-up',
+  'ceremony-started': 'Change started',
+  'ceremony-staged': 'Signed, staged',
+  'ceremony-applied': 'Change live',
+  'ceremony-discarded': 'Change discarded',
+  'authors-signed': 'Author list signed',
+  'items-resigned': 'Posts re-signed',
+  'item-published': 'Published',
+  'item-edited': 'Edited',
+  'item-unpublished': 'Unpublished',
+  'invite-created': 'Invite',
+  'member-registered': 'Registered',
+}
+
+const newestFirst = (entries: ReadonlyArray<Entry>) =>
+  [...entries].sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
+
 export const Activity = () => {
-  const log = useAsync(() => call((api) => api.company.auditLog()), [])
+  const log = useAsync(() => call((api) => api.company.auditLog()).then(newestFirst), [])
   return (
     <Page
       title="Activity"
@@ -20,7 +41,7 @@ export const Activity = () => {
       <Card>
         {log.loading && !log.data && <Loading />}
         <div className="table-scroll">
-          <table className="table">
+          <table className="table table-stack">
             <thead>
               <tr>
                 <th>When</th>
@@ -34,11 +55,13 @@ export const Activity = () => {
                 <tr key={`${entry.at}-${entry.action}-${entry.summary}`}>
                   <td className="nowrap">{formatDateTime(entry.at)}</td>
                   <td className="nowrap">{actorName(entry.actor)}</td>
-                  <td>{entry.summary}</td>
+                  <td>
+                    <Badge>{actionLabels[entry.action]}</Badge> {entry.summary}
+                  </td>
                   <td className="mono tiny">
                     {Object.entries(entry.versions)
                       .map(([file, version]) => `${file} v${version}`)
-                      .join(', ') || '—'}
+                      .join(', ')}
                   </td>
                 </tr>
               ))}

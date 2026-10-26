@@ -26,7 +26,7 @@ const ChangeLines = ({ lines }: { readonly lines: ReadonlyArray<ChangeLine> }) =
   <ul className="change-list">
     {lines.map((line) => (
       <li key={line.text}>
-        <ChangeIcon />
+        <ChangeIcon kind={line.kind} />
         <div>
           <strong>{line.text}</strong>
           {line.detail && <p>{line.detail}</p>}
@@ -101,7 +101,7 @@ const RemovalImpact = ({ summary }: { readonly summary: Summary }) => {
                 task in their console. Posts nobody re-signs are unpublished when you sign, because
                 subscriber apps would reject them.
               </p>
-              <ul className="small">
+              <ul className="small" style={{ margin: 0 }}>
                 {items.map((item) => (
                   <li key={item.id}>{item.title}</li>
                 ))}

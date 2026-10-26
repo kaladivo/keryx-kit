@@ -47,6 +47,7 @@ export interface KeyLine {
 }
 
 export interface ChangeLine {
+  readonly kind: 'add' | 'edit' | 'remove' | 'note'
   readonly text: string
   readonly detail?: string
   readonly keys?: ReadonlyArray<KeyLine>
@@ -155,10 +156,12 @@ const describeChange = (
 
   if (a.custom.company_name !== b.custom.company_name)
     lines.push({
+      kind: 'edit',
       text: `Rename the company from “${b.custom.company_name}” to “${a.custom.company_name}”`,
     })
   if (a.custom.logo !== b.custom.logo)
     lines.push({
+      kind: 'edit',
       text: 'Replace the company logo',
       detail: 'Subscribers see a one-tap acknowledgement of the new logo.',
       ...(a.custom.logo === undefined ? {} : { logo: a.custom.logo }),
@@ -169,6 +172,7 @@ const describeChange = (
     const title = display.display_name ?? channel
     if (old === undefined) {
       lines.push({
+        kind: 'add',
         text: `Create channel ${title} (${channel})`,
         ...(display.description ? { detail: display.description } : {}),
         keys: [
@@ -180,10 +184,12 @@ const describeChange = (
     }
     if (!sameText(old.display_name, display.display_name))
       lines.push({
+        kind: 'edit',
         text: `Rename channel ${channel} from “${old.display_name ?? channel}” to “${title}”`,
       })
     if (!sameText(old.description, display.description))
       lines.push({
+        kind: 'edit',
         text: `Change the description of ${title}`,
         detail: display.description ?? '(no description)',
       })
@@ -193,11 +199,13 @@ const describeChange = (
     const removed = was.filter((k) => !now.includes(k))
     if (added.length > 0)
       lines.push({
+        kind: 'add',
         text: `Add ${added.map(who).join(', ')} as author of ${title}`,
         keys: added.map((k) => keyLine(k, 'author')),
       })
     if (removed.length > 0)
       lines.push({
+        kind: 'remove',
         text: `Remove ${removed.map(who).join(', ')} from ${title}`,
         detail: 'Their key stops working on this channel.',
         keys: removed.map((k) => keyLine(k, 'author')),
@@ -208,6 +216,7 @@ const describeChange = (
     )
     if (dropped.length > 0)
       lines.push({
+        kind: 'remove',
         text: `Unpublish ${dropped.length} ${dropped.length === 1 ? 'post' : 'posts'} from ${title} that no remaining author signed`,
         items: dropped.map((path) => {
           const bytes = before.items[path]
@@ -218,9 +227,13 @@ const describeChange = (
   }
   for (const channel of Object.keys(b.custom.channels))
     if (a.custom.channels[channel] === undefined)
-      lines.push({ text: `Delete channel ${b.custom.channels[channel]?.display_name ?? channel}` })
+      lines.push({
+        kind: 'remove',
+        text: `Delete channel ${b.custom.channels[channel]?.display_name ?? channel}`,
+      })
 
   lines.push({
+    kind: 'note',
     text:
       lines.length === 0
         ? `Renew targets.json until ${formatDate(a.expires)}`
