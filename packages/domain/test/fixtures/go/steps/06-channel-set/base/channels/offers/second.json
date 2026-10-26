@@ -1,0 +1,35 @@
+{
+  "attachments": [
+    {
+      "mime_type": "application/pdf",
+      "name": "Price list",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_in_bytes": 12345,
+      "url": "https://acme.example/prices.pdf?a=1&b=2"
+    }
+  ],
+  "content_html": "<p>Hello & welcome to <b>ACME</b>\u2028</p>",
+  "date_published": "2026-10-26T12:00:00Z",
+  "id": "second",
+  "image": "data:image/png;base64,iVBORw0KGgo=",
+  "language": "en",
+  "sig": [
+    {
+      "keyid": "08f6908f3f428c5eb492f30b82d707c718a9757bdb62556da1290c51e93ed170",
+      "sig": "P7z_PEBYWNY6tC-Zh34fw-g0Sc2SJO5N1_-VqQ-zxPwyldfI3dNjEDAKPuTEagv9lS50m-LfUe4K49PUU_ZVAA"
+    },
+    {
+      "keyid": "704591f7aa9216610895c4d3ddec637c0f2fb5ceb409747a871056fae83a5cf5",
+      "sig": "r9aCOCJnIayt4bdPHPIBavuNXOHezybMQwoYmlltSJ8hSn8G62WrVeLxuMcMDj2UWSWamiN_EXxooCdPwilTDw"
+    },
+    {
+      "keyid": "8f0239422ec43a07d98f60203793b9af178b339914fcab82a4527ffafa9dd294",
+      "sig": "bwYE0dNy51-WCUjA7u5gZ62ONRbw3xsg870ce23-L-DUkZRhWUYPp3tujMswo4o8W3XGTi5U5nEbxDw6kLB9DQ"
+    }
+  ],
+  "tags": [
+    "news",
+    "ünïcode"
+  ],
+  "title": "Second 😀"
+}

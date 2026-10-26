@@ -1,0 +1,25 @@
+{
+	"signatures": [
+		{
+			"keyid": "7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5",
+			"sig": "7793a61f1502d279f944bc08003ee706c9cd55a7c5396d7854fb00f59ba57fb068e09a5dc1e1c0ad3b1bebcd7cb0cb017a21e6d7714778e40a53b047f1903108"
+		}
+	],
+	"signed": {
+		"_type": "targets",
+		"custom": {
+			"channels": {},
+			"company_name": "ACME \u003cShop\u003e \u0026 Co.",
+			"logo": "data:image/png;base64,iVBORw0KGgo=",
+			"private_feed_patterns": []
+		},
+		"delegations": {
+			"keys": {},
+			"roles": []
+		},
+		"expires": "2027-10-26T12:00:00Z",
+		"spec_version": "1.0.31",
+		"targets": {},
+		"version": 1
+	}
+}

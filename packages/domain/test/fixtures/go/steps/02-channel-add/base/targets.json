@@ -1,0 +1,70 @@
+{
+	"signatures": [
+		{
+			"keyid": "7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5",
+			"sig": "fb4479810121bdea9b9498a87abab846ea1d90bbac6ddf2da661854a698bac8dfabae2443f90b210b46acc611f37a3feae1f359b566f9a1997c97d8f1d308c0f"
+		}
+	],
+	"signed": {
+		"_type": "targets",
+		"custom": {
+			"channels": {
+				"offers": {
+					"description": "Weekly \u003cb\u003edeals\u003c/b\u003e",
+					"display_name": "Offers \u0026 deals"
+				}
+			},
+			"company_name": "ACME \u003cShop\u003e \u0026 Co.",
+			"logo": "data:image/png;base64,iVBORw0KGgo=",
+			"private_feed_patterns": []
+		},
+		"delegations": {
+			"keys": {
+				"08f6908f3f428c5eb492f30b82d707c718a9757bdb62556da1290c51e93ed170": {
+					"keytype": "ed25519",
+					"keyval": {
+						"public": "e797788fb0c9d18c1f98ffb5e2ea6571f778cbb0dc3a6924f34efc77e0399445"
+					},
+					"name": "alice",
+					"scheme": "ed25519"
+				},
+				"8f0239422ec43a07d98f60203793b9af178b339914fcab82a4527ffafa9dd294": {
+					"keytype": "ed25519",
+					"keyval": {
+						"public": "f1a5e2ab4d07366ab3a20420237eb909763334922e7581aea7ecd9b1de2a5398"
+					},
+					"name": "offers",
+					"scheme": "ed25519"
+				}
+			},
+			"roles": [
+				{
+					"keyids": [
+						"8f0239422ec43a07d98f60203793b9af178b339914fcab82a4527ffafa9dd294"
+					],
+					"name": "channels.offers",
+					"paths": [
+						"channels/offers/*"
+					],
+					"terminating": true,
+					"threshold": 1
+				},
+				{
+					"keyids": [
+						"08f6908f3f428c5eb492f30b82d707c718a9757bdb62556da1290c51e93ed170"
+					],
+					"name": "channels.offers.authors",
+					"paths": [
+						"channels/offers/*"
+					],
+					"terminating": false,
+					"threshold": 1
+				}
+			]
+		},
+		"expires": "2027-10-26T13:00:00Z",
+		"spec_version": "1.0.31",
+		"targets": {},
+		"version": 2
+	}
+}

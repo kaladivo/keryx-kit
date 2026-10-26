@@ -1,0 +1,62 @@
+{
+  "message": "keryx golden message",
+  "canonical": [
+    {
+      "input": "{\"b\":1,\"a\":[true,false,null],\"c\":{\"z\":\"\\\"quoted\\\" \\\\ back\",\"y\":-42}}",
+      "canonical": "{\"a\":[true,false,null],\"b\":1,\"c\":{\"y\":-42,\"z\":\"\\\"quoted\\\" \\\\ back\"}}"
+    },
+    {
+      "input": "{\"é\":1,\"z\":2,\"A\":3,\"😀\":4,\"￿\":5,\"aa\":6,\"a\":7}",
+      "canonical": "{\"A\":3,\"a\":7,\"aa\":6,\"z\":2,\"é\":1,\"￿\":5,\"😀\":4}"
+    },
+    {
+      "input": "\"line\\nbreak\\ttab \u003cb\u003e\u0026amp;\u003c/b\u003e \u2028 \\u0001 é /\"",
+      "canonical": "\"line\nbreak\ttab \u003cb\u003e\u0026amp;\u003c/b\u003e \u2028 \u0001 é /\""
+    },
+    {
+      "input": "{\"a\":{},\"b\":[],\"c\":\"\",\"d\":0}",
+      "canonical": "{\"a\":{},\"b\":[],\"c\":\"\",\"d\":0}"
+    },
+    {
+      "input": "9007199254740991",
+      "canonical": "9007199254740991"
+    }
+  ],
+  "keys": [
+    {
+      "name": "master",
+      "seed": "efadce1e2f3e7906566a2982a819992192ba95eeed2340d3778bd53043f43878",
+      "public": "51c271938517e1c9fdbac3a73b1bcec7bd7b2a6e081230c653b1d992cdce7a29",
+      "keyid": "7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5",
+      "sig": "80c6dbd5de61cfd608fc9e73c55660509bc1e26d3c8837e4d841f9e1b1ff3e82c77e51ca27c587924323a13c5f538c5e49cdfb5ca2dd945d7f7d3e23b1f98e04"
+    },
+    {
+      "name": "ops",
+      "seed": "2bc21321bf07ca901fce0ba4cb6da92ae69ebd241bf7948b02cb00515cf068e8",
+      "public": "76f6d6ea40b42ccdcf8b57bca509eb01105f0c9a409cc4b1e0251fdd0479bbef",
+      "keyid": "057c4a1f7dd1138c56e5b75cca4e30fb1ac53d36948b2364af3805a3a89b4ac7",
+      "sig": "03e5ee485d5e52c212486c4368b21b2c8f51be334e1903537a272be79e050cddfb67ef8cca2398d790666e10303a41001e13caafb5b5bc25e221602a1617460b"
+    },
+    {
+      "name": "offers",
+      "seed": "8a2ed68f869c40146f8a3e05b7035ae382bd471177e8abf3bc004a2b83df7731",
+      "public": "f1a5e2ab4d07366ab3a20420237eb909763334922e7581aea7ecd9b1de2a5398",
+      "keyid": "8f0239422ec43a07d98f60203793b9af178b339914fcab82a4527ffafa9dd294",
+      "sig": "47136d88fbd64fc5e76adc4dac4273c9d81026c6c6d5c50f0d799b2fd1b3080ca301c7feb871ab01bf69aa22a20b425c8868651336c25cbe384c77c03c539d0a"
+    },
+    {
+      "name": "alice",
+      "seed": "6695a93248e8e33a439ea0548fa864189d5f54a04f93fa94b533da5df67465d5",
+      "public": "e797788fb0c9d18c1f98ffb5e2ea6571f778cbb0dc3a6924f34efc77e0399445",
+      "keyid": "08f6908f3f428c5eb492f30b82d707c718a9757bdb62556da1290c51e93ed170",
+      "sig": "59c60b7026e788a1d50e50287aff9e1e1787849c480f8dd9cace8656d8872e0fdc9383bbb684090424379719072fa7326fed18bfae476fafa0c4cb7b8ebef505"
+    },
+    {
+      "name": "bob",
+      "seed": "b8f4a67f6e04c2e49eff93bf38af4d324648f38430c43252776b71992dd0415b",
+      "public": "e99de33f4cd3fc487833adfc127b19bbb3949b0ab6bbdc66db7127dcccce88b2",
+      "keyid": "704591f7aa9216610895c4d3ddec637c0f2fb5ceb409747a871056fae83a5cf5",
+      "sig": "5e8956b047c721435caf005096c10e1ea902982cb475418ca016107426096b1e9a3cfcbd37c841d1225d273666822e260d76316ec32b9993ed06d72d970dcd0b"
+    }
+  ]
+}

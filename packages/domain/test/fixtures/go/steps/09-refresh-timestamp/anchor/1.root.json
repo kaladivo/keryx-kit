@@ -1,0 +1,63 @@
+{
+	"signatures": [
+		{
+			"keyid": "7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5",
+			"sig": "10f01c402e06e2fcd3a4db8f4ad4cc0a6dbca9cf52d1300e4076b3e402e2b54d75be33288fc97a027c6593651c0901bdac2bed8bf3052b26a97f4fc6ff332e0b"
+		}
+	],
+	"signed": {
+		"_type": "root",
+		"consistent_snapshot": false,
+		"custom": {
+			"mode": "full",
+			"repo_base": "https://repo.keryx-kit.test/acme/"
+		},
+		"expires": "2036-10-23T12:00:00Z",
+		"keys": {
+			"057c4a1f7dd1138c56e5b75cca4e30fb1ac53d36948b2364af3805a3a89b4ac7": {
+				"keytype": "ed25519",
+				"keyval": {
+					"public": "76f6d6ea40b42ccdcf8b57bca509eb01105f0c9a409cc4b1e0251fdd0479bbef"
+				},
+				"name": "ops",
+				"scheme": "ed25519"
+			},
+			"7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5": {
+				"keytype": "ed25519",
+				"keyval": {
+					"public": "51c271938517e1c9fdbac3a73b1bcec7bd7b2a6e081230c653b1d992cdce7a29"
+				},
+				"name": "master",
+				"scheme": "ed25519"
+			}
+		},
+		"roles": {
+			"root": {
+				"keyids": [
+					"7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5"
+				],
+				"threshold": 1
+			},
+			"snapshot": {
+				"keyids": [
+					"057c4a1f7dd1138c56e5b75cca4e30fb1ac53d36948b2364af3805a3a89b4ac7"
+				],
+				"threshold": 1
+			},
+			"targets": {
+				"keyids": [
+					"7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5"
+				],
+				"threshold": 1
+			},
+			"timestamp": {
+				"keyids": [
+					"057c4a1f7dd1138c56e5b75cca4e30fb1ac53d36948b2364af3805a3a89b4ac7"
+				],
+				"threshold": 1
+			}
+		},
+		"spec_version": "1.0.31",
+		"version": 1
+	}
+}
