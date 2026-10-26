@@ -62,7 +62,7 @@
               </picture>
               <picture class="shot" data-shot="spoof">
                 <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-spoof-dark.webp">
-                <img src="/src/assets/phone-spoof-light.webp" width="600" height="1226" loading="lazy" alt="Illustration: a greyed-out fake post, Scuffwell Cloud Insoles: 70% off, from sh0e.roguedave.codes, labelled Not signed, never displayed.">
+                <img src="/src/assets/phone-spoof-light.webp" width="600" height="1226" loading="lazy" alt="Illustration: a greyed-out forged post, Scuffwell Cloud Insoles: 70% off, today only, asking for an email password and a wallet recovery seed, labelled Not signed, never displayed.">
               </picture>
             </div>
             <figcaption class="note note-signed" data-note="feed">
@@ -105,17 +105,17 @@
           </li>
           <li class="step" data-step="spoof">
             <div class="step-copy">
-              <h2>Fakes never show.</h2>
-              <p>A message from <span class="mono">sh0e.roguedave.codes</span>, or with a broken signature, is dropped. There is no warning to click through.</p>
+              <h2>Forgeries never show.</h2>
+              <p>If your key didn't sign it, it never appears in your feed: no forged sale, no altered post, no warning to click through.</p>
             </div>
             <picture class="step-phone">
               <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-spoof-dark.webp">
-              <img src="/src/assets/phone-spoof-light.webp" width="600" height="1226" loading="lazy" alt="Illustration: a greyed-out fake post labelled Not signed, never displayed.">
+              <img src="/src/assets/phone-spoof-light.webp" width="600" height="1226" loading="lazy" alt="Illustration: a greyed-out forged Scuffwell post labelled Not signed, never displayed.">
             </picture>
           </li>
         </ol>
       </div>
-      <p class="story-source">Screens from the Keryx app following Scuffwell, a demo shoe brand. The greyed-out fake is an illustration: the app never displays it.</p>
+      <p class="story-source">Screens from the Keryx app following Scuffwell, a demo shoe brand. The greyed-out forgery is an illustration: the app never displays it.</p>
     </section>
 
     <section class="section facts" aria-label="What Keryx removes">
@@ -135,49 +135,50 @@
       </dl>
     </section>
 
-    <section class="section" id="lookalikes" aria-labelledby="lookalikes-title">
-      <div class="head">
-        <h2 id="lookalikes-title">A look-alike can copy your logo. Not your key.</h2>
-        <p>Keryx checks signatures, not appearances.</p>
-      </div>
-      <ul class="domains">
-        <li class="domain domain-real">
-          <p class="domain-name mono">shoe.roguedave.codes</p>
-          <p class="domain-what">Scuffwell's own domain</p>
-          <p class="domain-verdict"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.3 3 3 6-6.3"/></svg>Signed, shown</p>
-        </li>
-        <li class="domain domain-fake">
-          <p class="domain-name mono">sh<mark>0</mark>e.roguedave.codes</p>
-          <p class="domain-what">A zero for the letter o</p>
-          <p class="domain-verdict"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6.5 6.5 7 7m0-7-7 7"/></svg>No signature, never shown</p>
-        </li>
-        <li class="domain domain-fake">
-          <p class="domain-name mono">shoe<mark>-</mark>roguedave<mark>.support</mark></p>
-          <p class="domain-what">A new ending</p>
-          <p class="domain-verdict"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6.5 6.5 7 7m0-7-7 7"/></svg>No signature, never shown</p>
-        </li>
-      </ul>
-    </section>
-
     <section class="section" id="try" aria-labelledby="try-title">
       <div class="head">
         <h2 id="try-title">Change one character. The signature breaks.</h2>
-        <p>A Scuffwell post signed with a demo author key. Your browser checks it the way the app does.</p>
+        <p>Someone edits a signed Scuffwell post, and your browser checks it the way the app does.</p>
       </div>
-      <div class="check" data-check-state="checking">
-        <div class="check-post">
-          <img src="/src/assets/post-puddle.webp" width="800" height="420" loading="lazy" alt="Scuffwell's Puddle season sale artwork: 20% off every pair of boots, code PUDDLE20.">
-          <label class="check-label" for="check-title">Title <span>Try changing 20% to 70%</span></label>
-          <textarea id="check-title" rows="2" spellcheck="false" aria-describedby="check-verdict">Puddle season: 20% off every pair of boots</textarea>
-          <p class="check-excerpt">Until Monday 16 November, every pair of Puddle boots is 20% off with the code PUDDLE20.</p>
-          <button class="link-button check-reset" type="button" hidden>Restore the original</button>
-        </div>
-        <div class="check-verdict" id="check-verdict" role="status">
-          <p class="verdict-word">Checking</p>
-          <p class="verdict-line">Verifying the signature in your browser.</p>
-          <p class="verdict-key"><span>Author key</span> <span class="mono">c68e4453…90f285</span></p>
+      <p class="visually-hidden" id="check-summary">Demo: the post's title, Puddle season: 20% off every pair of boots, is edited to say 70% off. The edited post no longer matches its signature, so the app stops showing it in Scuffwell's feed.</p>
+      <div class="showcase" aria-hidden="true">
+        <div class="check" data-check-state="checking">
+          <div class="check-post">
+            <img src="/src/assets/post-puddle.webp" width="800" height="420" loading="lazy" alt="">
+            <p class="check-label">Title</p>
+            <p class="check-field">Puddle season: <span class="check-edit">20%</span> off every pair of boots</p>
+            <p class="check-excerpt">Until Monday 16 November, every pair of Puddle boots is 20% off with the code PUDDLE20.</p>
+          </div>
+          <div class="check-verdict">
+            <p class="verdict-word">Checking</p>
+            <p class="verdict-line">Verifying the signature in your browser.</p>
+            <p class="verdict-key"><span>Author key</span> <span class="mono">c68e4453…90f285</span></p>
+          </div>
+          <div class="check-phone">
+            <div class="mini-phone">
+              <div class="mini-screen">
+                <picture class="mini-head">
+                  <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-feed-dark.webp">
+                  <img src="/src/assets/phone-feed-light.webp" width="600" height="1226" loading="lazy" alt="">
+                </picture>
+                <div class="mini-post">
+                  <div class="mini-card">
+                    <img src="/src/assets/post-puddle-square.webp" width="480" height="480" loading="lazy" alt="">
+                    <p class="mini-title">Puddle season: 20% off every pair of boots</p>
+                    <p class="mini-meta"><span class="mini-date">Oct 26, 2026</span> <span class="mini-chip">sale</span> <span class="mini-chip">puddle</span></p>
+                  </div>
+                </div>
+                <picture class="mini-rest">
+                  <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-feed-dark.webp">
+                  <img src="/src/assets/phone-feed-light.webp" width="600" height="1226" loading="lazy" alt="">
+                </picture>
+              </div>
+            </div>
+          </div>
+          <svg class="check-cursor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2.5v17.2l4.3-4.1 2.9 6.6 3-1.3-2.9-6.5h6z"/></svg>
         </div>
       </div>
+      <p class="check-source">The post is signed with a demo author key. The feed beside it recreates the Keryx app.</p>
     </section>
 
     <section class="section" id="team" aria-labelledby="team-title">

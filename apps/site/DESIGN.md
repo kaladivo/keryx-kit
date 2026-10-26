@@ -138,16 +138,16 @@ components:
 
 **Creative North Star: "Proof on the device"**
 
-The page is calm, quiet and expensive-looking, in the language of mercury.com: a soft photographic landscape behind a centred headline, generous whitespace, a refined sans at light weights, a muted palette with one restrained indigo, and soft frosted 3D objects on a dark band for the security ideas. Inside that calm sits one real product object: a phone running the actual Keryx app. It stays on screen while the page scrolls through four states (scan, confirm the domain, a signed post arrives, a fake never shows), with one sentence beside each, like the sticky device on trezor.io.
+The page is calm, quiet and expensive-looking, in the language of mercury.com: a soft photographic landscape behind a centred headline, generous whitespace, a refined sans at light weights, a muted palette with one restrained indigo, and soft frosted 3D objects on a dark band for the security ideas. Inside that calm sits one real product object: a phone running the actual Keryx app. It stays on screen while the page scrolls through four states (scan, confirm the domain, a signed post arrives, a forgery never shows), with one sentence beside each, like the sticky device on trezor.io.
 
-Everything persuasive is real or labelled: app captures from the real subscriber app paired with a locally signed Scuffwell repo, the real keryx-kit console editor, and a signature check that runs in the visitor's browser. The one recreated screen (the greyed-out fake) is captioned as an illustration.
+Everything persuasive is real or labelled: app captures from the real subscriber app paired with a locally signed Scuffwell repo, the real keryx-kit console editor, and a signature check that runs in the visitor's browser. The recreations (the greyed-out forgery and the small feed beside the signature check) are captioned as such.
 
 ## Colors
 
 A cool off-white canvas, white surfaces, a near-black ink with two quieter greys, and one indigo accent close to the Keryx app's own blue. A dark navy band carries the security section in both themes.
 
-- **Accent** (`#4b5ce4`, dark `#5464e6`): the primary pill, the verified state, the live check's "Shown". Nothing else.
-- **Bad** (`#b5452f`, dark `#f0846c`): only look-alike characters, "never shown" verdicts and form errors.
+- **Accent** (`#4b5ce4`, dark `#5464e6`): the primary pill, the verified state, the signature check's "Shown". Nothing else.
+- **Bad** (`#b5452f`, dark `#f0846c`): only look-alike characters, edited characters, "not shown" verdicts and form errors.
 - **Deep** (`#15161d`, dark `#0b0c10`) with **deep-card** `#23252f`: the security band and the object cards. The generated objects are rendered on exactly `#23252f`, so the cards and images meet without a seam.
 - Text greys: ink-2 for body copy, ink-3 for captions, all at 4.5:1 or better on their surfaces.
 
@@ -186,11 +186,8 @@ Pills for buttons, 12px controls, 14 to 24px cards and panels, a drawn phone fra
 ### Phone
 A CSS-drawn frame around real 390×797 app captures under a 47px status bar (9:41, signal, Wi-Fi, battery). Light and dark captures switch with `prefers-color-scheme` through `<picture>`. In the story, the screens crossfade (420ms) and the verified note slides in beside the feed state.
 
-### Domain cards
-Three cards in the manner of Red Sift: the real domain (accent ring, "Signed, shown") and two look-alikes in muted mono with the substituted characters marked in bad red ("No signature, never shown").
-
-### Live check
-A Scuffwell post signed with a local demo author key. The title is editable; the browser checks the Ed25519 signature with `@keryx-kit/domain` on every keystroke and the verdict panel switches between "Shown" and "Never shown".
+### Signature check showcase
+A Scuffwell post signed with a local demo author key, a verdict panel and a small recreated phone feed, side by side in one card (stacked under 900px). A drawn pointer selects "20%" in the title and types "70%"; every keystroke goes through the real Ed25519 check (`@keryx-kit/domain`), and its result alone switches the verdict between "Shown" and "Not shown" and drops the post from the phone's feed. Nothing is editable by the visitor. The stage is `aria-hidden`; a visually hidden sentence states the real results.
 
 ### Product shot
 The real console editor in a browser frame on the landscape photograph, with the real "Sign and publish" card floating over its lower left.
@@ -202,11 +199,11 @@ Three 4:5 cards on the dark band, each a generated frosted object (hardware devi
 
 - **Landscape**: misty layered hills, a pale dawn version for light and a blue-hour version for dark, generated, used behind the hero, the product shot and the pilot form.
 - **Objects**: soft frosted white objects with fine grain on `#23252f`, generated, no logos or text.
-- **Screens**: real captures only, except the captioned illustration of the rejected fake.
+- **Screens**: real captures only, except the captioned illustration of the rejected forgery and the small feed recreation beside the signature check.
 
 ## Motion
 
-One authored moment: the phone's screen change and the step copy fading in as each step reaches the middle of the viewport. Under `prefers-reduced-motion: reduce` there are no transitions and no smooth scrolling. Without JavaScript all step copy is visible and the phone shows the first state.
+Two authored moments. The story: the phone's screen change and the step copy fading in as each step reaches the middle of the viewport. The signature check: a calm loop (about 10 seconds) of pointer, selection, typing, verdict flip, the post fading and collapsing out of the feed, a pause and a reset; it plays only while the card is at least half on screen and the tab is visible, and starts over from the signed state. Under `prefers-reduced-motion: reduce` there are no transitions and no smooth scrolling, and the signature check shows a static pair instead: the signed post ("Shown") above the edited one ("Not shown"). Without JavaScript all step copy is visible and the phone shows the first state.
 
 ## Do's and Don'ts
 

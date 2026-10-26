@@ -85,11 +85,13 @@ because author keys are only ever unwrapped in the author's browser (`docs/mvp-s
   the real subscriber app (`vendor/keryx/app`, Vite dev) paired with it. Captures at 390×797 @2x,
   light and dark (`src/assets/phone-*.webp`): scan (fake camera feed of a printed Scuffwell card
   with the real join QR), confirm, channel picker, feed. The greyed-out fake
-  (`phone-spoof-*.webp`) is a recreation in the app's own classes; the app never renders it.
+  (`phone-spoof-*.webp`) is a recreation in the app's own classes, a forged post claiming to be from
+  Scuffwell (no sender domain shown); the app never renders it.
 - The console editor (`src/assets/editor-*.webp`) is a capture of `apps/console` in mock mode with
   Scuffwell seed data, an author registered with a virtual passkey, and the Karlín pop-up post.
-- The live check uses Scuffwell's Puddle sale post (without its image), signed with a local demo
-  author key (`src/demo-item.ts`), not a production key.
+- The signature check showcase uses Scuffwell's Puddle sale post (without its image), signed with
+  a local demo author key (`src/demo-item.ts`), not a production key. The small feed beside it is
+  a recreation: an HTML card in the app's metrics over the real feed capture.
 - The landscape and object images are generated (Codex image generation) and carry no text, logos
   or brand marks.
 - The Android release certificate fingerprint (`vendor/keryx/README.md`).
