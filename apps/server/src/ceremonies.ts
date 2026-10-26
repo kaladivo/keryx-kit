@@ -35,7 +35,7 @@ import {
 } from '@keryx-kit/domain'
 import { Effect, Schema } from 'effect'
 import { SqlClient } from 'effect/sql'
-import { randomToken } from './crypto.ts'
+import { randomToken, sha256Hex } from './crypto.ts'
 import {
   changedVersions,
   commit,
@@ -487,7 +487,7 @@ const tasksOf = (member: MemberRow) =>
         authorsTaskFor.add(channel)
         tasks.push({
           _tag: 'SignAuthorsMetadata',
-          id: `authors-${channel}-v${doc.signed.version}-${day.slice(0, 10)}`,
+          id: `authors-${sha256Hex(`${channel}/${doc.signed.version}/${day}`).slice(0, 32)}`,
           channel,
           reason,
           ...(ceremonyId ? { ceremonyId } : {}),

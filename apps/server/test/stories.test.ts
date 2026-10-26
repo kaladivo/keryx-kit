@@ -363,6 +363,26 @@ describe('B3 to B6: ceremonies', () => {
     expect((await signAsOwner(owner, again, device, SLUG)).status).toBe('applied')
   })
 
+  it('gives authors tasks on long channel names an id the API accepts', async () => {
+    const { owner } = await company()
+    const jana = await registerAuthor(server, owner, 'Jana')
+    const channel = 'a-very-long-channel-name-for-the-weekly-company-offers'
+    await ceremony(owner, device, SLUG, {
+      _tag: 'CreateChannel',
+      channel,
+      displayName: 'Offers',
+      description: '',
+      authors: [jana.memberId],
+    })
+    await doTasks(jana)
+    advance(server, 130 * DAY)
+    await memberLogin(jana)
+    const [renewal] = await doTasks(jana)
+    expect(renewal).toMatchObject({ _tag: 'SignAuthorsMetadata', reason: 'renewal', channel })
+    expect(renewal?.id).toMatch(/^[A-Za-z0-9_-]{1,64}$/)
+    expect(await call(jana.browser.client.ceremonies.tasks())).toEqual([])
+  })
+
   it('labels author keys in targets.json without personal names', async () => {
     await liveChannel()
     const repo = await server.runWithServices(
