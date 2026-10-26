@@ -1,0 +1,24 @@
+{
+  "name": "@keryx-kit/demo-coffee",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "bun scripts/deploy.ts",
+    "install-kit": "bun scripts/install-kit.ts",
+    "reset-kit": "bun scripts/reset-kit.ts",
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --fsModuleCachePath node_modules/.vitest-cache"
+  },
+  "dependencies": {
+    "fflate": "0.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  }
+}
