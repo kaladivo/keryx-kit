@@ -208,6 +208,10 @@ code {
   font-size: 0.9375rem;
 }
 
+.nav-list a {
+  white-space: nowrap;
+}
+
 .nav-list a:not(.button) {
   color: var(--text);
   text-decoration: none;
@@ -281,7 +285,7 @@ code {
 }
 
 .hero-compact {
-  padding-bottom: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  padding-bottom: 0;
 }
 
 .hero-text,
@@ -318,12 +322,14 @@ code {
   display: block;
   width: 100%;
   height: auto;
+  /* Lifts the grey paper to white so multiply blends it into the page background. */
+  filter: brightness(1.08) contrast(1.12);
   mix-blend-mode: multiply;
 }
 
 @media (prefers-color-scheme: dark) {
   .hero-art img {
-    filter: invert(1);
+    filter: brightness(1.08) contrast(1.12) invert(1);
     mix-blend-mode: screen;
     opacity: 0.85;
   }
@@ -346,7 +352,7 @@ code {
   margin-bottom: 2rem;
 }
 
-.prose {
+.prose > * {
   max-width: 46rem;
 }
 
@@ -510,6 +516,13 @@ code {
     display: none;
   }
 
+  .keys caption {
+    display: block;
+    padding: 1rem 1.25rem 0;
+  }
+
+  .keys,
+  .keys tbody,
   .keys tr,
   .keys th,
   .keys td {
@@ -590,6 +603,11 @@ code {
   border: 1px solid var(--border-strong);
   border-radius: 10px;
   padding: 0.7rem 0.85rem;
+}
+
+.field input,
+.field textarea {
+  scroll-margin-top: 6rem;
 }
 
 .field textarea {
