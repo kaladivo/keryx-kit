@@ -169,11 +169,21 @@ export const Invite = Schema.Struct({ ...PendingInvite.fields, url: Schema.Strin
 
 export const InvitePreview = Schema.Struct({ companyName: Schema.String, expiresAt: Instant })
 
-/** The logged-in member, with what the browser needs to unwrap the author key. */
+/** The logged-in member. `credentialIds` can go in `allowCredentials` as a hint only. */
 export const Me = Schema.Struct({
   ...Member.fields,
   company: CompanyRef,
+  credentialIds: Schema.Array(Base64url),
+})
+
+/**
+ * The author key wrapped for one passkey. A site can hold several passkeys and a
+ * discoverable assertion may return any of them, so the console fetches this by the
+ * credential id the assertion returned (mvp-spec §5.4).
+ */
+export const WrappedAuthorKey = Schema.Struct({
   credentialId: Base64url,
+  authorPublicKey: PublicKeyHex,
   wrappedKey: WrappedKey,
 })
 

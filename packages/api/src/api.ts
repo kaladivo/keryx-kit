@@ -48,6 +48,7 @@ import {
   SignupRequest,
   SignupStarted,
   Team,
+  WrappedAuthorKey,
 } from './records.ts'
 import {
   MemberSession,
@@ -56,7 +57,7 @@ import {
   RequestValidation,
   TeamSession,
 } from './security.ts'
-import { CompanySlug, Id } from './values.ts'
+import { Base64url, CompanySlug, Id } from './values.ts'
 import {
   AuthenticationCredential,
   CreationOptions,
@@ -131,6 +132,11 @@ export const AuthMember = HttpApiGroup.make('authMember').add(
     error: [LoginFailed, TooManyRequests],
   }),
   HttpApiEndpoint.get('me', '/api/me', { success: Me }).middleware(MemberSession),
+  HttpApiEndpoint.get('wrappedKey', '/api/me/wrapped-keys/:credentialId', {
+    params: { credentialId: Base64url },
+    success: WrappedAuthorKey,
+    error: NotFound,
+  }).middleware(MemberSession),
   HttpApiEndpoint.post('logout', '/api/auth/member/logout'),
 )
 

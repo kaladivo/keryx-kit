@@ -40,8 +40,13 @@ with its id. The owner finishes or discards it.
 Owner ceremonies make exactly one Trezor Connect call (`cipherKeyValue`), started from the
 click handler (mvp-spec §5.3).
 
-Author signing: one WebAuthn assertion with PRF on `me.credentialId`, unwrap
-`me.wrappedKey` (§5.4), sign everything pending (tasks and the item), overwrite the key.
+Author signing: one WebAuthn assertion with PRF (`me.credentialIds` may go in
+`allowCredentials` as a hint). A site can hold several passkeys and the assertion may
+return any of them, so fetch the wrapped key by the credential id it returned:
+`authMember.wrappedKey` `GET /api/me/wrapped-keys/:credentialId`. `NotFound` means the
+member picked a passkey that is not theirs; ask them to pick again. Unwrap (§5.4), check
+the public key equals `authorPublicKey`, sign everything pending (tasks and the item),
+overwrite the key.
 
 ## 1. Sign-up (A1, A2)
 

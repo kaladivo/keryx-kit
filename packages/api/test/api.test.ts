@@ -56,6 +56,7 @@ describe('KeryxKitApi', () => {
         "authMember.loginOptions POST /api/auth/member/login/options",
         "authMember.login POST /api/auth/member/login",
         "authMember.me GET /api/me",
+        "authMember.wrappedKey GET /api/me/wrapped-keys/:credentialId",
         "authMember.logout POST /api/auth/member/logout",
         "company.get GET /api/company",
         "company.auditLog GET /api/company/audit-log",
