@@ -1,0 +1,30 @@
+[
+  {
+    "origin": "https://acme.example",
+    "channels": [
+      "offers",
+      "security"
+    ],
+    "private_feeds": null,
+    "payload": "{\"v\":1,\"channels\":[\"offers\",\"security\"],\"private_feeds\":[]}",
+    "url": "https://acme.example/join?p=eyJ2IjoxLCJjaGFubmVscyI6WyJvZmZlcnMiLCJzZWN1cml0eSJdLCJwcml2YXRlX2ZlZWRzIjpbXX0"
+  },
+  {
+    "origin": "https://acme.example/",
+    "channels": null,
+    "private_feeds": [
+      "https://shop.example/channels/tracking/AAAAAAAAAAAAAAAAAAAAAA/feed.json?a=1\u0026b=\u003c2\u003e"
+    ],
+    "payload": "{\"v\":1,\"channels\":[],\"private_feeds\":[\"https://shop.example/channels/tracking/AAAAAAAAAAAAAAAAAAAAAA/feed.json?a=1\\u0026b=\\u003c2\\u003e\"]}",
+    "url": "https://acme.example/join?p=eyJ2IjoxLCJjaGFubmVscyI6W10sInByaXZhdGVfZmVlZHMiOlsiaHR0cHM6Ly9zaG9wLmV4YW1wbGUvY2hhbm5lbHMvdHJhY2tpbmcvQUFBQUFBQUFBQUFBQUFBQUFBQUFBQS9mZWVkLmpzb24_YT0xXHUwMDI2Yj1cdTAwM2MyXHUwMDNlIl19"
+  },
+  {
+    "origin": "https://acme.example/shop",
+    "channels": [
+      "a_b-c"
+    ],
+    "private_feeds": [],
+    "payload": "{\"v\":1,\"channels\":[\"a_b-c\"],\"private_feeds\":[]}",
+    "url": "https://acme.example/shop/join?p=eyJ2IjoxLCJjaGFubmVscyI6WyJhX2ItYyJdLCJwcml2YXRlX2ZlZWRzIjpbXX0"
+  }
+]

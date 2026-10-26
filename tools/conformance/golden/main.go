@@ -15,6 +15,7 @@ import (
 
 	"github.com/secure-systems-lab/go-securesystemslib/cjson"
 	"github.com/v1b3coder/keryx/sdk/feed"
+	"github.com/v1b3coder/keryx/sdk/join"
 	"github.com/v1b3coder/keryx/sdk/keys"
 	"github.com/v1b3coder/keryx/sdk/publisher"
 	"github.com/v1b3coder/keryx/sdk/repo"
@@ -54,7 +55,7 @@ func (s *memStore) Find(_ context.Context, role keys.Role, name string) (*keys.K
 }
 
 func (s *memStore) Add(_ context.Context, k *keys.Key) error { s.keys = append(s.keys, k); return nil }
-func (s *memStore) Remove(context.Context, string) error  { return nil }
+func (s *memStore) Remove(context.Context, string) error     { return nil }
 
 func key(role keys.Role, name string) *keys.Key {
 	k, err := keys.FromSeed(role, name, seed(name))
@@ -112,6 +113,31 @@ func writeCanonical(out string, names []string) {
 	must(os.WriteFile(filepath.Join(out, "canonical.json"), append(data, '\n'), 0o644))
 }
 
+func writeJoin(out string) {
+	type joinCase struct {
+		Origin       string   `json:"origin"`
+		Channels     []string `json:"channels"`
+		PrivateFeeds []string `json:"private_feeds"`
+		Payload      string   `json:"payload"`
+		URL          string   `json:"url"`
+	}
+	cases := []joinCase{
+		{Origin: "https://acme.example", Channels: []string{"offers", "security"}},
+		{Origin: "https://acme.example/", PrivateFeeds: []string{"https://shop.example/channels/tracking/AAAAAAAAAAAAAAAAAAAAAA/feed.json?a=1&b=<2>"}},
+		{Origin: "https://acme.example/shop", Channels: []string{"a_b-c"}, PrivateFeeds: []string{}},
+	}
+	for i, c := range cases {
+		payload, err := join.BuildPayload(c.Channels, c.PrivateFeeds)
+		must(err)
+		url, err := join.JoinURL(c.Origin, payload)
+		must(err)
+		cases[i].Payload, cases[i].URL = string(payload), url
+	}
+	data, err := json.MarshalIndent(cases, "", "  ")
+	must(err)
+	must(os.WriteFile(filepath.Join(out, "join.json"), append(data, '\n'), 0o644))
+}
+
 func item(id, title string, signers ...*keys.Key) map[string]any {
 	obj := map[string]any{
 		"id":             id,
@@ -142,6 +168,7 @@ func main() {
 	must(os.RemoveAll(out))
 	must(os.MkdirAll(out, 0o755))
 	writeCanonical(out, []string{"master", "ops", "offers", "alice", "bob"})
+	writeJoin(out)
 
 	master := key(keys.RoleMaster, "master")
 	ops := key(keys.RoleOps, "ops")
