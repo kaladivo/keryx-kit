@@ -22,7 +22,7 @@ import {
 import { Effect, Schema } from 'effect'
 import { HttpApiBuilder } from 'effect/http-api'
 import { SqlClient } from 'effect/sql'
-import { domain } from '../ceremonies.ts'
+import { domain, openCeremony } from '../ceremonies.ts'
 import { randomToken } from '../crypto.ts'
 import { changedVersions, commit, Repos } from '../repos.ts'
 import { serverSigner } from '../serverKeys.ts'
@@ -71,6 +71,12 @@ const publish = (
     const sql = yield* SqlClient.SqlClient
     const slug = member.company_slug
     const published = yield* repos.published(slug)
+    const open = yield* openCeremony(slug)
+    if (open?.operation._tag === 'createChannel' && open.operation.params.channel === channel) {
+      return yield* new Conflict({
+        error: `Channel ${channel} is waiting for an author to sign it.`,
+      })
+    }
     yield* requireLiveChannel(published, channel)
     yield* requireAuthor(published, channel, member)
     if (!payload.item.sig.some((s) => s.keyid === member.keyid)) {

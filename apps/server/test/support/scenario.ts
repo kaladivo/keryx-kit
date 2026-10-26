@@ -98,6 +98,13 @@ const demo = async (
     owner.client.ceremonies.start({ payload: { intent: { _tag: 'RenewTargets' } } }),
   )
   assert(blocked._tag === 'CeremonyInProgress', 'one open ceremony per company')
+  const early = await failure(
+    jana.browser.client.items.publish({
+      params: { channel: 'offers' },
+      payload: { item: await signedItem(jana, draftItem('early', 'Early', server.clock.current)) },
+    }),
+  )
+  assert(early._tag === 'Conflict', 'no publishing before the channel is live')
   const janaTasks = await doTasks(jana)
   assert(janaTasks[0]?._tag === 'SignAuthorsMetadata', 'Jana gets the new-channel task')
   const live = await call(owner.client.channels.list())

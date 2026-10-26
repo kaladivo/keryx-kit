@@ -92,84 +92,88 @@ export const AuthOwnerLive = HttpApiBuilder.group(KeryxKitApi, 'authOwner', (han
     )
     .handle('completeSignup', ({ params, payload }) =>
       Effect.gen(function* () {
-        const sql = yield* SqlClient.SqlClient
-        const config = yield* ServerConfig
-        const rows = yield* sql<{
-          invite_code: string
-          slug: string
-          company_name: string
-          join_origin: string
-          logo: string | null
-          contact_email: string
-          ops_public_key: string
-          challenge_hidden: string
-          challenge_visual: string
-          now: string
-          expires_at: string
-        }>`SELECT * FROM signups WHERE id = ${params.signupId}`
-        const signup = rows[0]
-        if (!signup) return yield* new NotFound({ error: 'No such sign-up.' })
-        const at = yield* now
-        if (signup.expires_at < iso(at)) {
-          return yield* new Expired({ error: 'This sign-up expired. Start again.' })
-        }
-        const unused = yield* sql`SELECT code FROM invite_codes
-          WHERE code = ${signup.invite_code} AND used_at IS NULL`
-        if (unused.length === 0) {
-          return yield* new Expired({ error: 'This invite code was already used.' })
-        }
-        if (yield* findCompany(signup.slug)) {
-          return yield* new Refused({
-            error: `The company id ${signup.slug} is taken.`,
-            code: 'invalid-company',
-          })
-        }
-        const proof = {
-          challengeHidden: signup.challenge_hidden,
-          challengeVisual: signup.challenge_visual,
-          ...payload.login,
-        }
-        if (!verifyTrezorLogin(proof)) return yield* loginFailed()
-        const init = yield* domain(
-          initRepo(
-            {
-              repoBase: repoBaseFor(config, signup.slug),
-              companyName: signup.company_name,
-              ...(signup.logo ? { logo: signup.logo } : {}),
-              masterKey: payload.masterPublicKey,
-              opsKey: signup.ops_public_key,
-            },
-            { now: new Date(signup.now) },
-          ),
-        )
-        const signed = yield* domain(
-          Effect.flatMap(attachRoleSignature(init, 'root', payload.signatures.root), (state) =>
-            attachRoleSignature(state, 'targets', payload.signatures.targets),
-          ),
-        )
         const repos = yield* Repos
-        const next = yield* repos.locked(commit(signup.slug, undefined, signed))
-        yield* sql`INSERT INTO companies ${sql.insert({
-          slug: signup.slug,
-          name: signup.company_name,
-          join_origin: signup.join_origin,
-          contact_email: signup.contact_email,
-          identity_key: payload.login.publicKey,
-          created_at: iso(at),
-        })}`
-        yield* markTimestamp(signup.slug)
-        yield* sql`UPDATE invite_codes SET used_at = ${iso(at)}, used_by = ${signup.slug}
+        return yield* repos.locked(
+          Effect.gen(function* () {
+            const sql = yield* SqlClient.SqlClient
+            const config = yield* ServerConfig
+            const rows = yield* sql<{
+              invite_code: string
+              slug: string
+              company_name: string
+              join_origin: string
+              logo: string | null
+              contact_email: string
+              ops_public_key: string
+              challenge_hidden: string
+              challenge_visual: string
+              now: string
+              expires_at: string
+            }>`SELECT * FROM signups WHERE id = ${params.signupId}`
+            const signup = rows[0]
+            if (!signup) return yield* new NotFound({ error: 'No such sign-up.' })
+            const at = yield* now
+            if (signup.expires_at < iso(at)) {
+              return yield* new Expired({ error: 'This sign-up expired. Start again.' })
+            }
+            const unused = yield* sql`SELECT code FROM invite_codes
+          WHERE code = ${signup.invite_code} AND used_at IS NULL`
+            if (unused.length === 0) {
+              return yield* new Expired({ error: 'This invite code was already used.' })
+            }
+            if (yield* findCompany(signup.slug)) {
+              return yield* new Refused({
+                error: `The company id ${signup.slug} is taken.`,
+                code: 'invalid-company',
+              })
+            }
+            const proof = {
+              challengeHidden: signup.challenge_hidden,
+              challengeVisual: signup.challenge_visual,
+              ...payload.login,
+            }
+            if (!verifyTrezorLogin(proof)) return yield* loginFailed()
+            const init = yield* domain(
+              initRepo(
+                {
+                  repoBase: repoBaseFor(config, signup.slug),
+                  companyName: signup.company_name,
+                  ...(signup.logo ? { logo: signup.logo } : {}),
+                  masterKey: payload.masterPublicKey,
+                  opsKey: signup.ops_public_key,
+                },
+                { now: new Date(signup.now) },
+              ),
+            )
+            const signed = yield* domain(
+              Effect.flatMap(attachRoleSignature(init, 'root', payload.signatures.root), (state) =>
+                attachRoleSignature(state, 'targets', payload.signatures.targets),
+              ),
+            )
+            const next = yield* commit(signup.slug, undefined, signed)
+            yield* sql`INSERT INTO companies ${sql.insert({
+              slug: signup.slug,
+              name: signup.company_name,
+              join_origin: signup.join_origin,
+              contact_email: signup.contact_email,
+              identity_key: payload.login.publicKey,
+              created_at: iso(at),
+            })}`
+            yield* markTimestamp(signup.slug)
+            yield* sql`UPDATE invite_codes SET used_at = ${iso(at)}, used_by = ${signup.slug}
           WHERE code = ${signup.invite_code}`
-        yield* sql`DELETE FROM signups WHERE id = ${params.signupId}`
-        yield* startSession('owner', { companySlug: signup.slug })
-        yield* audit(
-          signup.slug,
-          { kind: 'owner' },
-          'signup',
-          `Created ${signup.company_name}`,
-          changedVersions(undefined, next),
+            yield* sql`DELETE FROM signups WHERE id = ${params.signupId}`
+            yield* startSession('owner', { companySlug: signup.slug })
+            yield* audit(
+              signup.slug,
+              { kind: 'owner' },
+              'signup',
+              `Created ${signup.company_name}`,
+              changedVersions(undefined, next),
+            )
+            return { company: { slug: signup.slug, name: signup.company_name } }
+          }),
         )
-        return { company: { slug: signup.slug, name: signup.company_name } }
       }).pipe(orDieSql),
     )
     .handle('challenge', ({ payload }) =>
