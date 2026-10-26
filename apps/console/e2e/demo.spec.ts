@@ -1,31 +1,50 @@
 import { execFileSync } from 'node:child_process'
-import { cpSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test'
 import { e2e } from '../playwright.server.config.ts'
-import { addPasskeyAuthenticator, photo } from './support.ts'
+import { addPasskeyAuthenticator, photo, serveCompanyDomain } from './support.ts'
 
 /**
  * The demo script (mvp-spec §7 steps 1 to 5 and 7, plus B4 and B5) against the real
  * server. The owner signs with the dev Trezor stub (real SLIP-0013 and Ed25519
  * signatures from fixed test keys), each author has their own CDP virtual authenticator
- * with PRF. After every repo change the company's anchor and base are copied, and the
- * last test runs the Go conformance verifier and the subscriber app's verifier on them.
+ * with PRF. The company's domain serves the join kit's root chain to the authors'
+ * browsers (re-signing checks targets.json against it). After every repo change the
+ * company's anchor and base are copied, and the last test runs the Go conformance
+ * verifier and the subscriber app's verifier on them.
  */
 test.describe.configure({ mode: 'serial' })
 
 const SLUG = 'demo-shop'
+const COMPANY_DOMAIN = 'https://demo-shop.example'
 
 let owner: Page
 let jana: Page
 let petr: Page
+let eva: Page
 const contexts: Array<BrowserContext> = []
 
-const open = async (browser: Browser, withPasskeys = false) => {
+/** Whether the company's domain serves its join kit, as after upload (A3). */
+let companyDomainLive = true
+
+const anchorFile = async (name: string) => {
+  if (!companyDomainLive || !/^(\d+\.)?root\.json$/.test(name)) return undefined
+  try {
+    return readFileSync(join(e2e.data, 'repos', SLUG, 'anchor', name))
+  } catch {
+    return undefined
+  }
+}
+
+const open = async (browser: Browser, author = false) => {
   const context = await browser.newContext()
   contexts.push(context)
   const page = await context.newPage()
-  if (withPasskeys) await addPasskeyAuthenticator(context, page)
+  if (author) {
+    await addPasskeyAuthenticator(context, page)
+    await serveCompanyDomain(context, COMPANY_DOMAIN, anchorFile)
+  }
   return page
 }
 
@@ -34,6 +53,7 @@ test.beforeAll(async ({ browser }) => {
   owner = await open(browser)
   jana = await open(browser, true)
   petr = await open(browser, true)
+  eva = await open(browser, true)
 })
 
 test.afterAll(async () => {
@@ -64,12 +84,27 @@ const invite = async (label: string): Promise<string> => {
   return (await link.textContent()) ?? ''
 }
 
-const register = async (page: Page, url: string, name: string): Promise<string> => {
+/**
+ * Registers through the invite link. With `failFirstUpload`, the first upload of the
+ * wrapped key fails before it reaches the server and the author retries.
+ */
+const register = async (
+  page: Page,
+  url: string,
+  name: string,
+  failFirstUpload = false,
+): Promise<string> => {
   await page.goto(url)
   await expect(page.getByRole('heading', { name: 'Join Demo Shop as an author' })).toBeVisible()
   await page.getByLabel('Your name').fill(name)
   await page.getByRole('button', { name: 'Continue' }).click()
+  if (failFirstUpload)
+    await page.route('**/api/auth/member/registration', (route) => route.fulfill({ status: 503 }), {
+      times: 1,
+    })
   await page.getByRole('button', { name: 'Create passkey' }).click()
+  if (failFirstUpload)
+    await page.getByRole('button', { name: 'Lock my key with the passkey' }).click()
   await expect(page.getByText('You are registered')).toBeVisible()
   const fingerprint = (await page.locator('.fingerprint-large').textContent()) ?? ''
   expect(fingerprint).toMatch(/^[0-9a-f]{4}( [0-9a-f]{4}){4}$/)
@@ -125,8 +160,45 @@ test('owner logs in again with the Trezor (§5.3)', async () => {
 
 let janaFingerprint = ''
 
-test('3. an invited author registers with a passkey (B1, B2)', async () => {
-  janaFingerprint = await register(jana, await invite('Jana, marketing'), 'Jana Dvořáková')
+/** Tries the stored wrapped key with HKDF over 32 zero bytes, the key a wiped PRF buffer gives. */
+const opensWithZeroPrf = (page: Page) =>
+  page.evaluate(async () => {
+    const json = async (path: string) => (await fetch(path)).json()
+    const bytes = (b64url: string) =>
+      Uint8Array.from(atob(b64url.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0))
+    const me = await json('/api/me')
+    const wrapped = await json(`/api/me/wrapped-keys/${me.credentialIds[0]}`)
+    const ikm = await crypto.subtle.importKey('raw', new Uint8Array(32), 'HKDF', false, [
+      'deriveKey',
+    ])
+    const key = await crypto.subtle.deriveKey(
+      {
+        name: 'HKDF',
+        hash: 'SHA-256',
+        salt: new Uint8Array(32),
+        info: new TextEncoder().encode('keryx/author-key/v1/aes-256-gcm'),
+      },
+      ikm,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['decrypt'],
+    )
+    const aad = Uint8Array.from(me.authorPublicKey.match(/../g), (h: string) => parseInt(h, 16))
+    try {
+      await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: bytes(wrapped.wrappedKey.iv), additionalData: aad },
+        key,
+        bytes(wrapped.wrappedKey.ciphertext),
+      )
+      return true
+    } catch {
+      return false
+    }
+  })
+
+test('3. an invited author registers with a passkey, retrying a failed upload (B1, B2)', async () => {
+  janaFingerprint = await register(jana, await invite('Jana, marketing'), 'Jana Dvořáková', true)
+  expect(await opensWithZeroPrf(jana)).toBe(false)
   await jana.getByRole('link', { name: 'Open the console' }).click()
   await expect(jana.getByText('The owner has not added you to a channel yet')).toBeVisible()
   await jana.getByRole('button', { name: 'Sign out' }).click()
@@ -203,10 +275,7 @@ test('owner assigns a second author (B2, B4)', async () => {
 
 test('owner removes the first author after the second re-signs (B5)', async () => {
   await owner.goto('/owner/channels/offers')
-  await owner
-    .locator('li', { hasText: 'Jana Dvořáková' })
-    .getByRole('button', { name: 'Remove' })
-    .click()
+  await authorRow('Jana Dvořáková').getByRole('button', { name: 'Remove' }).click()
   await expect(owner.getByText('Remove Jana Dvořáková from Offers')).toBeVisible()
   await expect(owner.getByText(/1 published post is signed only by this author/)).toBeVisible()
 
@@ -223,13 +292,51 @@ test('owner removes the first author after the second re-signs (B5)', async () =
   await owner.getByRole('button', { name: 'Sign with Trezor' }).click()
   await expect(owner.getByText('The change is live')).toBeVisible()
   await owner.goto('/owner/channels/offers')
-  await expect(owner.locator('li', { hasText: 'Jana Dvořáková' })).toHaveCount(0)
+  await expect(authorRow('Jana Dvořáková')).toHaveCount(0)
   await expect(owner.getByText(EDITED)).toBeVisible()
   await expect(owner.getByText('signed by Petr Novák')).toBeVisible()
   snapshot('removed')
 })
 
+test('owner signs a removal first; it waits for the re-sign, which needs the company domain (B5)', async () => {
+  await register(eva, await invite('Eva, support'), 'Eva Malá')
+  await owner.goto('/owner/channels/offers')
+  await owner.getByLabel('Add an author').selectOption({ label: 'Eva Malá (author-3)' })
+  await owner.getByRole('button', { name: 'Add with Trezor' }).click()
+  await signAndApply()
+  await owner.goto('/owner/channels/offers')
+  await authorRow('Petr Novák').getByRole('button', { name: 'Remove' }).click()
+  await expect(owner.getByText('Remove Petr Novák from Offers')).toBeVisible()
+  await owner.getByRole('button', { name: 'Sign with Trezor' }).click()
+  await expect(owner.getByText('Signed, waiting for an author')).toBeVisible()
+  const ceremony = owner.url()
+
+  companyDomainLive = false
+  await eva.goto('/author')
+  await eva.getByRole('button', { name: 'Sign now' }).click()
+  await expect(eva.getByText(/needs your company's domain to be live/)).toBeVisible()
+  await expect(eva.getByText(/posts of this removal were not re-signed/)).toBeVisible()
+  await owner.goto('/owner/channels/offers')
+  await expect(owner.getByText(EDITED)).toBeVisible()
+  await expect(authorRow('Petr Novák')).toHaveCount(1)
+
+  companyDomainLive = true
+  await eva.reload()
+  await eva.getByRole('button', { name: 'Sign now' }).click()
+  await expect(eva.getByText('Signed 2 pending tasks')).toBeVisible()
+  await owner.goto(ceremony)
+  await expect(owner.getByText('The change is live')).toBeVisible()
+  await owner.goto('/owner/channels/offers')
+  await expect(authorRow('Petr Novák')).toHaveCount(0)
+  await expect(owner.getByText('signed by Eva Malá')).toBeVisible()
+  snapshot('removed-after-owner-signed')
+})
+
 // Beyond the demo script: the other console flows, against the same server.
+
+/** A row of the channel's author list (post rows also name authors, in "signed by"). */
+const authorRow = (name: string) =>
+  owner.locator('li').filter({ has: owner.getByText(name, { exact: true }) })
 
 const signAndApply = async () => {
   await owner.getByRole('button', { name: 'Sign with Trezor' }).click()
@@ -267,11 +374,11 @@ test('a Trezor on another Suite wallet is refused, then targets.json is renewed 
 })
 
 test('a second post is published by one author and unpublished by the owner (C2, C5)', async () => {
-  await petr.goto('/author/write?channel=offers')
-  await petr.getByLabel('Title').fill('Closed on Friday')
-  await petr.getByLabel('Body').fill('We are closed on Friday for inventory.')
-  await petr.getByRole('button', { name: 'Sign and publish' }).click()
-  await expect(petr.getByText('Signed and live')).toBeVisible()
+  await eva.goto('/author/write?channel=offers')
+  await eva.getByLabel('Title').fill('Closed on Friday')
+  await eva.getByLabel('Body').fill('We are closed on Friday for inventory.')
+  await eva.getByRole('button', { name: 'Sign and publish' }).click()
+  await expect(eva.getByText('Signed and live')).toBeVisible()
   snapshot('second-post')
   await owner.goto('/owner/channels/offers')
   const post = owner.locator('li', { hasText: 'Closed on Friday' })
@@ -311,9 +418,9 @@ test('activity log, operator dashboard and pilot requests (E4, F2, G2)', async (
 })
 
 test('everyone signs out, and a missing session answers 401 Unauthorized', async () => {
-  await petr.goto('/author')
-  await petr.getByRole('button', { name: 'Sign out' }).click()
-  const me = await petr.request.get('/api/me')
+  await eva.goto('/author')
+  await eva.getByRole('button', { name: 'Sign out' }).click()
+  const me = await eva.request.get('/api/me')
   expect(me.status()).toBe(401)
   expect(await me.json()).toEqual({ _tag: 'Unauthorized' })
   await owner.goto('/owner')

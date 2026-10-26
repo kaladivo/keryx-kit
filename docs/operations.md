@@ -135,9 +135,13 @@ port 5176 with the Trezor stub. Headless Chromium plays the demo script (mvp-spe
 author registers with a passkey (CDP virtual authenticator with PRF), the owner creates
 "Offers" with that author, the author's visit makes it live, the author publishes a post
 with an image and edits it, and the owner adds a second author and removes the first after
-the re-sign. It goes on with channel and logo edits, a wrong Suite wallet, targets
-renewal, unpublishing, the join kit, the domain check, the activity log, the operator
-dashboard and sign-out.
+the re-sign. It goes on with a failed passkey upload and its retry, a removal the owner
+signs before the re-sign (refused while the company domain is down, applied once it is
+up), channel and logo edits, a wrong Suite wallet, targets renewal, unpublishing, the join
+kit, the domain check, the activity log, the operator dashboard and sign-out. The
+authors' browsers get `https://demo-shop.example/.well-known/keryx/` from the server's
+anchor directory, as if the company had uploaded the join kit, because re-signing checks
+`targets.json` against it.
 
 After every repo change the run copies the repo the server wrote to
 `tmp/e2e/repo-states`. The last test verifies all of them with the Go SDK
