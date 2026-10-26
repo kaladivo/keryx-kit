@@ -272,7 +272,7 @@ the server and shown on the operator dashboard.
 
 ### 5.1 Architecture
 
-One pnpm monorepo, TypeScript and Effect throughout:
+One Bun monorepo (Bun as package manager and runtime), TypeScript and Effect throughout:
 
 | Package | Contents |
 |---|---|
