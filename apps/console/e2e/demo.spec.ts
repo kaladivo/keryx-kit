@@ -358,6 +358,8 @@ const signAndApply = async () => {
 
 test('owner edits the channel and the logo (B6, A5)', async () => {
   await owner.goto('/owner/channels/offers')
+  // The form fills itself from the loaded channel; typing before that gets overwritten.
+  await expect(owner.getByLabel('Description')).toHaveValue('Weekly deals for our regulars.')
   await owner.getByLabel('Description').fill('Weekly deals for our regulars, every Monday.')
   await owner.getByRole('button', { name: 'Save with Trezor' }).click()
   await signAndApply()
