@@ -2,6 +2,8 @@ import { describe, expect, it } from '@effect/vitest'
 import { Effect } from 'effect'
 import {
   attachRoleSignature,
+  attachSignature,
+  authorityOf,
   bytesEqual,
   createChannel,
   parseRepoFiles,
@@ -77,6 +79,27 @@ describe('ceremony: the server builds, the browser rebuilds and signs (§5.5)', 
       expect(
         yield* refusalCode(attachRoleSignature(server, 'channels.security.authors', byAlice)),
       ).toBe('unauthorized-signer')
+    }),
+  )
+})
+
+describe('malformed signatures', () => {
+  it.effect('attachSignature and attachRoleSignature refuse non-hex or wrong-length sigs', () =>
+    Effect.gen(function* () {
+      const published = yield* companyRepo
+      const server = yield* createChannel(published, intent, at(12))
+      const authority = authorityOf(server, 'targets')
+      if (!authority) throw new Error('fixture')
+      const valid = yield* signatureFor(server.targets, signerOf('master'))
+      for (const sig of ['zz'.repeat(64), valid.sig.slice(0, 126), `${valid.sig}00`, 'abc', '']) {
+        const signature = { keyid: valid.keyid, sig }
+        expect(yield* refusalCode(attachRoleSignature(server, 'targets', signature))).toBe(
+          'bad-signature',
+        )
+        expect(yield* refusalCode(attachSignature(server.targets, signature, authority))).toBe(
+          'bad-signature',
+        )
+      }
     }),
   )
 })

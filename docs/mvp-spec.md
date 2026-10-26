@@ -347,7 +347,10 @@ overwrites the buffer afterwards.
 Transport: `@trezor/connect-web` 10 with `coreMode: 'auto'`. Connect 10 always
 goes through Trezor Suite: Suite desktop on any browser, or Suite Web
 (`suite.trezor.io`) in a popup on Chromium over WebUSB. Each ceremony costs one
-Suite permission prompt and one device confirmation. The first connection from
+Suite permission prompt and one device confirmation. Each Connect call opens a
+Suite Web popup, and browsers block a popup that does not directly follow a
+click, so a ceremony makes exactly one Connect call, started from the click
+handler (several derivations go in one `bundle`). The first connection from
 a browser also needs pairing (confirm on the device, type a code into Suite).
 
 Owner login is a separate `requestLogin` (SLIP-0013) with a server challenge.

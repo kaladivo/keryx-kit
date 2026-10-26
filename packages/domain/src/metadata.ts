@@ -58,13 +58,20 @@ export interface Authority {
   readonly threshold: number
 }
 
+/** Signatures arrive from the browser unchecked; only a 64-byte hex value can verify. */
+const SIGNATURE_HEX = /^[0-9a-f]{128}$/
+
 const signatureVerifies = (
   message: Uint8Array,
   signature: Signature,
   authority: Authority,
 ): boolean => {
   const key = authority.keys[signature.keyid]
-  return key !== undefined && verifyEd25519(fromHex(signature.sig), message, key.keyval.public)
+  return (
+    key !== undefined &&
+    SIGNATURE_HEX.test(signature.sig) &&
+    verifyEd25519(fromHex(signature.sig), message, key.keyval.public)
+  )
 }
 
 /** Distinct authorized keyids whose signature verifies. */
