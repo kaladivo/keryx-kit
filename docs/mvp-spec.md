@@ -412,8 +412,13 @@ Every change to `root.json` or `targets.json` follows the same flow:
    example an authors metadata signature (B3, B5).
 
 Step 3 matters because it limits what a compromised API can trick a working
-console into signing. It does not help against a compromised console bundle
-(§3).
+console into signing: the change is exactly the declared operation applied to
+the published state. It does not prove that keys the server supplies are
+genuine. A compromised API could hand the owner its own key as "Jana's author
+key". To close that gap by hand, the ceremony summary shows a short fingerprint
+of every author key it adds, and each author sees their own fingerprint in the
+console, so the owner can compare the two. It does not help against a
+compromised console bundle (§3).
 
 ### 5.6 Join kit page
 
