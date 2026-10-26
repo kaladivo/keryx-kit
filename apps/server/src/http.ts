@@ -118,14 +118,17 @@ const serveConsole = (config: ServerConfigShape, pathname: string) =>
     return html ? fileResponse(index, html) : notFound
   })
 
-/** mvp-spec §5.9. Trezor Connect talks to Suite Web and to Suite desktop on the loopback. */
-export const consoleHeaders: Record<string, string> = {
+/**
+ * mvp-spec §5.9. Trezor Connect talks to Suite Web and to Suite desktop on the loopback;
+ * author tasks read the published `targets.json` from the repo origin.
+ */
+export const consoleHeaders = (config: ServerConfigShape): Record<string, string> => ({
   'content-security-policy': [
     "default-src 'self'",
     "script-src 'self'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
-    "connect-src 'self' https://suite.trezor.io ws://127.0.0.1:21335",
+    `connect-src 'self' ${config.repoOrigin} https://suite.trezor.io ws://127.0.0.1:21335`,
     'frame-src https://suite.trezor.io',
     "object-src 'none'",
     "base-uri 'none'",
@@ -135,7 +138,7 @@ export const consoleHeaders: Record<string, string> = {
   'cross-origin-opener-policy': 'same-origin-allow-popups',
   'referrer-policy': 'no-referrer',
   'x-content-type-options': 'nosniff',
-}
+})
 
 const corsHeaders = {
   'access-control-allow-origin': '*',
@@ -203,7 +206,7 @@ const HostRouting = HttpRouter.middleware(
           const response = pathname.startsWith('/api/')
             ? yield* httpEffect
             : yield* serveConsole(config, pathname)
-          return HttpServerResponse.setHeaders(response, consoleHeaders)
+          return HttpServerResponse.setHeaders(response, consoleHeaders(config))
         }
         return HttpServerResponse.text('Unknown host', { status: 404 })
       })

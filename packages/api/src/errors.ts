@@ -14,7 +14,7 @@ export class InvalidRequest extends Schema.TaggedError<InvalidRequest>()(
   { httpApiStatus: 400 },
 ) {}
 
-/** No session, or the session does not grant this endpoint. Empty body. */
+/** No session, or the session does not grant this endpoint. Body `{ "_tag": "Unauthorized" }`. */
 export const Unauthorized = HttpApiError.Unauthorized
 
 /** A login, challenge or invite code did not verify. Never says which part was wrong. */

@@ -135,6 +135,8 @@ Remove:
 2. Remaining authors now get tasks: `ResignItems` (sign `itemSigningBytes(item)` of each
    item, complete with `{ _tag: 'ItemSignatures', signatures: [{ itemId, signature }] }`)
    and, if needed, `SignAuthorsMetadata` with `reason: 'author-removal'`.
+   `ResignItems` carries no `base`: the console checks each item against the published
+   `targets.json` at `company.repoBase`, which the console CSP allows in `connect-src`.
    `ceremonies.get` shows the impact shrinking as they do.
 3. The owner signs whenever ready. Items still signed only by the removed author are
    unpublished with the revocation. If the authors metadata still needs its re-sign, the

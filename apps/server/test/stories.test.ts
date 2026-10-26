@@ -531,6 +531,9 @@ describe('hosting (§5.2, §5.9)', () => {
     expect(spa.headers.get('content-security-policy')).toContain(
       'frame-src https://suite.trezor.io',
     )
+    expect(spa.headers.get('content-security-policy')).toContain(
+      "connect-src 'self' https://repo.keryx.test ",
+    )
     expect(spa.headers.get('cross-origin-opener-policy')).toBe('same-origin-allow-popups')
     expect((await get('https://console.keryx.test/assets/missing.js')).status).toBe(404)
     const release = await (await get('https://console.keryx.test/api/release')).json()
