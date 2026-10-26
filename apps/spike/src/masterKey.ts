@@ -12,21 +12,28 @@ export const masterKeyValue = bytesToHex(sha256(utf8ToBytes('keryx/master-key/v1
 
 export const masterKeyLabel = (companyId: string) => `Keryx master key ${companyId}`
 
-export const deriveMasterSeed = async (
+const derivation = (companyId: string) => ({
+  path: masterKeyPath,
+  key: masterKeyLabel(companyId),
+  value: masterKeyValue,
+  encrypt: true,
+  askOnEncrypt: true,
+  askOnDecrypt: true,
+})
+
+/**
+ * One Connect call per user click: through Suite Web every call opens a popup, and the
+ * browser blocks a popup that does not directly follow a click. Several derivations go in
+ * one `bundle`.
+ */
+export const deriveMasterSeeds = async (
   trezor: TrezorClient,
-  companyId: string,
-): Promise<Uint8Array> => {
-  const response = await trezor.cipherKeyValue({
-    path: masterKeyPath,
-    key: masterKeyLabel(companyId),
-    value: masterKeyValue,
-    encrypt: true,
-    askOnEncrypt: true,
-    askOnDecrypt: true,
-  })
+  companyIds: readonly string[],
+): Promise<Uint8Array[]> => {
+  const response = await trezor.cipherKeyValue({ bundle: companyIds.map(derivation) })
   if (!response.success)
     throw new Error(`cipherKeyValue failed: ${response.error.code} ${response.error.message}`)
-  return hexToBytes(response.payload.value)
+  return response.payload.map(({ value }) => hexToBytes(value))
 }
 
 export const runMasterKey = async (
@@ -36,8 +43,13 @@ export const runMasterKey = async (
 ): Promise<void> => {
   check.info(`path ${masterKeyPath}, key "${masterKeyLabel(companyId)}"`)
   check.info(`value ${masterKeyValue}`)
-  const first = await deriveMasterSeed(trezor, companyId)
-  const second = await deriveMasterSeed(trezor, companyId)
+  const otherCompanyId = `${companyId}-other`
+  const [first, second, other] = await deriveMasterSeeds(trezor, [
+    companyId,
+    companyId,
+    otherCompanyId,
+  ])
+  if (!first || !second || !other) throw new Error('cipherKeyValue returned too few values')
   check.assert(first.length === 32, `output is 32 bytes (got ${first.length})`)
   check.assert(bytesEqual(first, second), 'two derivations give identical output')
 
@@ -47,8 +59,6 @@ export const runMasterKey = async (
   const signature = await ed.signAsync(message, first)
   check.assert(await ed.verifyAsync(signature, message, publicKey), 'test signature verifies')
 
-  const otherCompanyId = `${companyId}-other`
-  const other = await deriveMasterSeed(trezor, otherCompanyId)
   const otherPublicKey = await ed.getPublicKeyAsync(other)
   check.info(`"${otherCompanyId}" public key ${bytesToHex(otherPublicKey)}`)
   check.assert(!bytesEqual(first, other), 'a different company_id gives a different key')
