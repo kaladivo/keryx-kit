@@ -1,0 +1,28 @@
+{
+  "name": "@keryx-kit/spike",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit -p .",
+    "test:e2e": "playwright test",
+    "tenv:up": "docker run -d --rm --name keryx-spike-tenv -e MACOS=1 -p 19001:9001 -p 21330:21328 -p 16080:6080 ghcr.io/trezor/trezor-user-env:latest",
+    "tenv:down": "docker rm -f keryx-spike-tenv"
+  },
+  "dependencies": {
+    "@noble/curves": "2.4.0",
+    "@noble/ed25519": "3.2.0",
+    "@noble/hashes": "2.4.0",
+    "@trezor/connect": "10.0.1",
+    "@trezor/connect-web": "10.0.1",
+    "@trezor/transport-common": "10.0.1",
+    "@trezor/transport-web": "10.0.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.5",
+    "vite": "8.3.5",
+    "vite-plugin-node-polyfills": "0.28.0"
+  }
+}
