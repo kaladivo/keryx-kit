@@ -178,7 +178,10 @@ describe('validateTargets', () => {
   it.effect('accepts targets.json signed by the root chain and nothing else', () =>
     Effect.gen(function* () {
       const repo = yield* companyRepo
-      expect(validateTargets(repo)).toEqual([])
+      expect(validateTargets(repo, at(12).now)).toEqual([])
+      expect(validateTargets(repo, new Date(Date.UTC(2028, 0, 1))).map((i) => i.code)).toContain(
+        'expired',
+      )
       const intruder = ed25519Key(publicOf('mallory'))
       const { delegations } = repo.targets.signed
       const forged = {
@@ -189,18 +192,18 @@ describe('validateTargets', () => {
         },
       }
       const unsigned = { signatures: [], signed: forged }
-      expect(validateTargets({ ...repo, targets: unsigned }).map((i) => i.code)).toEqual([
-        'signature-threshold',
-      ])
+      expect(
+        validateTargets({ ...repo, targets: unsigned }, at(12).now).map((i) => i.code),
+      ).toEqual(['signature-threshold'])
       const byMallory = {
         ...unsigned,
         signatures: [yield* signatureFor(unsigned, signerOf('mallory'))],
       }
-      expect(validateTargets({ ...repo, targets: byMallory }).map((i) => i.code)).toEqual([
-        'signature-threshold',
-      ])
+      expect(
+        validateTargets({ ...repo, targets: byMallory }, at(12).now).map((i) => i.code),
+      ).toEqual(['signature-threshold'])
       const otherRoot = { ...repo, roots: [] }
-      expect(validateTargets(otherRoot).map((i) => i.code)).toEqual(['root-chain'])
+      expect(validateTargets(otherRoot, at(12).now).map((i) => i.code)).toEqual(['root-chain'])
     }),
   )
 })

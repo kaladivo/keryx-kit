@@ -281,13 +281,9 @@ const allMetadata = (
 ]
 
 const checkExpiry = (report: Report, repo: RepoState & Partial<Repo>, now: Date) => {
-  for (const [file, doc] of allMetadata(repo).filter(([file]) => !/^\d+\.root\.json$/.test(file))) {
-    if (Date.parse(doc.signed.expires) < now.getTime())
-      report('expired', file, `expired ${doc.signed.expires}`)
-  }
-  const root = currentRoot(repo)
-  if (Date.parse(root.signed.expires) < now.getTime())
-    report('expired', 'root.json', `expired ${root.signed.expires}`)
+  for (const [file, doc] of allMetadata(repo).filter(([file]) => !/^\d+\.root\.json$/.test(file)))
+    checkNotExpired(report, file, doc, now)
+  checkNotExpired(report, 'root.json', currentRoot(repo), now)
 }
 
 const checkMonotonic = (report: Report, repo: RepoState & Partial<Repo>, previous: Repo) => {
@@ -343,6 +339,30 @@ export const validateRepo = (
   return issues
 }
 
+const checkNotExpired = (report: Report, file: string, doc: AnyMetadata, now: Date) => {
+  if (Date.parse(doc.signed.expires) < now.getTime())
+    report('expired', file, `expired ${doc.signed.expires}`)
+}
+
+const issuesOf = (check: (report: Report) => void): ReadonlyArray<Issue> => {
+  const issues: Array<Issue> = []
+  check((code, file, message) => {
+    issues.push({ code, file, message })
+  })
+  return issues
+}
+
+/** A root chain on its own, e.g. the one a company's domain serves, at time `now`. */
+export const validateRootChain = (
+  roots: ReadonlyArray<RootMetadata>,
+  now: Date,
+): ReadonlyArray<Issue> =>
+  issuesOf((report) => {
+    checkRootChain(report, roots)
+    const root = roots.at(-1)
+    if (root) checkNotExpired(report, 'root.json', root, now)
+  })
+
 /**
  * The root chain and `targets.json` alone, for a client that trusts only the roots it
  * fetched from the company's domain and needs the delegations (e.g. author keys) from a
@@ -350,14 +370,13 @@ export const validateRepo = (
  */
 export const validateTargets = (
   state: Pick<RepoState, 'roots' | 'targets'>,
+  now: Date,
 ): ReadonlyArray<Issue> => {
-  const issues: Array<Issue> = []
-  const report: Report = (code, file, message) => {
-    issues.push({ code, file, message })
-  }
-  checkRootChain(report, state.roots)
-  if (issues.length > 0) return issues
-  checkThreshold(report, 'targets.json', state.targets, authorityOf(state, 'targets'))
-  checkKeyids(report, 'targets.json', state.targets.signed.delegations.keys)
-  return issues
+  const chain = validateRootChain(state.roots, now)
+  if (chain.length > 0) return chain
+  return issuesOf((report) => {
+    checkThreshold(report, 'targets.json', state.targets, authorityOf(state, 'targets'))
+    checkKeyids(report, 'targets.json', state.targets.signed.delegations.keys)
+    checkNotExpired(report, 'targets.json', state.targets, now)
+  })
 }

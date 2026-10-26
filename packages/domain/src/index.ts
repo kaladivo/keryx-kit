@@ -92,5 +92,6 @@ export {
   type IssueCode,
   type ValidateOptions,
   validateRepo,
+  validateRootChain,
   validateTargets,
 } from './validate.ts'
