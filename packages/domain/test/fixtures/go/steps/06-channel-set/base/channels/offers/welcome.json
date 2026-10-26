@@ -1,0 +1,31 @@
+{
+  "attachments": [
+    {
+      "mime_type": "application/pdf",
+      "name": "Price list",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_in_bytes": 12345,
+      "url": "https://acme.example/prices.pdf?a=1&b=2"
+    }
+  ],
+  "content_html": "<p>Hello & welcome to <b>ACME</b>\u2028</p>",
+  "date_published": "2026-10-26T12:00:00Z",
+  "id": "welcome",
+  "image": "data:image/png;base64,iVBORw0KGgo=",
+  "language": "en",
+  "sig": [
+    {
+      "keyid": "08f6908f3f428c5eb492f30b82d707c718a9757bdb62556da1290c51e93ed170",
+      "sig": "alD0v8iB_2dL1qetlyRtR9h0D_2y3wglENGBbqMWk68TvQ2O4igGgGkFCcRrQcoThHO6nybHQfQkQv6iiTqNAQ"
+    },
+    {
+      "keyid": "8f0239422ec43a07d98f60203793b9af178b339914fcab82a4527ffafa9dd294",
+      "sig": "EGDwmQ8yklw3e7DgyiRN9IuKKq2YLWN4RNIoSMoLgsK-5zthjgTxULJ5vaTBgk3Pww8GAbK1vGOCjt-fVE3QBA"
+    }
+  ],
+  "tags": [
+    "news",
+    "ünïcode"
+  ],
+  "title": "Welcome <to> ACME & co"
+}

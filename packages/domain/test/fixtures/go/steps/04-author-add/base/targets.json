@@ -1,0 +1,79 @@
+{
+	"signatures": [
+		{
+			"keyid": "7d04c20fc81dba956c00928d303fdaa2af0de1919d0cca87640ae930cedacea5",
+			"sig": "4462540e75cc29298de33b471c56b36a53394e81dbc6d2c6019a0f7be97f9c98546ac5065875d719fef2c59899135d412201e7db2150b095ac07ca738e40320b"
+		}
+	],
+	"signed": {
+		"_type": "targets",
+		"custom": {
+			"channels": {
+				"offers": {
+					"description": "Weekly \u003cb\u003edeals\u003c/b\u003e",
+					"display_name": "Offers \u0026 deals"
+				}
+			},
+			"company_name": "ACME \u003cShop\u003e \u0026 Co.",
+			"logo": "data:image/png;base64,iVBORw0KGgo=",
+			"private_feed_patterns": []
+		},
+		"delegations": {
+			"keys": {
+				"08f6908f3f428c5eb492f30b82d707c718a9757bdb62556da1290c51e93ed170": {
+					"keytype": "ed25519",
+					"keyval": {
+						"public": "e797788fb0c9d18c1f98ffb5e2ea6571f778cbb0dc3a6924f34efc77e0399445"
+					},
+					"name": "alice",
+					"scheme": "ed25519"
+				},
+				"704591f7aa9216610895c4d3ddec637c0f2fb5ceb409747a871056fae83a5cf5": {
+					"keytype": "ed25519",
+					"keyval": {
+						"public": "e99de33f4cd3fc487833adfc127b19bbb3949b0ab6bbdc66db7127dcccce88b2"
+					},
+					"name": "bob",
+					"scheme": "ed25519"
+				},
+				"8f0239422ec43a07d98f60203793b9af178b339914fcab82a4527ffafa9dd294": {
+					"keytype": "ed25519",
+					"keyval": {
+						"public": "f1a5e2ab4d07366ab3a20420237eb909763334922e7581aea7ecd9b1de2a5398"
+					},
+					"name": "offers",
+					"scheme": "ed25519"
+				}
+			},
+			"roles": [
+				{
+					"keyids": [
+						"8f0239422ec43a07d98f60203793b9af178b339914fcab82a4527ffafa9dd294"
+					],
+					"name": "channels.offers",
+					"paths": [
+						"channels/offers/*"
+					],
+					"terminating": true,
+					"threshold": 1
+				},
+				{
+					"keyids": [
+						"08f6908f3f428c5eb492f30b82d707c718a9757bdb62556da1290c51e93ed170",
+						"704591f7aa9216610895c4d3ddec637c0f2fb5ceb409747a871056fae83a5cf5"
+					],
+					"name": "channels.offers.authors",
+					"paths": [
+						"channels/offers/*"
+					],
+					"terminating": false,
+					"threshold": 1
+				}
+			]
+		},
+		"expires": "2027-10-26T15:00:00Z",
+		"spec_version": "1.0.31",
+		"targets": {},
+		"version": 3
+	}
+}
