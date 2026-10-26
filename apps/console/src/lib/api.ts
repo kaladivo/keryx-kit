@@ -27,11 +27,21 @@ const fallbackMessages: Readonly<Record<string, string>> = {
   HttpClientError: 'The console cannot reach the server. Check your connection and try again.',
 }
 
+const field = (value: unknown, key: string): unknown =>
+  typeof value === 'object' && value !== null ? (value as Record<string, unknown>)[key] : undefined
+
+/** A 401 is a missing session whether its body is `{"_tag":"Unauthorized"}` or empty. */
+const tagOf = (error: unknown): string => {
+  if (field(field(error, 'response'), 'status') === 401) return 'Unauthorized'
+  const tag = field(error, '_tag')
+  return typeof tag === 'string' ? tag : 'Unknown'
+}
+
 const toApiError = (error: unknown): ApiError => {
   if (error instanceof ApiError) return error
   const record =
     typeof error === 'object' && error !== null ? (error as Record<string, unknown>) : {}
-  const tag = typeof record._tag === 'string' ? record._tag : 'Unknown'
+  const tag = tagOf(error)
   const message =
     typeof record.error === 'string'
       ? record.error
