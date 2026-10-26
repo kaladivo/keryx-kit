@@ -1,0 +1,41 @@
+name: keryx-kit
+
+x-logging: &logging
+  driver: local
+  options:
+    max-size: 10m
+    max-file: "3"
+
+services:
+  app:
+    image: ghcr.io/kaladivo/keryx-kit:${KERYX_KIT_TAG:-latest}
+    restart: unless-stopped
+    init: true
+    environment:
+      KERYX_KEK_FILE: /run/secrets/kek
+    volumes:
+      - ./data:/data
+      - ./secrets/kek:/run/secrets/kek:ro
+    mem_limit: 512m
+    memswap_limit: 768m
+    logging: *logging
+
+  caddy:
+    image: caddy:2.11.7-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    mem_limit: 128m
+    logging: *logging
+
+volumes:
+  caddy-data:
+  caddy-config:
