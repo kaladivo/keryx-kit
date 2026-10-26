@@ -18,12 +18,12 @@ Versions used:
 
 | Test | Emulator, in-page Connect core + Bridge (Chromium) | Emulator, `connect-web` → Suite Web popup (Chromium) | Real Safe 7, Chrome | Real Safe 7, Firefox + Suite desktop | Phones |
 |---|---|---|---|---|---|
-| 1. Owner login (`requestLogin`) | pass | pass | untested (manual) | untested | n/a |
-| 2. Master key (`cipherKeyValue`) | pass | pass | untested (manual) | untested | n/a |
+| 1. Owner login (`requestLogin`) | pass | pass | pass (Suite Web) | untested | n/a |
+| 2. Master key (`cipherKeyValue`) | pass | pass | pass (Suite Web, one bundled call) | untested | n/a |
 
 | Test | Chromium + CDP virtual authenticator (`hasPrf`) | Chrome + Google PM | Chrome + iCloud Keychain | 1Password | YubiKey | Edge | Safari 18+ | Firefox | Phones |
 |---|---|---|---|---|---|---|---|---|---|
-| 3. Passkey PRF wrap/unwrap | pass | untested | untested | untested | untested | untested | untested | untested | untested (needs HTTPS domain) |
+| 3. Passkey PRF wrap/unwrap | pass | untested | untested | pass (Chrome extension) | untested | untested | untested | untested | untested (needs HTTPS domain) |
 
 Emulator values (same seed, so they reproduce on every run):
 
@@ -33,6 +33,22 @@ Emulator values (same seed, so they reproduce on every run):
 
 Both Connect paths produced byte-identical keys, and the master key stayed the same across a
 page reload (new THP session).
+
+Real Safe 7 (2026-10-26, Chrome, Suite Web): the identity key was the same in two sessions
+(`02fb3bbd7a10f2be6fb964def234c16c4bf0839f80718f432c67b056173c4ba5fe` for
+`http://localhost:5173`); master key for `acme-spike`
+`7b5dff844409a68a88774db455acd46d0fec1b90a03a28d58b8ce108b71ce9c8`.
+
+Found on real hardware and fixed in the spike:
+
+- **One Connect call per click.** Three sequential `cipherKeyValue` calls failed with
+  `Handshake_Error popup-blocked`: each call opens a Suite Web popup, and Chrome blocks a popup
+  that does not directly follow a click. One call with a `bundle` of derivations works.
+- **1Password returns PRF output as a plain number array** (`{"first":[33,187,…]}`), not an
+  ArrayBuffer. The console must accept ArrayBuffer, typed arrays (from any JS realm) and byte
+  arrays.
+- **Discoverable assertions may pick another passkey** for the same site. The console must look up
+  the wrapped key by the credential id the assertion returns, never assume it is the newest.
 
 ### Exact parameters
 

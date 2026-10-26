@@ -383,8 +383,14 @@ Spike results, including the manual test still to run on a real Safe 7:
 - A lost passkey means a lost author key. The owner removes the author (B5)
   and the member registers again (B2).
 
-PRF passed with Chrome's virtual authenticator. Real authenticators and phones
-are still to test (`docs/spikes.md`).
+- PRF output arrives in different shapes: an ArrayBuffer, a typed array from
+  another JS realm, or (1Password) a plain array of byte values. The console
+  accepts all three.
+- The wrapped key is looked up by the credential id the assertion returns, since
+  a site can have several passkeys.
+
+PRF passed with Chrome's virtual authenticator and with 1Password on a real
+machine. Other providers and phones are still to test (`docs/spikes.md`).
 
 ### 5.5 Ceremonies
 
