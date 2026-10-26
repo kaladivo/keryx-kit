@@ -16,13 +16,14 @@ import { Effect } from 'effect'
 import { SqlClient } from 'effect/sql'
 import { unzipSync } from 'fflate'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { refreshTimestamps } from '../src/jobs.ts'
+import { refreshTimestampFor, refreshTimestamps, renewServerMetadata } from '../src/jobs.ts'
 import { Repos } from '../src/repos.ts'
 import {
   type Author,
   ceremony,
   doTasks,
   draftItem,
+  memberLogin,
   operatorBrowser,
   ownerLogin,
   registerAuthor,
@@ -63,11 +64,9 @@ const liveChannel = async () => {
   return { owner, operator, jana }
 }
 
-const publish = async (author: Author, id: string) => {
+const publish = async (author: Author, id: string, channel = 'news') => {
   const item = await signedItem(author, draftItem(id, `Post ${id}`, server.clock.current))
-  return call(
-    author.browser.client.items.publish({ params: { channel: 'news' }, payload: { item } }),
-  )
+  return call(author.browser.client.items.publish({ params: { channel }, payload: { item } }))
 }
 
 const publishedRepo = () =>
@@ -527,6 +526,47 @@ describe('E1: scheduled timestamp', () => {
     advance(server, 12 * 60 * 60 * 1000)
     await server.runWithServices(refreshTimestamps)
     expect(await version()).toBe(before + 1)
+  })
+})
+
+describe('expired authors metadata', () => {
+  it('does not block writes that leave the expired file untouched', async () => {
+    const { owner } = await liveChannel()
+    const petr = await registerAuthor(server, owner, 'Petr')
+    await ceremony(owner, device, SLUG, {
+      _tag: 'CreateChannel',
+      channel: 'offers',
+      displayName: 'Offers',
+      description: '',
+      authors: [petr.memberId],
+    })
+    await doTasks(petr)
+    advance(server, 150 * DAY)
+    await memberLogin(petr)
+    expect((await doTasks(petr)).map((task) => task._tag)).toEqual(['SignAuthorsMetadata'])
+    advance(server, 25 * DAY)
+    await server.runWithServices(renewServerMetadata)
+    advance(server, 6 * DAY)
+    const expired = (await publishedRepo()).authors.news?.signed.expires ?? ''
+    expect(Date.parse(expired)).toBeLessThan(server.clock.current.getTime())
+
+    await server.runWithServices(refreshTimestampFor(SLUG))
+    await memberLogin(petr)
+    await publish(petr, 'still-live', 'offers')
+    await ownerLogin(owner, device, SLUG)
+    const assigned = await ceremony(owner, device, SLUG, {
+      _tag: 'AssignAuthor',
+      channel: 'news',
+      memberId: petr.memberId,
+    })
+    expect(assigned.status).toBe('applied')
+    const removed = await ceremony(owner, device, SLUG, {
+      _tag: 'RemoveAuthor',
+      channel: 'news',
+      memberId: petr.memberId,
+    })
+    expect(removed.status).toBe('applied')
+    expect((await publishedRepo()).authors.news?.signed.expires).toBe(expired)
   })
 })
 

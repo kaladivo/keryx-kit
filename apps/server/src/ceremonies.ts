@@ -36,7 +36,14 @@ import {
 import { Effect, Schema } from 'effect'
 import { SqlClient } from 'effect/sql'
 import { randomToken } from './crypto.ts'
-import { changedVersions, commit, issuesError, Repos, signServerRoles } from './repos.ts'
+import {
+  changedVersions,
+  commit,
+  issuesError,
+  Repos,
+  signServerRoles,
+  withoutUntouchedExpiry,
+} from './repos.ts'
 import { generateServerKey } from './serverKeys.ts'
 import { orDieSql } from './sql.ts'
 import {
@@ -233,8 +240,8 @@ export const assemble = (published: Repo, ceremony: CeremonyRecord) =>
 const isAuthorsFile = (file: string) => /^channels\.[a-z0-9_-]+\.authors\.json$/.test(file)
 
 /** Splits what the change still lacks (authors signatures) from real problems. */
-const check = (state: RepoState, at: Date) => {
-  const issues = validateRepo(state, { now: at })
+const check = (state: RepoState, published: Repo, at: Date) => {
+  const issues = withoutUntouchedExpiry(validateRepo(state, { now: at }), published, state)
   const missing = issues.filter((i) => i.code === 'signature-threshold' && isAuthorsFile(i.file))
   return { missing, invalid: issues.filter((i) => !missing.includes(i)) }
 }
@@ -263,7 +270,7 @@ export const tryApply = (ceremony: CeremonyRecord, actor: Actor) =>
     const published = yield* repos.published(ceremony.slug)
     const state = yield* assemble(published, ceremony)
     const at = yield* now
-    const { missing, invalid } = check(state, at)
+    const { missing, invalid } = check(state, published, at)
     if (invalid.length > 0) return yield* issuesError(invalid)
     if (missing.length > 0) return ceremony
     const next = yield* commit(ceremony.slug, published, state)
@@ -405,7 +412,7 @@ const summaryOf = (ceremony: CeremonyRecord) =>
       missing = yield* missingSignatures(
         ceremony.slug,
         state,
-        check(state, yield* now).missing.map((issue) => issue.file),
+        check(state, published, yield* now).missing.map((issue) => issue.file),
       )
     }
     const removal =

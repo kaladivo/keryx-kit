@@ -6,6 +6,7 @@ import {
   bytesEqual,
   currentRoot,
   meetsThreshold,
+  metadataFileBytes,
   parseRepoFiles,
   type Repo,
   type RepoFiles,
@@ -57,6 +58,42 @@ const baseWriteRank = (path: string): number => {
   if (path === 'snapshot.json') return 3
   if (path === 'timestamp.json') return 4
   return 0
+}
+
+/** Every metadata file of a state by file name, as written to disk. */
+const metadataFiles = (state: RepoState): Map<string, Uint8Array> => {
+  const files = new Map<string, Uint8Array>([
+    ['root.json', metadataFileBytes(currentRoot(state))],
+    ['targets.json', metadataFileBytes(state.targets)],
+  ])
+  for (const [channel, doc] of Object.entries(state.channels)) {
+    files.set(`channels.${channel}.json`, metadataFileBytes(doc))
+  }
+  for (const [channel, doc] of Object.entries(state.authors)) {
+    files.set(`channels.${channel}.authors.json`, metadataFileBytes(doc))
+  }
+  return files
+}
+
+/**
+ * A write may leave expired metadata it did not touch (an authors role nobody renewed)
+ * in place: refusing would stop timestamps and every other change for the company.
+ * Only metadata the write changes must be unexpired.
+ */
+export const withoutUntouchedExpiry = <I extends { readonly code: string; readonly file: string }>(
+  issues: ReadonlyArray<I>,
+  previous: RepoState | undefined,
+  next: RepoState,
+): ReadonlyArray<I> => {
+  if (!previous) return issues
+  const before = metadataFiles(previous)
+  const after = metadataFiles(next)
+  return issues.filter((issue) => {
+    if (issue.code !== 'expired') return true
+    const old = before.get(issue.file)
+    const current = after.get(issue.file)
+    return !(old && current && bytesEqual(old, current))
+  })
 }
 
 export const issuesError = (
@@ -168,7 +205,11 @@ export const ReposLive = Layer.effect(Repos)(
 
     const write = (slug: string, previous: Repo | undefined, next: Repo) =>
       Effect.gen(function* () {
-        const issues = validateRepo(next, { previous, now: yield* time.now })
+        const issues = withoutUntouchedExpiry(
+          validateRepo(next, { previous, now: yield* time.now }),
+          previous,
+          next,
+        )
         if (issues.length > 0) return yield* issuesError(issues)
         yield* writeFiles(slug, previous, next)
         cache.set(slug, next)
