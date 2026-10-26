@@ -30,6 +30,8 @@ export interface FakeResponse {
   readonly status?: number
   readonly headers?: Record<string, string>
   readonly body: Uint8Array | string
+  /** Send `Access-Control-Allow-Origin: *` only to requests that carry an Origin. */
+  readonly corsWithOrigin?: boolean
 }
 
 const testConfig = (dir: string): ServerConfigShape => ({
@@ -87,8 +89,15 @@ export const startServer = async () => {
   const fakeWeb = HttpClient.make((request, url) =>
     Effect.sync(() => {
       const found = web.get(url.toString())
+      const cors =
+        found?.corsWithOrigin && request.headers.origin
+          ? { 'access-control-allow-origin': '*' }
+          : {}
       const response = found
-        ? new Response(found.body, { status: found.status ?? 200, headers: found.headers ?? {} })
+        ? new Response(found.body, {
+            status: found.status ?? 200,
+            headers: { ...(found.headers ?? {}), ...cors },
+          })
         : new Response('not found', { status: 404 })
       return HttpClientResponse.fromWeb(request, response)
     }),

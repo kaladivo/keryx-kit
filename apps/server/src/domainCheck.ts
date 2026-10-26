@@ -1,4 +1,5 @@
 import { bytesEqual, type Repo, repoFiles } from '@keryx-kit/domain'
+import { PWA_URL } from '@keryx-kit/join-kit'
 import { Duration, Effect } from 'effect'
 import { HttpClient } from 'effect/http'
 
@@ -11,10 +12,13 @@ export const JOIN_PAGE_MARKER = '<title>Subscribe with Keryx</title>'
 
 const TIMEOUT = Duration.seconds(10)
 
+/** The subscriber app's origin: some hosts send CORS headers only when a request has one. */
+const PROBE_ORIGIN = new URL(PWA_URL).origin
+
 const fetchBytes = (url: string) =>
   Effect.gen(function* () {
     const client = yield* HttpClient.HttpClient
-    const response = yield* client.get(url)
+    const response = yield* client.get(url, { headers: { origin: PROBE_ORIGIN } })
     const body = new Uint8Array(yield* response.arrayBuffer)
     return { status: response.status, headers: response.headers, body }
   }).pipe(

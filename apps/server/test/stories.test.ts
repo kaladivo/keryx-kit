@@ -480,7 +480,7 @@ describe('A3, A4: join kit and domain check', () => {
     expect(noCors).toMatchObject({ status: 'mismatch' })
     expect(noCors.reason).toContain('Access-Control-Allow-Origin')
     server.web.set(`${ORIGIN}/.well-known/keryx/root.json`, {
-      headers: { 'access-control-allow-origin': '*' },
+      corsWithOrigin: true,
       body: zip['.well-known/keryx/root.json'] ?? new Uint8Array(),
     })
     expect((await call(owner.client.join.checkDomain())).status).toBe('live')
