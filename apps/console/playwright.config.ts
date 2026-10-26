@@ -5,6 +5,7 @@ const port = 5175
 /** Runs against the dev server with the in-memory mock API and the stub Trezor. */
 export default defineConfig({
   testDir: 'e2e',
+  testMatch: 'flow.spec.ts',
   timeout: 120_000,
   workers: 1,
   reporter: 'list',

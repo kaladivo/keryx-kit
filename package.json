@@ -9,6 +9,7 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "conformance": "bun packages/domain/scripts/write-scenario.ts tmp/conformance && bun apps/server/scripts/write-scenario.ts tmp/conformance-server && cd tools/conformance && go run . ../../tmp/conformance && go run . ../../tmp/conformance-server",
+    "e2e": "bun run --filter @keryx-kit/console e2e",
     "golden": "cd tools/conformance && go run ./golden ../../packages/domain/test/fixtures/go"
   },
   "devDependencies": {

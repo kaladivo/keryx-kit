@@ -16,8 +16,9 @@ renews the Let's Encrypt certificates on its own.
 
 Every push to `main` runs `.github/workflows/ci.yml`:
 
-1. `check`: lint, typecheck, tests.
-2. `release` (only on `main`, only if `check` passed, one at a time):
+1. `check`: lint, typecheck, tests, conformance. `e2e` runs the end-to-end run (below)
+   next to it.
+2. `release` (only on `main`, only if `check` and `e2e` passed, one at a time):
    1. Builds the `linux/amd64` image from `Dockerfile` and pushes
       `ghcr.io/kaladivo/keryx-kit:latest` and `:<commit sha>`. The digest is in
       the job summary.
@@ -89,20 +90,63 @@ renewal and the domain check every 24 h, each also once at startup.
 
 ## Run locally
 
-Port 3000 is often taken; use another one. With the console dev server proxying `/api`
-to `http://console.localhost:3999` (`changeOrigin: true`):
+Port 3000 is often taken; use another one. The server:
 
 ```sh
 mkdir -p tmp/dev && head -c 32 /dev/urandom > tmp/dev/kek && echo dev-token > tmp/dev/operator-token
 bun run --filter @keryx-kit/site build
 KERYX_DATA_DIR=tmp/dev KERYX_KEK_FILE=tmp/dev/kek KERYX_OPERATOR_TOKEN_FILE=tmp/dev/operator-token \
-  KERYX_SERVICE_HOST=localhost:3999 KERYX_SCHEME=http KERYX_CONSOLE_ORIGIN=http://localhost:5173 \
+  KERYX_SERVICE_HOST=localhost:3999 KERYX_SCHEME=http KERYX_CONSOLE_ORIGIN=http://localhost:5174 \
   PORT=3999 bun apps/server/src/main.ts
 ```
 
-The landing page is at `http://localhost:3999`, the repo bases at
-`http://repo.localhost:3999/<slug>/`. Owner login keys are bound to the console origin, so a
-Trezor identity made on localhost never works in production and the other way round.
+The console dev server, at `http://localhost:5174`, proxies `/api` to
+`http://console.localhost:3999` (`KERYX_API` overrides it):
+
+```sh
+bun run --filter @keryx-kit/console dev        # real Trezor through Suite
+bun run --filter @keryx-kit/console dev:stub   # dev Trezor stub with fixed test keys
+```
+
+`KERYX_CONSOLE_ORIGIN` must be the origin the browser shows, because WebAuthn binds
+passkeys to it (the rpId is its hostname). The landing page is at
+`http://localhost:3999`, the repo bases at `http://repo.localhost:3999/<slug>/`. Owner
+login keys are bound to the console origin, so a Trezor identity made on localhost never
+works in production and the other way round.
+
+The Trezor stub (`apps/console/src/dev/trezorStub.ts`) makes real SLIP-0013 login
+signatures and master keys from fixed seeds, so the real server accepts them. It only
+exists under `vite` serve with `KERYX_TREZOR_STUB=1` or `KERYX_MOCK`; the build drops it
+and `apps/console/scripts/check-dist.ts` fails the build if it is ever bundled.
+`bun run --filter @keryx-kit/console dev:mock` runs the console against an in-memory mock
+API instead of the server.
+
+## End-to-end run
+
+```sh
+(cd apps/console && bunx playwright install chromium)   # once
+bun run e2e
+```
+
+`apps/console/e2e/demo.spec.ts` (config `apps/console/playwright.server.config.ts`) starts
+the real server on port 3998 with a fresh `tmp/e2e/data`, and the console dev server on
+port 5176 with the Trezor stub. Headless Chromium plays the demo script (mvp-spec §7 steps
+1 to 5 and 7): the operator creates an invite code, the owner signs up "Demo Shop", an
+author registers with a passkey (CDP virtual authenticator with PRF), the owner creates
+"Offers" with that author, the author's visit makes it live, the author publishes a post
+with an image and edits it, and the owner adds a second author and removes the first after
+the re-sign. It goes on with channel and logo edits, a wrong Suite wallet, targets
+renewal, unpublishing, the join kit, the domain check, the activity log, the operator
+dashboard and sign-out.
+
+After every repo change the run copies the repo the server wrote to
+`tmp/e2e/repo-states`. The last test verifies all of them with the Go SDK
+(`tools/conformance`) and with the subscriber app's verifier
+(`packages/domain/test/subscriber-app-dir.test.ts`). The whole run takes about 20 s;
+CI runs it in the `e2e` job.
+
+`bun run --filter @keryx-kit/console test:e2e` runs the older screen walkthrough against
+the mock API (`SHOTS_DIR=<dir>` saves screenshots).
 
 ## Check the console bundle hash
 

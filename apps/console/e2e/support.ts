@@ -60,3 +60,26 @@ export const shoot = async (page: Page, name: string) => {
   await page.emulateMedia({ colorScheme: 'light' })
   if (original) await page.setViewportSize(original)
 }
+
+/** A colourful JPEG drawn in the page, so the editor's resize path runs on a real image. */
+export const photo = async (page: Page, hue: number, label: string): Promise<Buffer> => {
+  const dataUrl = await page.evaluate(
+    ([h, text]) => {
+      const canvas = document.createElement('canvas')
+      canvas.width = 1600
+      canvas.height = 900
+      const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+      const gradient = ctx.createLinearGradient(0, 0, 1600, 900)
+      gradient.addColorStop(0, `hsl(${h} 80% 55%)`)
+      gradient.addColorStop(1, `hsl(${Number(h) + 60} 70% 35%)`)
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, 1600, 900)
+      ctx.fillStyle = 'rgba(255,255,255,0.9)'
+      ctx.font = 'bold 150px system-ui, sans-serif'
+      ctx.fillText(String(text), 120, 520)
+      return canvas.toDataURL('image/jpeg', 0.9)
+    },
+    [hue, label] as const,
+  )
+  return Buffer.from(dataUrl.split(',')[1] ?? '', 'base64')
+}
