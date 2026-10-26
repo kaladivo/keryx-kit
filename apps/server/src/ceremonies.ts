@@ -341,16 +341,15 @@ export const signCeremony = (
       return yield* new Conflict({ error: `This ceremony is already ${ceremony.status}.` })
     }
     const published = yield* repos.published(slug)
-    let state = yield* domain(applyOperation(published, ceremony.operation))
-    for (const { role, signature } of signatures) {
-      state = yield* domain(attachRoleSignature(state, role, signature))
-    }
+    const at = yield* now
     const staged: CeremonyRecord = {
       ...ceremony,
       status: 'staged',
       signatures: { ...ceremony.signatures, owner: signatures },
-      updatedAt: iso(yield* now),
+      updatedAt: iso(at),
     }
+    const { invalid } = check(yield* assemble(published, staged), published, at)
+    if (invalid.length > 0) return yield* issuesError(invalid)
     yield* saveCeremony(staged)
     const result = yield* tryApply(staged, { kind: 'owner' })
     if (result.status === 'staged') {

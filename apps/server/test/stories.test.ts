@@ -27,6 +27,7 @@ import {
   operatorBrowser,
   ownerLogin,
   registerAuthor,
+  signAsOwner,
   signedItem,
   signUp,
   trezor,
@@ -340,6 +341,26 @@ describe('B3 to B6: ceremonies', () => {
       }),
     )
     expect(last).toMatchObject({ _tag: 'Refused', code: 'last-author' })
+  })
+
+  it('keeps a ceremony awaiting the owner when the owner signatures leave the repo invalid', async () => {
+    const { owner } = await company()
+    const started = await call(
+      owner.client.ceremonies.start({ payload: { intent: { _tag: 'RenewTargets' } } }),
+    )
+    const rootOnly = await call(
+      signatureFor(currentRoot(await publishedRepo()), device.master(SLUG)),
+    )
+    const refused = await failure(
+      owner.client.ceremonies.sign({
+        params: { ceremonyId: started.id },
+        payload: { signatures: [{ role: 'root', signature: rootOnly }] },
+      }),
+    )
+    expect(refused._tag).toBe('RepoInvalid')
+    const again = await call(owner.client.ceremonies.get({ params: { ceremonyId: started.id } }))
+    expect(again.status).toBe('awaiting-owner')
+    expect((await signAsOwner(owner, again, device, SLUG)).status).toBe('applied')
   })
 
   it('labels author keys in targets.json without personal names', async () => {
