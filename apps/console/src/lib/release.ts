@@ -1,20 +1,10 @@
-/**
- * `GET /api/release` (`{ gitSha, consoleBundleSha256 }`), so anyone can compare the
- * served bundle with the published hash (mvp-spec §5.9). The endpoint is newer than the
- * `@keryx-kit/api` contract on this branch, so it is fetched directly.
- */
-import { Schema } from 'effect'
+/** `public.release`, so anyone can compare the served bundle with the published hash (mvp-spec §5.9). */
+import type { Release } from '@keryx-kit/api'
+import { call } from './api.ts'
 
-export const Release = Schema.Struct({ gitSha: Schema.String, consoleBundleSha256: Schema.String })
-export type Release = typeof Release.Type
+let release: Promise<typeof Release.Type | undefined> | undefined
 
-let release: Promise<Release | undefined> | undefined
-
-export const loadRelease = (): Promise<Release | undefined> => {
-  release ??= fetch('/api/release')
-    .then(async (response) =>
-      response.ok ? Schema.decodeUnknownSync(Release)(await response.json()) : undefined,
-    )
-    .catch(() => undefined)
+export const loadRelease = (): Promise<typeof Release.Type | undefined> => {
+  release ??= call((api) => api.public.release()).catch(() => undefined)
   return release
 }

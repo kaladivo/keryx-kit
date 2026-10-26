@@ -63,11 +63,6 @@ export const mockApi = (mode: string): Plugin => {
         try {
           const origin = `http://${req.headers.host ?? 'localhost'}`
           const api = await load(server, origin)
-          if (url === '/api/release') {
-            res.setHeader('Content-Type', 'application/json')
-            res.end(JSON.stringify({ gitSha: 'dev', consoleBundleSha256: 'dev-server-no-bundle' }))
-            return
-          }
           if (url.startsWith('/repo/')) {
             const [, , slug = '', ...rest] = new URL(url, origin).pathname.split('/')
             const bytes = api.repoFile(slug, rest.join('/'))

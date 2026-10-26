@@ -1187,11 +1187,15 @@ export const createMock = (mode: string, origin: string) => {
   )
 
   const Public = HttpApiBuilder.group(KeryxKitApi, 'public', (h) =>
-    h.handle('requestPilot', ({ payload }) =>
-      Effect.sync(() => {
-        state.pilotRequests.push({ id: randomId(), ...payload, createdAt: nowIso() })
-      }),
-    ),
+    h
+      .handle('requestPilot', ({ payload }) =>
+        Effect.sync(() => {
+          state.pilotRequests.push({ id: randomId(), ...payload, createdAt: nowIso() })
+        }),
+      )
+      .handle('release', () =>
+        Effect.succeed({ gitSha: 'dev', consoleBundleSha256: 'dev-server-no-bundle' }),
+      ),
   )
 
   // Sessions
