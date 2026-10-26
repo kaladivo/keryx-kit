@@ -10,7 +10,13 @@ export interface CompanyPin {
 
 const storageKey = (slug: string) => `keryx-company-pin/${slug}`
 
-export const companyPin = (slug: string): CompanyPin | undefined => {
+/** Keeps a pin for this session when the browser blocks storage. */
+const sessionPins = new Map<string, CompanyPin>()
+
+export const companyPin = (slug: string): CompanyPin | undefined =>
+  storedPin(slug) ?? sessionPins.get(slug)
+
+const storedPin = (slug: string): CompanyPin | undefined => {
   try {
     const pin = JSON.parse(localStorage.getItem(storageKey(slug)) ?? 'null') as unknown
     if (typeof pin !== 'object' || pin === null) return undefined
@@ -24,9 +30,10 @@ export const companyPin = (slug: string): CompanyPin | undefined => {
 }
 
 export const pinCompany = (slug: string, pin: CompanyPin): void => {
+  sessionPins.set(slug, pin)
   try {
     localStorage.setItem(storageKey(slug), JSON.stringify(pin))
   } catch {
-    // Without storage the author confirms again in the next session.
+    // Without storage the pin lasts for this session only.
   }
 }
