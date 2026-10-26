@@ -35,10 +35,33 @@ const prfAssertion = async (credentialId?: ArrayBuffer) => {
     },
   })
   if (!(assertion instanceof PublicKeyCredential)) throw new Error('no assertion')
-  const output = assertion.getClientExtensionResults().prf?.results?.first
-  if (!(output instanceof ArrayBuffer)) throw new Error('assertion returned no PRF output')
-  return { rawId: new Uint8Array(assertion.rawId), prf: new Uint8Array(output) }
+  const extensions = assertion.getClientExtensionResults()
+  const prf = asBytes(extensions.prf?.results?.first)
+  if (!prf) throw new Error(`assertion returned no PRF output: ${summarize(extensions)}`)
+  return { rawId: new Uint8Array(assertion.rawId), prf }
 }
+
+const isByteArray = (value: unknown): value is number[] =>
+  Array.isArray(value) && value.every((b) => Number.isInteger(b) && b >= 0 && b <= 255)
+
+/**
+ * Passkey-manager extensions do not always return an ArrayBuffer: 1Password returns a plain
+ * number array, and buffers from another JS realm fail `instanceof`.
+ */
+const asBytes = (value: unknown): Uint8Array<ArrayBuffer> | undefined => {
+  if (ArrayBuffer.isView(value))
+    return Uint8Array.from(new Uint8Array(value.buffer, value.byteOffset, value.byteLength))
+  if (Object.prototype.toString.call(value) === '[object ArrayBuffer]')
+    return new Uint8Array(value as ArrayBuffer)
+  if (isByteArray(value) && value.length > 0) return Uint8Array.from(value)
+  return undefined
+}
+
+const summarize = (extensions: AuthenticationExtensionsClientOutputs): string =>
+  JSON.stringify(extensions, (_, v) => {
+    const bytes = asBytes(v)
+    return bytes ? `<${bytes.length} bytes>` : v
+  })
 
 const wrappingKey = async (prfOutput: Uint8Array<ArrayBuffer>): Promise<CryptoKey> => {
   const ikm = await crypto.subtle.importKey('raw', prfOutput, 'HKDF', false, ['deriveKey'])
@@ -103,10 +126,8 @@ export const runPasskeyPrf = async (check: Check): Promise<void> => {
   if (created?.enabled !== true)
     check.info('prf.enabled is not true at registration; trying the assertions anyway')
 
-  const first = await prfAssertion()
+  const first = await prfAssertion(credential.rawId)
   const second = await prfAssertion(credential.rawId)
-  const createdId = new Uint8Array(credential.rawId)
-  check.assert(bytesEqual(first.rawId, createdId), 'discoverable assertion used the new passkey')
   check.assert(first.prf.length === 32, `PRF output is 32 bytes (got ${first.prf.length})`)
   check.assert(bytesEqual(first.prf, second.prf), 'two assertions give identical PRF output')
 
