@@ -9,12 +9,12 @@ master key on a Trezor, and their team publishes from the browser with passkeys.
 
 ## Development
 
-Requires pnpm, Bun and Go (for the conformance check).
+Requires Bun and Go (for the conformance check).
 
 ```
 git submodule update --init
-pnpm install
-pnpm lint && pnpm typecheck && pnpm test && pnpm conformance
+bun install
+bun run lint && bun run typecheck && bun run test && bun run conformance
 ```
 
 ## License

@@ -6,7 +6,7 @@ Protocol spec: `vendor/keryx/spec/` (normative; it wins over `docs/mvp-spec.md`)
 
 ## Conventions
 
-- pnpm for dependencies, Bun as the server runtime. Internal packages are consumed as
+- Bun is the package manager and the runtime (`bun add`, `bun install`, `bun run`). Internal packages are consumed as
   TypeScript source (`exports` points at `src/index.ts`), so there is no build step between them.
 - Effect 4 (`effect@4.x`). Its API differs from Effect 3, and HTTP lives in `effect/http` and
   `effect/http-api`. Look up signatures in `node_modules/effect/src` before writing Effect code.
@@ -20,9 +20,9 @@ Protocol spec: `vendor/keryx/spec/` (normative; it wins over `docs/mvp-spec.md`)
   Other packages import them.
 - Master and author private keys exist only in the browser, only for one signing operation.
   Server APIs carry public keys and signatures.
-- Every repo the TypeScript code writes must pass `pnpm conformance` (the Go SDK in
+- Every repo the TypeScript code writes must pass `bun run conformance` (the Go SDK in
   `vendor/keryx/sdk` verifies it).
 
 ## Done
 
-`pnpm lint && pnpm typecheck && pnpm test && pnpm conformance` all pass.
+`bun run lint && bun run typecheck && bun run test && bun run conformance` all pass.
