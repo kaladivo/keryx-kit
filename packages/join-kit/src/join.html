@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<title>Subscribe with Keryx</title>
+<style>
+:root {
+  --bg: #f4f1ea;
+  --surface: #ffffff;
+  --text: #1d1d1f;
+  --muted: #5c5c63;
+  --border: rgba(29, 29, 31, 0.14);
+  --accent: #0000ee;
+  --on-accent: #ffffff;
+  --warn-bg: #fff4d6;
+  --warn-text: #5a4300;
+  --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1015;
+    --surface: #171920;
+    --text: #f2f2f4;
+    --muted: #a6a7b0;
+    --border: rgba(242, 242, 244, 0.16);
+    --accent: #8c8cff;
+    --on-accent: #0e1015;
+    --warn-bg: #3a2f0d;
+    --warn-text: #ffe8a3;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 1rem/1.55 var(--font);
+}
+main {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  margin-bottom: 1.75rem;
+}
+.brand svg { width: 1.75rem; height: 1.75rem; }
+h1 { font-size: 1.75rem; line-height: 1.2; margin: 0 0 0.75rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.125rem; margin: 0 0 0.5rem; }
+p { margin: 0 0 0.75rem; }
+.lead { color: var(--muted); font-size: 1.0625rem; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+}
+.card > :last-child { margin-bottom: 0; }
+.origin {
+  font-family: var(--mono);
+  font-size: 1.125rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  margin: 0.25rem 0 0.75rem;
+}
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+}
+.button.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  min-height: 2.75rem;
+}
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.hint { color: var(--muted); font-size: 0.9375rem; margin-top: 0.75rem; }
+.warning {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+ol { padding-left: 1.25rem; margin: 0 0 1rem; }
+li { margin-bottom: 0.375rem; }
+code { font-family: var(--mono); font-size: 0.9375em; overflow-wrap: anywhere; }
+.qr-section { display: none; }
+@media (min-width: 48rem) and (hover: hover) {
+  .qr-section { display: flex; gap: 1.25rem; align-items: center; }
+}
+.qr {
+  flex: none;
+  width: 10rem;
+  height: 10rem;
+  background: #ffffff;
+  border-radius: 0.5rem;
+}
+.qr svg { display: block; width: 100%; height: 100%; }
+footer { margin-top: 2rem; font-size: 0.9375rem; color: var(--muted); }
+[hidden] {
+  /* biome-ignore lint/complexity/noImportantStyles: the hidden attribute must beat component display rules */
+  display: none !important;
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0000ee"/><rect x="8" y="8" width="16" height="16" rx="5" fill="#ffffff"/></svg>
+    Keryx
+  </div>
+
+  <h1>Get this website's announcements in Keryx</h1>
+  <p class="lead">Keryx is a free app that shows signed announcements from companies. You do not need an email address, a phone number or an account.</p>
+
+  <p class="warning" id="damaged" hidden>This link looks damaged. You can still subscribe, but ask the company for a fresh link if you expected specific channels or an order update.</p>
+
+  <section class="card" aria-labelledby="check-title">
+    <h2 id="check-title">Check the website address</h2>
+    <p>When Keryx asks you to confirm the website, it must show exactly:</p>
+    <p class="origin" id="origin">this website's address</p>
+    <p>If it shows anything else, tap Cancel.</p>
+  </section>
+
+  <a class="button" id="open" href="https://v1b3coder.github.io/keryx/">Open in Keryx</a>
+  <p class="hint">This opens the Keryx web app. It runs in your browser, and you can add it to your home screen.</p>
+
+  <section class="card qr-section" aria-labelledby="qr-title">
+    <div class="qr" id="qr" role="img" aria-label="QR code with the address of this page"></div>
+    <div>
+      <h2 id="qr-title">On a computer?</h2>
+      <p>Scan this code with your phone camera to open this page on your phone.</p>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="android-title">
+    <h2 id="android-title">Prefer the Android app?</h2>
+    <ol>
+      <li>Install Obtainium. It installs apps from their source and keeps them updated.</li>
+      <li>In Obtainium, add an app with the source <code>github.com/v1b3coder/keryx</code>.</li>
+      <li>Open Keryx, choose Paste a link, and paste the address of this page.</li>
+    </ol>
+    <button class="button secondary" id="copy" type="button" hidden>Copy the address of this page</button>
+    <p class="hint" id="copy-status" role="status"></p>
+  </section>
+
+  <p>This channel will never ask you for a password, a seed phrase or a code.</p>
+
+  <footer>
+    <a href="https://keryx-kit.roguedave.codes/subscribers">What is Keryx, and why can I trust it?</a>
+  </footer>
+</main>
+<script>
+/* qrcode-generator */
+(() => {
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const p = new URLSearchParams(window.location.search).get('p');
+  const pIsValid = p !== null && /^[A-Za-z0-9_-]+$/.test(p);
+  const pageUrl = window.location.origin + window.location.pathname + window.location.search;
+
+  const open = document.getElementById('open');
+  const domain = encodeURIComponent(window.location.host);
+  open.href = `${open.getAttribute('href')}?domain=${domain}${pIsValid ? `&p=${p}` : ''}`;
+  document.getElementById('origin').textContent = window.location.origin;
+  document.getElementById('damaged').hidden = p === null || pIsValid;
+
+  const renderQr = (container, text) => {
+    const qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+    const quiet = 4;
+    const count = qr.getModuleCount();
+    const size = count + quiet * 2;
+    let d = '';
+    for (let row = 0; row < count; row++) {
+      for (let col = 0; col < count; col++) {
+        if (qr.isDark(row, col)) d += `M${col + quiet} ${row + quiet}h1v1h-1z`;
+      }
+    }
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+    svg.setAttribute('shape-rendering', 'crispEdges');
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('fill', '#000000');
+    svg.appendChild(path);
+    container.appendChild(svg);
+  };
+  renderQr(document.getElementById('qr'), pageUrl);
+
+  const copy = document.getElementById('copy');
+  const status = document.getElementById('copy-status');
+  if (navigator.clipboard) {
+    copy.hidden = false;
+    copy.addEventListener('click', () => {
+      navigator.clipboard.writeText(pageUrl).then(
+        () => { status.textContent = 'Copied. Now paste it in Keryx.'; },
+        () => { status.textContent = 'Copying failed. Copy the address from your browser instead.'; }
+      );
+    });
+  }
+})();
+</script>
+</body>
+</html>
