@@ -72,19 +72,27 @@ because author keys are only ever unwrapped in the author's browser (`docs/mvp-s
 
 - Name: Keryx (working title in the protocol repo). The site is the keryx-kit offer.
 - Voice: plain, specific, short sentences. Say what is true and what is not covered. No hype.
-- The owner rejected the previous round as "AI slop": italic serif display lines, kicker labels,
-  numbered section labels, beige and terracotta, decorative illustration. Credibility beats flash.
+- The owner rejected three earlier rounds (an editorial serif version, and two Swiss/Impeccable
+  versions). The chosen direction is "Proof on the device": Mercury's calm, premium language
+  around one real phone running the Keryx app, with Trezor's sticky device as the scroll story.
+  Credibility beats flash.
 
 ## Evidence on Hand
 
-- Real screenshots of the subscriber app (PWA) paired with the demo publisher: the "Confirm this
-  website" screen and the channel picker (cropped below the company header, which shows the
-  demo's Trezor-styled name), light and dark (`src/assets/app-*.webp`). Captured 2026-10-26 with
-  Playwright at 390×844 from `https://v1b3coder.github.io/keryx/`.
-- A real signed item from the demo publisher:
-  `https://keryx-demo.github.io/keryx/channels/security/msg-2026-03-18-phishing-attacks.json`.
-- The join kit file list (`docs/mvp-spec.md` A3) and the Android release certificate fingerprint
-  (`vendor/keryx/README.md`).
+- Scuffwell, a fictional shoe brand at `shoe.roguedave.codes` (`apps/demo-shoe`), is the demo
+  company on both pages. Its posts were signed into a local repo with `packages/domain` and seed
+  signers, served over HTTPS for `shoe.roguedave.codes` and `repo.keryx-kit.roguedave.codes`, and
+  the real subscriber app (`vendor/keryx/app`, Vite dev) paired with it. Captures at 390×797 @2x,
+  light and dark (`src/assets/phone-*.webp`): scan (fake camera feed of a printed Scuffwell card
+  with the real join QR), confirm, channel picker, feed. The greyed-out fake
+  (`phone-spoof-*.webp`) is a recreation in the app's own classes; the app never renders it.
+- The console editor (`src/assets/editor-*.webp`) is a capture of `apps/console` in mock mode with
+  Scuffwell seed data, an author registered with a virtual passkey, and the Karlín pop-up post.
+- The live check uses Scuffwell's Puddle sale post (without its image), signed with a local demo
+  author key (`src/demo-item.ts`), not a production key.
+- The landscape and object images are generated (Codex image generation) and carry no text, logos
+  or brand marks.
+- The Android release certificate fingerprint (`vendor/keryx/README.md`).
 - Source: GPL-3.0 at `https://github.com/v1b3coder/keryx`.
 - Absent, never to be invented: customers, logos, testimonials, statistics, prices, audits,
   certifications, dates of availability.
@@ -99,5 +107,5 @@ because author keys are only ever unwrapped in the author's browser (`docs/mvp-s
 ## Accessibility & Inclusion
 
 WCAG 2.2 AA: semantic landmarks and headings, visible focus, 4.5:1 body contrast, alt text on
-every screenshot, `prefers-reduced-motion`, light and dark themes, usable at 390 px wide and on a
-1280×720 projector.
+every screenshot, `prefers-reduced-motion`, light and dark themes following the system setting,
+usable at 390 px wide and presentable full-screen at 1280×720 and 1920×1080.

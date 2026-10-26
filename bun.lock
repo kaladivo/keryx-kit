@@ -30,8 +30,8 @@
         "@noble/ed25519": "3.2.0",
       },
       "devDependencies": {
-        "@fontsource-variable/atkinson-hyperlegible-mono": "5.3.0",
-        "@fontsource-variable/atkinson-hyperlegible-next": "5.3.0",
+        "@fontsource-variable/geist-mono": "5.3.0",
+        "@fontsource-variable/hanken-grotesk": "5.3.0",
         "@types/node": "26.6.5",
         "vite": "8.3.5",
         "vitest": "5.0.5",
@@ -132,9 +132,9 @@
 
     "@fivebinaries/coin-selection": ["@fivebinaries/coin-selection@3.0.0", "", { "dependencies": { "@emurgo/cardano-serialization-lib-browser": "^13.2.0", "@emurgo/cardano-serialization-lib-nodejs": "13.2.0" } }, "sha512-h25Pn1ZA7oqQBQDodGAgIsQt66T2wDge9onBKNqE66WNWL0KJiKJbpij8YOLo5AAlEIg5IS7EB1QjBgDOIg6DQ=="],
 
-    "@fontsource-variable/atkinson-hyperlegible-mono": ["@fontsource-variable/atkinson-hyperlegible-mono@5.3.0", "", {}, "sha512-0IbthhO18EEpLe69h+cmrsxCkl4yk80gMk+fAN3+9M5zQvoR1JlkzoJRR6U9/UXLYpVBGEXu+Md2LO8TIp30dw=="],
+    "@fontsource-variable/geist-mono": ["@fontsource-variable/geist-mono@5.3.0", "", {}, "sha512-vBbuwDEo9AkrqADMXOrlAR3DFcJi4/JxeuU43FoiQERnNwsfXNnvxvReZG02cQKmyk4DZkZdBZX3oTDvy2zBAw=="],
 
-    "@fontsource-variable/atkinson-hyperlegible-next": ["@fontsource-variable/atkinson-hyperlegible-next@5.3.0", "", {}, "sha512-UnLzNUy1RWoLDfydAatP4NaRm99X/WbQEph7q/PymJnCFIOOwKOx3pBmp5ys8trO0dM+CKGuJgeZP9fAR4mQpA=="],
+    "@fontsource-variable/hanken-grotesk": ["@fontsource-variable/hanken-grotesk@5.3.0", "", {}, "sha512-DOd0FqL+3cH2dfNy0JtSq9tUfxBz5mLmHMjTU0DOr3E9Zo6wxuatCl53DIPNrSPgCsnuKyM739BTIG5glCLirw=="],
 
     "@jridgewell/resolve-uri": ["@jridgewell/resolve-uri@3.1.2", "", {}, "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw=="],
 

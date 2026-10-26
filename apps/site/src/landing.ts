@@ -8,9 +8,9 @@ import {
   validate,
 } from './pilot-request.ts'
 import { setupSignatureCheck } from './signature-check.ts'
-import { setupSite } from './site.ts'
+import { setupStory } from './story.ts'
 
-setupSite()
+setupStory()
 setupSignatureCheck()
 
 const FIELDS = Object.keys(MAX_LENGTH) as PilotField[]
