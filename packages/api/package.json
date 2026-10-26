@@ -1,0 +1,22 @@
+{
+  "name": "@keryx-kit/api",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p . && tsc --noEmit -p tsconfig.bun.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@keryx-kit/domain": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@effect/vitest": "4.0.6",
+    "@types/bun": "^1.4.4",
+    "vitest": "5.0.5"
+  }
+}
