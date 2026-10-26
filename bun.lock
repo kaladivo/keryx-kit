@@ -38,6 +38,14 @@
         "vitest": "5.0.5",
       },
     },
+    "apps/demo-shoe": {
+      "name": "@keryx-kit/demo-shoe",
+      "devDependencies": {
+        "@types/node": "26.6.5",
+        "vite": "8.3.5",
+        "vitest": "5.0.5",
+      },
+    },
     "apps/server": {
       "name": "@keryx-kit/server",
       "dependencies": {
@@ -184,6 +192,8 @@
     "@keryx-kit/api": ["@keryx-kit/api@workspace:packages/api"],
 
     "@keryx-kit/console": ["@keryx-kit/console@workspace:apps/console"],
+
+    "@keryx-kit/demo-shoe": ["@keryx-kit/demo-shoe@workspace:apps/demo-shoe"],
 
     "@keryx-kit/domain": ["@keryx-kit/domain@workspace:packages/domain"],
 

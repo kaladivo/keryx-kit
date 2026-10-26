@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260"><title>The Puddle</title>
+  <ellipse cx="244" cy="226" rx="214" ry="10" fill="#000" opacity=".12"/>
+  <path d="M42 186 H406 C432 186 448 196 448 206 C448 215 440 221 426 221 H58 C46 221 40 214 40 204 Z" fill="#3b3128"/>
+  <path d="M40 204 H130 V221" fill="none" stroke="#2a221c" stroke-width="3"/>
+  <path d="M140 200 H432" stroke="#5a4c3f" stroke-width="2" stroke-dasharray="6 5"/>
+  <path d="M48 188 L50 44 C50 32 58 26 70 26 H156 C166 26 172 32 172 42 C172 92 182 116 214 130 C256 142 290 144 328 148 C388 156 438 168 446 188 Z" fill="#5d6b3c"/>
+  <path d="M114 28 C106 70 110 104 132 136 C154 104 160 68 152 28 Z" fill="#2f3324"/>
+  <g stroke="#454b33" stroke-width="2"><path d="M122 34 V112"/><path d="M132 32 V124"/><path d="M142 34 V112"/></g>
+  <path d="M48 188 L50 120 C76 122 102 140 114 188 Z" fill="#4c5831"/>
+  <path d="M352 188 C348 162 372 146 404 156 C432 164 446 176 446 188 Z" fill="#4c5831"/>
+  <path d="M56 28 C56 6 82 6 82 28" fill="none" stroke="#2f3324" stroke-width="7" stroke-linecap="round"/>
+  <path d="M60 182 L60 50 C60 40 64 36 72 36 H104" fill="none" stroke="#9aa66e" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <path d="M200 134 C236 148 280 152 330 156" fill="none" stroke="#9aa66e" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <path d="M362 182 C360 166 376 156 400 162 C422 168 434 176 438 182" fill="none" stroke="#9aa66e" stroke-width="1.6" stroke-dasharray="4 4"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 260"><title>The Rambler</title>
+  <ellipse cx="244" cy="226" rx="214" ry="10" fill="#000" opacity=".12"/>
+  <path d="M46 188 H404 C430 188 448 197 448 207 C448 215 440 221 426 221 H58 C46 221 40 214 40 204 Z" fill="#f1e8d6"/>
+  <path d="M41 210 H447 C445 217 438 221 426 221 H58 C49 221 43 217 41 210 Z" fill="#b9773f"/>
+  <path d="M60 199 H430" stroke="#d8ccb4" stroke-width="2" stroke-dasharray="6 5"/>
+  <path d="M48 190 L50 122 C50 102 60 92 78 92 C112 95 140 106 170 101 C190 97 200 80 210 64 C215 55 227 53 233 62 L252 97 C302 119 362 137 402 151 C434 162 448 177 446 190 Z" fill="#a8693a"/>
+  <path d="M48 190 L50 130 C72 131 98 142 112 190 Z" fill="#8f5630"/>
+  <path d="M356 190 C350 162 368 142 402 151 C434 162 448 177 446 190 Z" fill="#8f5630"/>
+  <path d="M199 88 C212 72 221 64 230 70 L252 99 C282 113 312 125 338 133 L332 152 C298 142 262 128 232 116 C220 109 208 99 199 88 Z" fill="#7a4626"/>
+  <path d="M78 92 C112 95 140 106 170 101 C190 97 200 80 210 64" fill="none" stroke="#6b3c20" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#f1e8d6">
+    <circle cx="219" cy="86" r="3.2"/><circle cx="243" cy="104" r="3.2"/><circle cx="270" cy="116" r="3.2"/><circle cx="297" cy="126" r="3.2"/><circle cx="323" cy="135" r="3.2"/>
+  </g>
+  <g stroke="#f4ead2" stroke-width="5" stroke-linecap="round">
+    <path d="M214 80 L238 96"/><path d="M238 98 L265 108"/><path d="M265 110 L292 119"/><path d="M292 121 L318 129"/>
+  </g>
+  <path d="M216 84 C204 100 202 118 210 132" fill="none" stroke="#f4ead2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M221 86 C228 104 222 118 232 128" fill="none" stroke="#f4ead2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M56 182 L57 126 C60 112 66 104 78 101" fill="none" stroke="#d9a675" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <path d="M364 182 C360 162 374 150 400 158 C424 166 436 176 438 182" fill="none" stroke="#d9a675" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <path d="M120 186 C124 162 150 146 182 140" fill="none" stroke="#d9a675" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <rect x="58" y="100" width="12" height="26" rx="4" fill="#3f5a3a"/>
+</svg>
