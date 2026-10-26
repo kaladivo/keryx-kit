@@ -25,6 +25,7 @@ import {
   type MetaFile,
   type RootMetadata,
 } from './schema.ts'
+import { isLinkedHttpsUrl } from './url.ts'
 
 export type IssueCode =
   | 'root-chain'
@@ -119,7 +120,7 @@ const checkTargetsCustom = (report: Report, state: RepoState) => {
   if (logo !== undefined && logo !== '') {
     const ok = logo.startsWith('data:')
       ? logo.includes(';base64,')
-      : logo.startsWith('https://') && logo_sha256 !== undefined
+      : isLinkedHttpsUrl(logo) && logo_sha256 !== undefined
     if (!ok)
       report(
         'structure',

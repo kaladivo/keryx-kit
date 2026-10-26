@@ -32,6 +32,7 @@ import {
   authorsRoleName,
   channelRoleName,
   currentRoot,
+  parseRoleName,
   pinnedMetadata,
   type Repo,
   type RepoState,
@@ -50,6 +51,7 @@ import {
   type TargetsSigned,
   type TimestampMetadata,
 } from './schema.ts'
+import { isLinkedHttpsUrl } from './url.ts'
 
 /** A public key (hex) plus the Go SDK's optional label for it. */
 export interface PublicKey {
@@ -105,7 +107,7 @@ const logoProblem = (
   if (logo === undefined) return undefined
   if (logo.startsWith('data:'))
     return logo.includes(';base64,') ? undefined : 'logo data URL must be base64'
-  if (!logo.startsWith('https://')) return 'logo must be a data URL or an absolute HTTPS URL'
+  if (!isLinkedHttpsUrl(logo)) return 'logo must be a data URL or an absolute HTTPS URL'
   return logoSha256 !== undefined && /^[0-9a-f]{64}$/.test(logoSha256)
     ? undefined
     : 'linked logo requires logo_sha256 as a lowercase hex SHA-256'
@@ -199,7 +201,8 @@ const display = (
 const reservedKeyids = (state: RepoState): ReadonlySet<string> => {
   const reserved = new Set(Object.keys(currentRoot(state).signed.keys))
   for (const role of state.targets.signed.delegations.roles) {
-    if (!role.name.endsWith('.authors')) for (const keyid of role.keyids) reserved.add(keyid)
+    if (parseRoleName(role.name)?.kind !== 'authors')
+      for (const keyid of role.keyids) reserved.add(keyid)
   }
   return reserved
 }
@@ -238,6 +241,12 @@ export const createChannel = (
 ): Effect.Effect<RepoState, Refused> =>
   Effect.gen(function* () {
     const { channel } = params
+    if (channel === 'authors') {
+      return yield* refuse(
+        'reserved-channel-name',
+        'channel name authors is reserved: subscriber apps read channels.authors as an authors role',
+      )
+    }
     if (!CHANNEL_NAME.test(channel)) {
       return yield* refuse('invalid-channel-name', `channel name ${channel} must match [a-z0-9-_]+`)
     }

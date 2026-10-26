@@ -49,6 +49,8 @@ const publishAs = (id: string, ...signers: ReadonlyArray<string>) =>
     return { repo, state: yield* publishItem(repo, { channel: 'offers', item }, at(12)) }
   })
 
+const UNPARSEABLE_URLS = ['https://cdn.acme .com/a.png', 'https://a.com:99999/x.png']
+
 describe('initRepo', () => {
   it.effect('builds root v1 (master: root+targets, ops: snapshot+timestamp) and targets v1', () =>
     Effect.gen(function* () {
@@ -110,6 +112,46 @@ describe('initRepo', () => {
   )
 })
 
+describe('linked URLs the subscriber app cannot parse', () => {
+  it.effect.each(UNPARSEABLE_URLS)('publishItem refuses image and attachment %s', (url) =>
+    Effect.gen(function* () {
+      const repo = yield* companyRepo
+      const image = yield* signItem(
+        { ...draft('x'), image: url, image_sha256: '0'.repeat(64) },
+        signerOf('alice'),
+      )
+      expect(yield* refusal(publishItem(repo, { channel: 'offers', item: image }, at(12)))).toBe(
+        'invalid-item',
+      )
+      const attachment = yield* signItem(
+        { ...draft('x'), attachments: [{ url }] },
+        signerOf('alice'),
+      )
+      expect(
+        yield* refusal(publishItem(repo, { channel: 'offers', item: attachment }, at(12))),
+      ).toBe('invalid-item')
+    }),
+  )
+
+  it.effect.each(UNPARSEABLE_URLS)('initRepo and editCompany refuse logo %s', (url) =>
+    Effect.gen(function* () {
+      const params = {
+        repoBase: 'https://r/',
+        companyName: 'A',
+        masterKey: publicOf('master'),
+        opsKey: publicOf('ops'),
+        logo: url,
+        logoSha256: 'ab'.repeat(32),
+      }
+      expect(yield* refusal(initRepo(params, at(10)))).toBe('invalid-logo')
+      const repo = yield* companyRepo
+      expect(
+        yield* refusal(editCompany(repo, { logo: url, logoSha256: 'ab'.repeat(32) }, at(12))),
+      ).toBe('invalid-logo')
+    }),
+  )
+})
+
 describe('createChannel', () => {
   it.effect('adds the channel and authors delegations in the Go SDK order', () =>
     Effect.gen(function* () {
@@ -154,6 +196,18 @@ describe('createChannel', () => {
       expect(issues.map((i) => [i.code, i.file])).toEqual([
         ['signature-threshold', 'channels.security.authors.json'],
       ])
+    }),
+  )
+
+  it.effect('refuses the reserved channel name authors', () =>
+    Effect.gen(function* () {
+      const repo = yield* companyRepo
+      const params = {
+        channel: 'authors',
+        channelKey: publicOf('news'),
+        authors: [authorKey('carol')],
+      }
+      expect(yield* refusal(createChannel(repo, params, at(12)))).toBe('reserved-channel-name')
     }),
   )
 

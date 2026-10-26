@@ -3,9 +3,11 @@ import { Effect } from 'effect'
 import {
   ed25519Key,
   editChannel,
+  encodeItem,
   publishItem,
   type Repo,
   renewTargets,
+  sha256Hex,
   signItem,
   utf8,
   validateRepo,
@@ -107,6 +109,48 @@ describe('validateRepo', () => {
         codes({ ...repo, authors: noAuthors, targets: { ...repo.targets, signed: simple } }),
       ).toContain('not-authored')
     }),
+  )
+
+  it.effect.each(['https://cdn.acme .com/a.png', 'https://a.com:99999/x.png'])(
+    'rejects items and logos linking %s',
+    (url) =>
+      Effect.gen(function* () {
+        const repo = yield* companyRepo
+        const item = yield* signItem(
+          { ...draft('x'), image: url, image_sha256: '0'.repeat(64) },
+          signerOf('alice'),
+        )
+        const bytes = encodeItem(item)
+        const path = 'channels/offers/x.json'
+        const offers = repo.channels.offers
+        if (!offers) throw new Error('fixture')
+        const index = {
+          signatures: [],
+          signed: {
+            ...offers.signed,
+            version: offers.signed.version + 1,
+            targets: { [path]: { length: bytes.length, hashes: { sha256: sha256Hex(bytes) } } },
+          },
+        }
+        const state = { ...repo, channels: { offers: index }, items: { [path]: bytes } }
+        const withItem = yield* publish(
+          yield* signAll(state, ['channels.offers', 'offers']),
+          repo,
+          at(12),
+        )
+        expect(validateRepo(withItem).map((i) => [i.code, i.file])).toEqual([
+          ['item-invalid', path],
+        ])
+
+        const custom = { ...repo.targets.signed.custom, logo: url, logo_sha256: 'ab'.repeat(32) }
+        const targets = { signatures: [], signed: { ...repo.targets.signed, version: 3, custom } }
+        const withLogo = yield* publish(
+          yield* signAll({ ...repo, targets }, ['targets', 'master']),
+          repo,
+          at(12),
+        )
+        expect(codes(withLogo)).toEqual(['structure'])
+      }),
   )
 
   it.effect('rejects a key object published under the wrong keyid', () =>

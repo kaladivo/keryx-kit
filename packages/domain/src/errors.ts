@@ -2,6 +2,7 @@ import { Data } from 'effect'
 
 export type RefusalCode =
   | 'invalid-channel-name'
+  | 'reserved-channel-name'
   | 'channel-exists'
   | 'unknown-channel'
   | 'not-authored'
