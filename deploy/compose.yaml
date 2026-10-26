@@ -12,10 +12,13 @@ services:
     restart: unless-stopped
     init: true
     environment:
+      KERYX_SERVICE_HOST: keryx-kit.roguedave.codes
       KERYX_KEK_FILE: /run/secrets/kek
+      KERYX_OPERATOR_TOKEN_FILE: /run/secrets/operator-token
     volumes:
       - ./data:/data
       - ./secrets/kek:/run/secrets/kek:ro
+      - ./secrets/operator-token:/run/secrets/operator-token:ro
     mem_limit: 512m
     memswap_limit: 768m
     logging: *logging

@@ -34,6 +34,7 @@ export const repoBaseFor = (config: ServerConfigShape, slug: string): string =>
  * `KERYX_SERVICE_HOST` names the landing page host; the console and repo hosts are its
  * `console.` and `repo.` subdomains. Local dev: `KERYX_SERVICE_HOST=localhost:3000
  * KERYX_SCHEME=http` serves `console.localhost:3000` and `repo.localhost:3000`.
+ * `KERYX_CONSOLE_ORIGIN` overrides the origin WebAuthn and invite links use.
  */
 export const configFromEnv = (env: Record<string, string | undefined>): ServerConfigShape => {
   const serviceHost = env.KERYX_SERVICE_HOST ?? 'keryx-kit.roguedave.codes'
@@ -41,13 +42,15 @@ export const configFromEnv = (env: Record<string, string | undefined>): ServerCo
   const consoleHost = `console.${serviceHost}`
   const repoHost = `repo.${serviceHost}`
   const dataDir = env.KERYX_DATA_DIR ?? '/data'
+  // A console dev server that proxies /api serves the console from its own origin.
+  const consoleOrigin = env.KERYX_CONSOLE_ORIGIN ?? `${scheme}://${consoleHost}`
   return {
     port: Number(env.PORT ?? 3000),
     siteHost: serviceHost,
     consoleHost,
     repoHost,
-    consoleOrigin: `${scheme}://${consoleHost}`,
-    rpId: consoleHost.replace(/:\d+$/, ''),
+    consoleOrigin,
+    rpId: new URL(consoleOrigin).hostname,
     repoOrigin: `${scheme}://${repoHost}`,
     dataDir,
     siteDir: env.KERYX_SITE_DIR ?? resolve(repoRoot, 'apps/site/dist'),

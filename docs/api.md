@@ -11,7 +11,7 @@ Calls below use `group.endpoint` names.
   `Secure`, `SameSite=Strict` cookies (`keryx_owner`, `keryx_member`, `keryx_operator`).
   The browser sends them on its own, so the client sets no headers.
 - Auth column: **owner**, **member**, **team** (owner or member of the company),
-  **operator**, or none. A missing session answers an empty `401`.
+  **operator**, or none. A missing session answers `401 { _tag: 'Unauthorized' }`.
 - Every error body is `{ _tag, error, ... }`, where `error` is a sentence to show as is.
   A body that fails to decode answers `400 InvalidRequest`.
 - `Refused` (422) carries the domain refusal `code`; `RepoInvalid` (422) carries the
@@ -184,6 +184,10 @@ expiry banner from `company.get` `targetsExpires` at 60, 30 and 7 days.
 The landing page posts `public.requestPilot` `POST /api/pilot-requests`
 `{ company, name, email, message }` (message may be `""`). It returns `201` or
 `400 { error }`.
+
+`public.release` `GET /api/release` returns `{ gitSha, consoleBundleSha256 }`: the SHA-256
+of a manifest of `sha256  path` lines for every built console file, sorted by path
+(mvp-spec §5.9). The console can show it in its footer.
 
 ## 9. Audit log (E4)
 
