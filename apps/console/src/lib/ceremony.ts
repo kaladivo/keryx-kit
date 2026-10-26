@@ -208,7 +208,7 @@ const describeChange = (
     )
     if (dropped.length > 0)
       lines.push({
-        text: `Unpublish ${dropped.length} ${dropped.length === 1 ? 'item' : 'items'} from ${title} that no remaining author signed`,
+        text: `Unpublish ${dropped.length} ${dropped.length === 1 ? 'post' : 'posts'} from ${title} that no remaining author signed`,
         items: dropped.map((path) => {
           const bytes = before.items[path]
           const item = bytes && Effect.runSync(Effect.option(decodeItem(bytes)))

@@ -43,11 +43,14 @@ export const shoot = async (page: Page, name: string) => {
   if (!shotsDir) return
   mkdirSync(shotsDir, { recursive: true })
   const original = page.viewportSize()
+  await page.evaluate(() => window.scrollTo(0, 0))
   for (const variant of variants) {
     await page.setViewportSize({ width: variant.width, height: variant.height })
     for (const scheme of ['light', 'dark'] as const) {
       await page.emulateMedia({ colorScheme: scheme })
       await page.waitForTimeout(150)
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
+      if (overflow > 0) console.warn(`${name} ${variant.name}: ${overflow}px horizontal overflow`)
       await page.screenshot({
         path: join(shotsDir, `${name}-${variant.name}-${scheme}.png`),
         fullPage: true,

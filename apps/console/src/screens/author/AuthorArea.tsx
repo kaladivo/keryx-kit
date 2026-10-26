@@ -42,13 +42,25 @@ const nav = [
   { to: '/author/join', label: 'Join link' },
 ]
 
-const TaskOutcomes = ({ outcomes }: { readonly outcomes: ReadonlyArray<TaskOutcome> }) => {
+const TaskOutcomes = ({
+  outcomes,
+  onDismiss,
+}: {
+  readonly outcomes: ReadonlyArray<TaskOutcome>
+  readonly onDismiss: () => void
+}) => {
   const failed = outcomes.filter((o) => o.error)
   const done = outcomes.filter((o) => !o.error)
+  const dismiss = (
+    <Button small variant="quiet" onClick={onDismiss}>
+      Dismiss
+    </Button>
+  )
   return (
     <>
       {done.length > 0 && (
         <Notice
+          actions={dismiss}
           tone="success"
           title={`Signed ${done.length} pending ${done.length === 1 ? 'task' : 'tasks'}`}
         >
@@ -58,7 +70,12 @@ const TaskOutcomes = ({ outcomes }: { readonly outcomes: ReadonlyArray<TaskOutco
         </Notice>
       )}
       {failed.map((o) => (
-        <Notice key={o.task.id} tone="danger" title={`Not signed: ${o.description}`}>
+        <Notice
+          key={o.task.id}
+          tone="danger"
+          actions={dismiss}
+          title={`Not signed: ${o.description}`}
+        >
           {o.error}
         </Notice>
       ))}
@@ -80,9 +97,10 @@ const TaskQueue = () => {
     setOutcomes(await submitTasks(signed))
     await refresh()
   })
+  if (outcomes.length === 0 && tasks.length === 0) return null
   return (
-    <>
-      <TaskOutcomes outcomes={outcomes} />
+    <div className="wrap task-strip">
+      <TaskOutcomes outcomes={outcomes} onDismiss={() => setOutcomes([])} />
       {tasks.length > 0 && (
         <Notice
           tone="warn"
@@ -103,7 +121,7 @@ const TaskQueue = () => {
           {sign.error && <p className="field-error">{sign.error}</p>}
         </Notice>
       )}
-    </>
+    </div>
   )
 }
 
@@ -146,11 +164,7 @@ export const AuthorArea = ({ children }: { readonly children: ReactNode }) => {
     >
       {data ? (
         <AuthorContext.Provider value={{ ...data, refresh: session.reload }}>
-          <div className="wrap" style={{ paddingTop: '1.25rem' }}>
-            <div className="stack-small">
-              <TaskQueue />
-            </div>
-          </div>
+          <TaskQueue />
           {children}
         </AuthorContext.Provider>
       ) : session.error && !isUnauthorized(session.error) ? (
