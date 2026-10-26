@@ -11,199 +11,167 @@
   <script type="module" src="/src/subscribers.ts"></script>
 </head>
 <body>
-  <svg class="sprite" aria-hidden="true">
-    <symbol id="seal" viewBox="0 0 64 64">
-      <path class="seal-wax" d="M61.4 32L63.7 39.2L58.3 44.7L56.1 51.2L50.6 55.3L46 61.1L38.4 60L32 63L25.3 61.4L18.1 60.8L14.2 54.3L7.4 51.6L4.7 45.1L1.3 39L3.5 32L.9 24.9L4.8 18.9L7.7 12.6L14.1 9.5L18 2.9L25.4 2.9L32 1.2L38.5 3.6L46.1 2.7L50.4 9L56 12.9L58.7 19.2L63.6 24.8Z"/>
-      <circle class="seal-ring" cx="32" cy="32" r="21"/>
-      <path class="seal-check" d="M22 33l7 7 14-15"/>
-    </symbol>
-    <symbol id="cross" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
-  </svg>
-
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="masthead">
-    <a class="brand" href="/" aria-label="Keryx home">
-      <svg class="seal" aria-hidden="true"><use href="#seal"/></svg>
-      <span>Keryx</span>
-    </a>
-    <nav aria-label="Main">
-      <ul class="nav-list">
-        <li><a href="#install">Install</a></li>
-        <li><a href="#join">Join</a></li>
-        <li class="nav-optional"><a href="#trust">Why trust it</a></li>
-        <li class="nav-optional"><a href="#limits">Limits</a></li>
-        <li><button class="theme-toggle" type="button" aria-label="Switch between light and dark"><span class="theme-icon" aria-hidden="true"></span></button></li>
-      </ul>
-    </nav>
-  </header>
+  <div class="field">
+    <header class="masthead wrap">
+      <a class="wordmark" href="/">Keryx</a>
+      <nav aria-label="Main">
+        <ul class="nav-list">
+          <li><a href="#install">Install</a></li>
+          <li><a href="#join">Join</a></li>
+          <li class="nav-optional"><a href="#trust">Protection and limits</a></li>
+          <li><button class="theme-toggle" type="button" aria-label="Dark theme"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M10 2a8 8 0 0 1 0 16z"/></svg></button></li>
+        </ul>
+      </nav>
+    </header>
 
-  <nav class="slide-nav" aria-label="Sections">
-    <ol>
-      <li><a href="#top"><span>Intro</span></a></li>
-      <li><a href="#install"><span>Install</span></a></li>
-      <li><a href="#join"><span>Join</span></a></li>
-      <li><a href="#trust"><span>Why trust it</span></a></li>
-      <li><a href="#limits"><span>Limits</span></a></li>
-    </ol>
-  </nav>
-
-  <main id="main">
-    <section class="slide hero hero-sub" id="top" aria-labelledby="hero-title">
-      <div class="hero-copy reveal">
-        <p class="kicker">Keryx <span aria-hidden="true">·</span> for subscribers</p>
-        <h1 id="hero-title">Company news. <em>Signed, or not shown.</em></h1>
-        <p class="lede">A company invited you to follow its announcements in Keryx. No email address, no phone number, no account.</p>
-        <div class="actions">
-          <a class="btn btn-seal" href="#install">Install the app</a>
-          <a class="btn btn-ghost" href="#join">How to join</a>
-        </div>
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">Follow a company without giving it your email.</h1>
+        <p class="lede">A company invited you to follow its announcements in Keryx. Every message carries the company's digital signature, and the app shows only messages whose signature checks out. No email address, no phone number, no account.</p>
+        <p class="actions">
+          <a class="btn" href="#install">Install the app</a>
+          <a class="text-link" href="#join">How to join</a>
+        </p>
       </div>
-      <figure class="hero-art hero-art-phone" aria-hidden="true">
-        <div class="hero-disk"></div>
-        <div class="phone">
-          <div class="phone-bar"><span class="notice-logo">Y</span><span><b>Your Company</b><small>yourcompany.com</small></span></div>
-          <div class="phone-msg">
-            <p class="phone-chan">Security alerts</p>
-            <p class="phone-title">We will never ask for your password</p>
-            <p class="signed-badge"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>Signed</p>
-          </div>
-          <div class="phone-msg">
-            <p class="phone-chan">Product news</p>
-            <p class="phone-title">The spring collection is here</p>
-            <p class="signed-badge"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>Signed</p>
-          </div>
-          <div class="phone-msg">
-            <p class="phone-chan">Offers</p>
-            <p class="phone-title">Early access for subscribers</p>
-            <p class="signed-badge"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>Signed</p>
-          </div>
-        </div>
+      <figure class="screen hero-screen">
+        <img class="only-light" src="/src/assets/app-channels-light.webp" width="780" height="980" alt="Keryx app screen titled Choose what to follow, with three channels switched on: Security alerts, Product news and updates, Insights and guides, and Subscribe and Back buttons below.">
+        <img class="only-dark" src="/src/assets/app-channels-dark.webp" width="780" height="980" alt="Keryx app screen titled Choose what to follow, with three channels switched on: Security alerts, Product news and updates, Insights and guides, and Subscribe and Back buttons below.">
+        <figcaption>You choose what to follow. A real screen from the Keryx app, joining the public demo publisher.</figcaption>
       </figure>
     </section>
+  </div>
 
-    <section class="slide install" id="install" aria-labelledby="install-title">
-      <div class="slide-head reveal">
-        <p class="kicker"><span class="num">01</span> Install</p>
-        <h2 id="install-title">Get the app.</h2>
+  <main id="main">
+    <section class="section wrap" id="install" aria-labelledby="install-title">
+      <div class="section-head">
+        <h2 id="install-title">Install the app</h2>
       </div>
       <div class="install-grid">
-        <article class="install-card reveal">
-          <p class="install-tag">Any device</p>
-          <h3>Web app</h3>
-          <p class="sub">Open it in your browser and add it to your home screen. On an iPhone, use Safari. There is no App Store app yet.</p>
-          <p class="install-url">v1b3coder.github.io/keryx</p>
-          <a class="btn btn-seal" href="https://v1b3coder.github.io/keryx/">Open the web app</a>
-        </article>
-        <article class="install-card reveal" id="android">
-          <p class="install-tag">Android</p>
-          <h3>Android app via Obtainium</h3>
-          <ol class="mini-steps">
-            <li><span>Install <a href="https://github.com/ImranR98/Obtainium">Obtainium</a>.</span></li>
-            <li><span>Add an app with this source: <code>https://github.com/v1b3coder/keryx</code></span></li>
-            <li><span>Obtainium installs Keryx and keeps it updated.</span></li>
+        <div class="install-option">
+          <h3>Web app, any device</h3>
+          <p>The simplest way, on any phone. Open it in your browser and add it to your home screen. On an iPhone, open it in Safari, tap Share, then Add to Home Screen.</p>
+          <p class="mono url">v1b3coder.github.io/keryx</p>
+          <p><a class="btn" href="https://v1b3coder.github.io/keryx/">Open the web app</a></p>
+        </div>
+        <div class="install-option" id="android">
+          <h3>Android, through Obtainium</h3>
+          <p>Obtainium installs apps straight from their release page and keeps them updated.</p>
+          <ol class="numbered">
+            <li>Install <a href="https://github.com/ImranR98/Obtainium">Obtainium</a>.</li>
+            <li>Add an app with this source:<span class="mono source">https://github.com/v1b3coder/keryx</span></li>
+            <li>Obtainium installs Keryx and keeps it updated.</li>
           </ol>
-          <details>
+          <details class="cert">
             <summary>Check the signing certificate</summary>
             <p>Every release is signed with the same key. Tools such as AppVerifier can check this SHA-256 fingerprint before the first install:</p>
-            <p class="fingerprint"><code>5E:5A:CD:AF:31:88:49:F9:6D:C4:F5:08:A0:DA:A5:A4:74:BC:60:B2:3A:2C:63:9D:33:75:85:FF:F5:E7:C8:A1</code></p>
-            <p>On phones without Google services, the app uses ntfy for notifications and asks you to install it the first time you join a company.</p>
+            <p class="mono fingerprint">5E:5A:CD:AF:31:88:49:F9:6D:C4:F5:08:A0:DA:A5:A4:74:BC:60:B2:3A:2C:63:9D:33:75:85:FF:F5:E7:C8:A1</p>
           </details>
-        </article>
+        </div>
       </div>
-      <p class="footnote reveal">Install Keryx only from these links. The checks happen inside the app, so a fake app could show you anything.</p>
+      <p class="aside">Install Keryx only from these links. The app does the checking, so a fake app could show you anything.</p>
     </section>
 
-    <section class="slide join" id="join" aria-labelledby="join-title">
-      <div class="slide-head reveal">
-        <p class="kicker"><span class="num">02</span> Join</p>
-        <h2 id="join-title">Scan. <em>Check the address.</em> Pick channels.</h2>
+    <section class="section wrap" id="join" aria-labelledby="join-title">
+      <div class="section-head">
+        <h2 id="join-title">Join a company</h2>
       </div>
       <div class="join-grid">
         <ol class="join-steps">
-          <li class="reveal">
-            <span class="flow-num">1</span>
-            <div><h3>Scan the company's QR code</h3><p>Or open its join link, from a newsletter, a receipt or its website.</p></div>
+          <li>
+            <h3>Scan the company's QR code</h3>
+            <p>In the Keryx app, tap Add company and scan it. Or open the company's join link from a newsletter, a receipt or its website.</p>
           </li>
-          <li class="reveal join-key">
-            <span class="flow-num">2</span>
-            <div><h3>Check the address, letter by letter</h3><p>It must be exactly the company's own. Not sure? Tap Cancel.</p></div>
+          <li>
+            <h3>Check the address, letter by letter</h3>
+            <p>It must be exactly the address of the company's website, the one you would type yourself. Not sure? Tap Cancel.</p>
+            <p class="lookalikes-caption">For example, if the company's address is example.com:</p>
+            <dl class="lookalikes">
+              <div class="real">
+                <dt class="mono">example.com</dt>
+                <dd>The company's real address</dd>
+              </div>
+              <div class="fake">
+                <dt class="mono">examp<mark>1</mark>e.com</dt>
+                <dd>Look-alike: the digit 1 instead of the letter l</dd>
+              </div>
+              <div class="fake">
+                <dt class="mono">example<mark>-shop</mark>.com</dt>
+                <dd>Look-alike: an extra word</dd>
+              </div>
+            </dl>
           </li>
-          <li class="reveal">
-            <span class="flow-num">3</span>
-            <div><h3>Pick your channels</h3><p>Nothing is subscribed until you tap Subscribe.</p></div>
+          <li>
+            <h3>Pick your channels</h3>
+            <p>Nothing is subscribed until you tap Subscribe.</p>
           </li>
         </ol>
-        <div class="domain-check reveal" role="img" aria-label="Example: example.com is the real address; examp1e.com and example-shop.com are look-alikes.">
-          <p class="domain-row domain-ok"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg><span>example.com</span></p>
-          <p class="domain-row domain-bad"><svg class="mark-x" aria-hidden="true"><use href="#cross"/></svg><span>examp<mark>1</mark>e.com</span></p>
-          <p class="domain-row domain-bad"><svg class="mark-x" aria-hidden="true"><use href="#cross"/></svg><span>example<mark>-shop</mark>.com</span></p>
+        <div class="join-proof">
+          <figure class="screen join-screen">
+            <img class="only-light" src="/src/assets/app-confirm-light.webp" width="780" height="940" loading="lazy" alt="Keryx app screen titled Confirm this website, showing the address https://keryx-demo.github.io with Continue and Cancel buttons.">
+            <img class="only-dark" src="/src/assets/app-confirm-dark.webp" width="780" height="940" loading="lazy" alt="Keryx app screen titled Confirm this website, showing the address https://keryx-demo.github.io with Continue and Cancel buttons.">
+            <figcaption>Step 2 in the app. You will see the company's own address here; this screenshot shows the public demo's.</figcaption>
+          </figure>
         </div>
       </div>
-      <p class="footnote reveal">Checking the address is the only decision Keryx asks of you. The app checks everything else.</p>
+      <p class="aside">Checking the address is the only decision Keryx asks of you. The app checks everything else.</p>
     </section>
 
-    <section class="slide trust" id="trust" aria-labelledby="trust-title">
-      <div class="slide-head reveal">
-        <p class="kicker"><span class="num">03</span> Why trust it</p>
-        <h2 id="trust-title">Nothing to steal. <em>Nothing unsigned.</em></h2>
+    <section class="section wrap" id="trust" aria-labelledby="trust-title">
+      <div class="section-head">
+        <h2 id="trust-title">What Keryx protects, and what it can't</h2>
       </div>
-      <ul class="glyph-grid">
-        <li class="glyph-tile reveal">
-          <span class="glyph glyph-no" aria-hidden="true">@</span>
-          <h3>Nothing about you</h3>
-          <p>No email, no phone number, no account. The company keeps no list of you.</p>
-        </li>
-        <li class="glyph-tile reveal">
-          <svg class="glyph seal" aria-hidden="true"><use href="#seal"/></svg>
-          <h3>Every message is signed</h3>
-          <p>The app checks each one. Fails the check? You never see it.</p>
-        </li>
-        <li class="glyph-tile reveal">
-          <span class="glyph glyph-no" aria-hidden="true">***</span>
-          <h3>Never asks for a password</h3>
-          <p>Or a seed phrase, or a code. You cannot reply, and messages have no forms.</p>
-        </li>
-        <li class="glyph-tile reveal">
-          <span class="glyph glyph-mono" aria-hidden="true">&lt;/&gt;</span>
-          <h3>Open source</h3>
-          <p>The app and the protocol are public at <a href="https://github.com/v1b3coder/keryx">github.com/v1b3coder/keryx</a>.</p>
-        </li>
-      </ul>
-      <p class="footnote reveal">Leave any time: remove the company in the app and its messages are gone. Nobody is told.</p>
-    </section>
-
-    <section class="slide limits" id="limits" aria-labelledby="limits-title">
-      <div class="slide-head reveal">
-        <p class="kicker"><span class="num">04</span> Limits</p>
-        <h2 id="limits-title">What Keryx can't protect you from.</h2>
+      <div class="ledger">
+        <div class="ledger-column">
+          <h3>Protects</h3>
+          <dl class="ledger-list">
+            <div>
+              <dt>Your identity</dt>
+              <dd>No email, no phone number, no account. The company keeps no list of you.</dd>
+            </div>
+            <div>
+              <dt>Every message</dt>
+              <dd>The app checks each signature. If the check fails, you never see the message.</dd>
+            </div>
+            <div>
+              <dt>Your passwords</dt>
+              <dd>You cannot reply and messages have no forms, so the channel cannot collect a password, a seed phrase or a code.</dd>
+            </div>
+            <div>
+              <dt>Your exit</dt>
+              <dd>Leave any time by removing the company in the app. Nobody is told: there is no account to close.</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="ledger-column" id="limits">
+          <h3>Can't protect</h3>
+          <dl class="ledger-list">
+            <div>
+              <dt>The moment you join</dt>
+              <dd>Confirm a look-alike address, or join while an attacker controls the company's website, and you subscribe to the attacker.</dd>
+            </div>
+            <div>
+              <dt>The publishing service</dt>
+              <dd>The company may publish through a hosted service. The service cannot write messages on its own, but an attacker there could hold messages back, or ship altered software to steal the key a staff member signs with.</dd>
+            </div>
+            <div>
+              <dt>Your own phone</dt>
+              <dd>Anyone with your unlocked phone, or malware on it, can read stored messages.</dd>
+            </div>
+            <div>
+              <dt>Connection data</dt>
+              <dd>Like any website, the servers that host the company's messages see your IP address when the app checks for news. There is no name or account to tie it to.</dd>
+            </div>
+          </dl>
+        </div>
       </div>
-      <dl class="limit-list reveal">
-        <div>
-          <dt>The moment you join</dt>
-          <dd>Confirm a look-alike address, or join while an attacker controls the company's website, and you subscribe to the attacker.</dd>
-        </div>
-        <div>
-          <dt>The publishing service</dt>
-          <dd>The company may publish through a hosted service. It cannot sign messages, but an attacker there could hold messages back, or ship altered software to capture a staff member's signing key.</dd>
-        </div>
-        <div>
-          <dt>If a company's keys stop checking out</dt>
-          <dd>The app stops showing its messages, warns you and offers to remove it. It never asks you to scan a new code.</dd>
-        </div>
-        <div>
-          <dt>Your own phone</dt>
-          <dd>Anyone with your unlocked phone, or malware on it, can read stored messages.</dd>
-        </div>
-        <div>
-          <dt>Connection data</dt>
-          <dd>Like any website, the company's servers see your IP address when the app checks for news. There is no name or account to tie it to.</dd>
-        </div>
-      </dl>
+      <p class="aside">If a company's signatures ever stop checking out, the app stops showing its messages, warns you and offers to remove it. In that case it never asks you to scan a new code. The app and the protocol are open source at <a href="https://github.com/v1b3coder/keryx">github.com/v1b3coder/keryx</a>.</p>
+      <p class="actions"><a class="btn" href="#install">Install the app</a></p>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer wrap">
     <p>This page is the same for every company. It never shows a company name, so nobody can use it to pose as one.</p>
     <p><a href="/">Keryx for businesses</a></p>
   </footer>

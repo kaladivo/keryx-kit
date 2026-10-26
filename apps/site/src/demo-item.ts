@@ -1,0 +1,45 @@
+import type { Item } from '@keryx-kit/domain'
+
+/** Fetched from the public demo publisher; its keys come from the demo's signed targets.json. */
+export const DEMO_ITEM_URL =
+  'https://keryx-demo.github.io/keryx/channels/security/msg-2026-03-18-phishing-attacks.json'
+
+export const DEMO_ITEM: Item = {
+  content_html:
+    '<p>Phishing is still the most common way crypto is stolen. Learn to spot fake emails, fake websites and fake support — and the simple habits that keep your funds safe.</p><p><strong>Never enter your wallet backup anywhere except your genuine Trezor device</strong>, and never sign a transaction that a link asks for.</p>',
+  date_modified: '2026-03-19T08:00:00Z',
+  date_published: '2026-03-18T10:30:00Z',
+  id: 'msg-2026-03-18-phishing-attacks',
+  image: 'https://keryx-demo.github.io/media/img/phishing.webp',
+  image_sha256: '891f3842d35f195afdbcf3eebfb04578d4f5555f328467f1b5a77502307358ae',
+  language: 'en',
+  sig: [
+    {
+      keyid: '11a712905c1733c0d98261f9d37c682205c776f03206b536ef154ec261a95e7a',
+      sig: 'vlp6PXJzlTuGuOHmuzGSwU-jZirA9uGnycDGtfObjPLRFRmynNOOP2ATe8m0hwT9f_jpxOSoF86vI7-bveUTAg',
+    },
+    {
+      keyid: '00fed46d76cadf9994982834a51b31b001577787eccf47118c019d605463f34b',
+      sig: 'KwGRymJWzUlTEdVvT8qf0i72DKufbdmCTPemETu05tWS2sHapGJMr8r3LK0728FPD_q4N5bWJ6Uf8Bkz9OpnAA',
+    },
+    {
+      keyid: '06d993c2391c0a7108b5abf3c3ca4c4221465a651b0e235cee221f2f691c174f',
+      sig: '0yL0LsWrQhV_ynAu9UYCKhdb2nN9KtMgZtxlv2hiZmcVvfvWkmVsxxS0-u5Lrv3UtwPed_L2cXmtANvJCpHDCg',
+    },
+  ],
+  tags: ['phishing', 'security', 'en'],
+  title: 'Phishing attacks and how to keep your crypto safe',
+}
+
+export const DEMO_AUTHORS = [
+  {
+    name: 'author-security-a',
+    keyid: '11a712905c1733c0d98261f9d37c682205c776f03206b536ef154ec261a95e7a',
+    publicKey: '05c3023064cacbe69e484411bd4f4c7978a430480fd6ac9ed5846f1801d75351',
+  },
+  {
+    name: 'author-security-b',
+    keyid: '00fed46d76cadf9994982834a51b31b001577787eccf47118c019d605463f34b',
+    publicKey: 'cfd3c6257ac96db034ff233b4f64fc18a247137c498df0b06bcb1c8b303f353a',
+  },
+] as const
