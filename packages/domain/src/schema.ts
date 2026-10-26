@@ -202,4 +202,4 @@ export const JoinPayload = Schema.Struct({
 })
 export type JoinPayload = typeof JoinPayload.Type
 
-export const strict = { onExcessProperty: 'error' } as const
+export const strictDecoding = { onExcessProperty: 'error' } as const

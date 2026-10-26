@@ -282,8 +282,11 @@ export const createChannel = (
         paths,
       },
     ]
-    const keys = { ...signed.delegations.keys, [channelKeyid]: channelKey }
-    for (const [i, key] of authorKeys.entries()) keys[authorKeyids[i] as string] = key
+    const keys = {
+      ...signed.delegations.keys,
+      [channelKeyid]: channelKey,
+      ...Object.fromEntries(authorKeys.map((key) => [keyidOf(key), key])),
+    }
     const next = withTargets(
       state,
       {
@@ -360,8 +363,8 @@ const orderedSignatures = (
   authors: Authority,
   channel: Authority,
 ): ReadonlyArray<ItemSignature> =>
-  [...authors.keyids, ...channel.keyids].flatMap((keyid) =>
-    item.sig.filter((s) => s.keyid === keyid).slice(0, 1),
+  [...authors.keyids, ...channel.keyids].flatMap(
+    (keyid) => item.sig.find((s) => s.keyid === keyid) ?? [],
   )
 
 const combined = (a: Authority, b: Authority): Authority => ({

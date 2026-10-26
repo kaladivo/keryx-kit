@@ -4,7 +4,7 @@ import { type Signer, verifyEd25519 } from './crypto.ts'
 import { type Refused, refuse, type SigningFailed } from './errors.ts'
 import { canonicalJson, goJson } from './json.ts'
 import type { Authority } from './metadata.ts'
-import { Item, type ItemDraft, type ItemSignature, strict } from './schema.ts'
+import { Item, type ItemDraft, type ItemSignature, strictDecoding } from './schema.ts'
 
 /** spec/feeds.md §1.1 RECOMMENDED limit; the subscriber app enforces the same. */
 export const ITEM_MAX_BYTES = 1024 * 1024
@@ -40,7 +40,7 @@ export const encodeItem = (item: Item): Uint8Array =>
   utf8(`${goJson(item, { indent: '  ', escapeHtml: false })}\n`)
 
 export const decodeItemJson = (input: unknown): Effect.Effect<Item, Refused> =>
-  Schema.decodeUnknownEffect(Item)(input, strict).pipe(
+  Schema.decodeUnknownEffect(Item)(input, strictDecoding).pipe(
     Effect.mapError((error) => refuse('invalid-item', error.message)),
   )
 

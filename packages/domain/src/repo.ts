@@ -9,7 +9,7 @@ import {
   RootMetadata,
   type Signature,
   SnapshotMetadata,
-  strict,
+  strictDecoding,
   TargetsMetadata,
   TimestampMetadata,
 } from './schema.ts'
@@ -186,7 +186,7 @@ const decodeFile = <S extends Schema.Codec<AnyMetadata, unknown>>(
     try: () => JSON.parse(fromUtf8(bytes)) as unknown,
     catch: () => refuse('invalid-repo', `${file}: not JSON`),
   }).pipe(
-    Effect.flatMap((json) => Schema.decodeUnknownEffect(schema)(json, strict)),
+    Effect.flatMap((json) => Schema.decodeUnknownEffect(schema)(json, strictDecoding)),
     Effect.mapError((error) =>
       error._tag === 'Refused' ? error : refuse('invalid-repo', `${file}: ${error.message}`),
     ),
