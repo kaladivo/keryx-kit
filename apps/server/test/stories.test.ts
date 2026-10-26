@@ -1,9 +1,12 @@
-import { rebuild } from '@keryx-kit/api'
+import { readdir, readFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { rebuild, repoFilesToText } from '@keryx-kit/api'
 import {
   currentRoot,
   fromUtf8,
   initRepo,
   publicKeyFromSeed,
+  repoFiles,
   seedSigner,
   signatureFor,
   toBase64url,
@@ -66,6 +69,9 @@ const publish = async (author: Author, id: string) => {
     author.browser.client.items.publish({ params: { channel: 'news' }, payload: { item } }),
   )
 }
+
+const publishedRepo = () =>
+  server.runWithServices(Effect.flatMap(Repos, (repos) => repos.published(SLUG)))
 
 const get = (url: string) => server.handler(new Request(url), undefined as never)
 
@@ -521,5 +527,60 @@ describe('E1: scheduled timestamp', () => {
     advance(server, 12 * 60 * 60 * 1000)
     await server.runWithServices(refreshTimestamps)
     expect(await version()).toBe(before + 1)
+  })
+})
+
+/** Every file under a repo directory, as `repoFiles` names them. */
+const filesOn = async (root: string) => {
+  const files: Record<string, Uint8Array> = {}
+  for (const entry of await readdir(root, { recursive: true, withFileTypes: true })) {
+    if (!entry.isFile()) continue
+    const path = join(entry.parentPath, entry.name)
+    files[path.slice(root.length + 1)] = new Uint8Array(await readFile(path))
+  }
+  return files
+}
+
+describe('repo writes', () => {
+  it('finishes a publish the client aborted mid-write, so cache, disk and database agree', async () => {
+    const { jana } = await liveChannel()
+    const item = await signedItem(jana, draftItem('aborted', 'Aborted', server.clock.current))
+    const source = { itemId: 'aborted', title: 'Aborted', markdown: 'Hi', tags: [] }
+    server.delays.unsealMs = 20
+    const abort = new AbortController()
+    const response = jana.browser.fetch(
+      new Request(`${server.config.consoleOrigin}/api/channels/news/items`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ item, source }),
+        signal: abort.signal,
+      }),
+    )
+    await new Promise((resolve) => setTimeout(resolve, 30))
+    abort.abort()
+    await response.catch(() => undefined)
+    server.delays.unsealMs = 0
+
+    const cached = await publishedRepo()
+    expect(cached.items['channels/news/aborted.json']).toBeDefined()
+    const dirs = await server.runWithServices(Effect.map(Repos, (repos) => repos.directory(SLUG)))
+    const disk = { anchor: await filesOn(dirs.anchor), base: await filesOn(dirs.base) }
+    expect(repoFilesToText(disk)).toEqual(repoFilesToText(repoFiles(cached)))
+    const audited = await server.runWithServices(
+      Effect.gen(function* () {
+        const sql = yield* SqlClient.SqlClient
+        return yield* sql<{ action: string }>`SELECT action FROM audit_log
+          WHERE company_slug = ${SLUG} ORDER BY id DESC LIMIT 1`
+      }),
+    )
+    expect(audited[0]?.action).toBe('item-published')
+    const stored = await call(
+      jana.browser.client.items.get({ params: { channel: 'news', itemId: 'aborted' } }),
+    )
+    expect(stored.source).toEqual(source)
+
+    const version = cached.channels.news?.signed.version ?? 0
+    await publish(jana, 'after')
+    expect((await publishedRepo()).channels.news?.signed.version).toBe(version + 1)
   })
 })

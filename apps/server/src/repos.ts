@@ -179,7 +179,8 @@ export const ReposLive = Layer.effect(Repos)(
       published,
       directory,
       write,
-      locked: (effect) => lock.withPermits(1)(effect),
+      // A client abort must not stop a write halfway or skip the bookkeeping after it.
+      locked: (effect) => lock.withPermits(1)(Effect.uninterruptible(effect)),
     })
   }),
 )

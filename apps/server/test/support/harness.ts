@@ -80,6 +80,8 @@ export const startServer = async () => {
   const config = testConfig(dir)
   writeFixtures(config)
   const clock = { current: START }
+  /** Slows down unsealing server keys, so a test can abort a request in the middle of a write. */
+  const delays = { unsealMs: 0 }
   /** The company websites the domain check fetches, by URL. */
   const web = new Map<string, FakeResponse>()
   const fakeWeb = HttpClient.make((request, url) =>
@@ -93,7 +95,18 @@ export const startServer = async () => {
   )
   const outside = Layer.mergeAll(
     Layer.succeed(Time, { now: Effect.sync(() => new Date(clock.current)) }),
-    Layer.effect(Vault)(vaultFromKey(randomBytes(32))),
+    Layer.effect(Vault)(
+      Effect.map(vaultFromKey(randomBytes(32)), (vault) =>
+        Vault.of({
+          seal: vault.seal,
+          open: (sealed, aad) =>
+            Effect.andThen(
+              Effect.suspend(() => Effect.sleep(delays.unsealMs)),
+              vault.open(sealed, aad),
+            ),
+        }),
+      ),
+    ),
     Layer.succeed(HttpClient.HttpClient, fakeWeb),
   )
   const scope = Effect.runSync(Scope.make())
@@ -154,7 +167,7 @@ export const startServer = async () => {
     await Effect.runPromise(Scope.close(scope, Exit.void))
   }
 
-  return { config, clock, web, browser, run, runWithServices, stop, handler }
+  return { config, clock, delays, web, browser, run, runWithServices, stop, handler }
 }
 
 export type TestServer = Awaited<ReturnType<typeof startServer>>
