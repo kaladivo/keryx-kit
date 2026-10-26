@@ -809,7 +809,7 @@ img {
 .article-hero {
   width: 100%;
   display: block;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1 / 1; /* matches the subscriber app's .article-img crop */
   object-fit: cover;
   background: var(--bg-alt);
 }
