@@ -1,0 +1,63 @@
+{
+	"signatures": [
+		{
+			"keyid": "3f6e5bb033db15649cb80809dbc4ef1694b1ba20ae8b4336a221970ce532e035",
+			"sig": "a54c9567636177468b3175532e5d8e9f3e787b9012fe972773f0a8e7489cf259f434a9626b0e3f9b19ef1bc9256a1f13202ddc0516e6eef65ab6462976faa805"
+		}
+	],
+	"signed": {
+		"_type": "root",
+		"consistent_snapshot": false,
+		"custom": {
+			"mode": "full",
+			"repo_base": "https://repo.keryx-kit.roguedave.codes/shoe/"
+		},
+		"expires": "2036-10-23T14:31:11Z",
+		"keys": {
+			"3f6e5bb033db15649cb80809dbc4ef1694b1ba20ae8b4336a221970ce532e035": {
+				"keytype": "ed25519",
+				"keyval": {
+					"public": "2c438ec89b11b92d4bdc2e03554638c458af35c2fde2932fb6917eb41c8878c1"
+				},
+				"name": "master",
+				"scheme": "ed25519"
+			},
+			"6e4907b53f12ef0a53336e9fb8e749d1673ab5aabd70a63208f3a8372722c210": {
+				"keytype": "ed25519",
+				"keyval": {
+					"public": "8cff1c2f822339b4b404fae06b982a709ac79e0bc0215b1bffc45e689d78989d"
+				},
+				"name": "ops",
+				"scheme": "ed25519"
+			}
+		},
+		"roles": {
+			"root": {
+				"keyids": [
+					"3f6e5bb033db15649cb80809dbc4ef1694b1ba20ae8b4336a221970ce532e035"
+				],
+				"threshold": 1
+			},
+			"snapshot": {
+				"keyids": [
+					"6e4907b53f12ef0a53336e9fb8e749d1673ab5aabd70a63208f3a8372722c210"
+				],
+				"threshold": 1
+			},
+			"targets": {
+				"keyids": [
+					"3f6e5bb033db15649cb80809dbc4ef1694b1ba20ae8b4336a221970ce532e035"
+				],
+				"threshold": 1
+			},
+			"timestamp": {
+				"keyids": [
+					"6e4907b53f12ef0a53336e9fb8e749d1673ab5aabd70a63208f3a8372722c210"
+				],
+				"threshold": 1
+			}
+		},
+		"spec_version": "1.0.31",
+		"version": 1
+	}
+}
