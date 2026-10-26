@@ -1,0 +1,3 @@
+[submodule "vendor/keryx"]
+	path = vendor/keryx
+	url = https://github.com/v1b3coder/keryx.git

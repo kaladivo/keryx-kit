@@ -1,0 +1,24 @@
+{
+  "name": "@keryx-kit/server",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@effect/platform-bun": "4.0.6",
+    "@effect/sql-sqlite-bun": "4.0.6",
+    "@keryx-kit/domain": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@effect/vitest": "4.0.6",
+    "@types/bun": "^1.4.4",
+    "vitest": "5.0.5"
+  }
+}
