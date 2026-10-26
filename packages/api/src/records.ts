@@ -295,3 +295,12 @@ export const PilotRequestRecord = Schema.Struct({
   ...PilotRequest.fields,
   createdAt: Instant,
 })
+
+/**
+ * The running release (mvp-spec §5.9): the git commit and the SHA-256 of the console
+ * bundle manifest (`sha256  path` lines of every built console file, sorted by path).
+ */
+export const Release = Schema.Struct({
+  gitSha: Schema.String,
+  consoleBundleSha256: Schema.String,
+})

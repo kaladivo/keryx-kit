@@ -44,6 +44,7 @@ import {
   PilotRequestRecord,
   PublishedItem,
   PublishItem,
+  Release,
   SaveDraft,
   SignupRequest,
   SignupStarted,
@@ -279,6 +280,7 @@ export const Public = HttpApiGroup.make('public').add(
     success: HttpApiSchema.Created,
     error: TooManyRequests,
   }),
+  HttpApiEndpoint.get('release', '/api/release', { success: Release }),
 )
 
 export class KeryxKitApi extends HttpApi.make('keryx-kit')

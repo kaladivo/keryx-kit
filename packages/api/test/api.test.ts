@@ -88,6 +88,7 @@ describe('KeryxKitApi', () => {
         "operator.createInviteCode POST /api/operator/invite-codes",
         "operator.pilotRequests GET /api/operator/pilot-requests",
         "public.requestPilot POST /api/pilot-requests",
+        "public.release GET /api/release",
       ]
     `)
     const routes = listed.map((line) => line.split(' ').slice(1).join(' '))
@@ -150,11 +151,15 @@ const Platform = Layer.mergeAll(HttpPlatform.layer, Etag.layer, Path.layer).pipe
 )
 
 const PublicHandlers = HttpApiBuilder.group(KeryxKitApi, 'public', (handlers) =>
-  handlers.handle('requestPilot', ({ payload }) =>
-    payload.email.includes('@')
-      ? Effect.void
-      : Effect.fail(new InvalidRequest({ error: 'Enter an email address like jana@example.com.' })),
-  ),
+  handlers
+    .handle('requestPilot', ({ payload }) =>
+      payload.email.includes('@')
+        ? Effect.void
+        : Effect.fail(
+            new InvalidRequest({ error: 'Enter an email address like jana@example.com.' }),
+          ),
+    )
+    .handle('release', () => Effect.succeed({ gitSha: 'dev', consoleBundleSha256: '' })),
 )
 
 const CeremonyHandlers = HttpApiBuilder.group(KeryxKitApi, 'ceremonies', (handlers) =>
@@ -212,7 +217,9 @@ describe('POST /api/pilot-requests as the landing page calls it', () => {
       HttpApiBuilder.layer(PilotApi).pipe(
         Layer.provide(
           HttpApiBuilder.group(PilotApi, 'public', (handlers) =>
-            handlers.handle('requestPilot', () => Effect.void),
+            handlers
+              .handle('requestPilot', () => Effect.void)
+              .handle('release', () => Effect.succeed({ gitSha: 'dev', consoleBundleSha256: '' })),
           ).pipe(Layer.provide(Sessions)),
         ),
         Layer.provide(Platform),
