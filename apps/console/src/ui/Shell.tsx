@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
+import { loadRelease } from '../lib/release.ts'
 import { Link, usePath } from '../lib/router.tsx'
+import { useAsync } from '../lib/useAsync.ts'
 import { BrandMark } from './icons.tsx'
 
 export interface NavItem {
@@ -55,6 +57,20 @@ export const Shell = ({
         </div>
       </header>
       <main id="main">{children}</main>
+      <ReleaseFooter />
     </>
+  )
+}
+
+const ReleaseFooter = () => {
+  const release = useAsync(loadRelease, []).data
+  if (!release) return null
+  return (
+    <footer className="wrap app-footer">
+      Console build <span className="mono">{release.gitSha.slice(0, 12)}</span> · bundle SHA-256{' '}
+      <span className="mono" title={release.consoleBundleSha256}>
+        {release.consoleBundleSha256}
+      </span>
+    </footer>
   )
 }

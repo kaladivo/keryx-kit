@@ -97,6 +97,11 @@ export const signTasks = async (
   return outcomes
 }
 
+/**
+ * Completes tasks one by one in the server's order: `ResignItems` must land before the
+ * `SignAuthorsMetadata` that applies an author removal, or the removal unpublishes the
+ * posts being re-signed.
+ */
 export const submitTasks = async (
   signed: ReadonlyArray<TaskOutcome>,
 ): Promise<ReadonlyArray<TaskOutcome>> => {
