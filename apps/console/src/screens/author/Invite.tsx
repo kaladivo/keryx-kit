@@ -110,7 +110,8 @@ export const Invite = () => {
       }
       throw error
     }
-    setCreated(passkey)
+    // The PRF output is wiped after its one wrap, so a retry must ask the passkey again.
+    setCreated({ ...passkey, prf: undefined })
     try {
       await unlockAndRegister(passkey)
     } catch (error) {

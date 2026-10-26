@@ -17,6 +17,8 @@ export class AuthorKeyError extends Error {}
 const wrappingKey = async (prfOutput: Uint8Array): Promise<CryptoKey> => {
   if (prfOutput.length !== 32)
     throw new AuthorKeyError(`The passkey returned ${prfOutput.length} PRF bytes instead of 32.`)
+  if (prfOutput.every((byte) => byte === 0))
+    throw new AuthorKeyError('The passkey returned an empty PRF output. Nothing was encrypted.')
   const ikm = ownBytes(prfOutput)
   try {
     const hkdf = await crypto.subtle.importKey('raw', ikm, 'HKDF', false, ['deriveKey'])

@@ -36,6 +36,11 @@ describe('author key wrapping (mvp-spec §5.4)', () => {
     await expect(unwrapAuthorKey(other, wrapped, publicKey)).rejects.toThrow(/cannot open/)
   })
 
+  it('refuses to wrap with an all-zero PRF output, e.g. one already wiped', async () => {
+    const { seed, publicKey } = generateAuthorKey()
+    await expect(wrapAuthorKey(new Uint8Array(32), seed, publicKey)).rejects.toThrow(/empty PRF/)
+  })
+
   it('refuses a PRF output of the wrong length', async () => {
     const { seed, publicKey } = generateAuthorKey()
     await expect(wrapAuthorKey(prf.slice(0, 16), seed, publicKey)).rejects.toThrow(/16 PRF bytes/)
