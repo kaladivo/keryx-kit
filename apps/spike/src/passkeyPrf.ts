@@ -35,10 +35,29 @@ const prfAssertion = async (credentialId?: ArrayBuffer) => {
     },
   })
   if (!(assertion instanceof PublicKeyCredential)) throw new Error('no assertion')
-  const output = assertion.getClientExtensionResults().prf?.results?.first
-  if (!(output instanceof ArrayBuffer)) throw new Error('assertion returned no PRF output')
-  return { rawId: new Uint8Array(assertion.rawId), prf: new Uint8Array(output) }
+  const extensions = assertion.getClientExtensionResults()
+  const prf = asBytes(extensions.prf?.results?.first)
+  if (!prf) throw new Error(`assertion returned no PRF output: ${describe(extensions)}`)
+  return { rawId: new Uint8Array(assertion.rawId), prf }
 }
+
+/**
+ * Passkey-manager extensions (1Password) build results in their own JS realm, where
+ * `instanceof ArrayBuffer` is false for a real buffer; check the tag instead.
+ */
+const asBytes = (value: unknown): Uint8Array<ArrayBuffer> | undefined => {
+  if (ArrayBuffer.isView(value))
+    return new Uint8Array(value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength))
+  if (Object.prototype.toString.call(value) === '[object ArrayBuffer]')
+    return new Uint8Array(value as ArrayBuffer)
+  return undefined
+}
+
+const describe = (extensions: AuthenticationExtensionsClientOutputs): string =>
+  JSON.stringify(extensions, (_, v) => {
+    const bytes = asBytes(v)
+    return bytes ? `<${bytes.length} bytes>` : v
+  })
 
 const wrappingKey = async (prfOutput: Uint8Array<ArrayBuffer>): Promise<CryptoKey> => {
   const ikm = await crypto.subtle.importKey('raw', prfOutput, 'HKDF', false, ['deriveKey'])
