@@ -342,3 +342,22 @@ export const validateRepo = (
   if (options.previous) checkMonotonic(report, repo, options.previous)
   return issues
 }
+
+/**
+ * The root chain and `targets.json` alone, for a client that trusts only the roots it
+ * fetched from the company's domain and needs the delegations (e.g. author keys) from a
+ * `targets.json` some other origin served.
+ */
+export const validateTargets = (
+  state: Pick<RepoState, 'roots' | 'targets'>,
+): ReadonlyArray<Issue> => {
+  const issues: Array<Issue> = []
+  const report: Report = (code, file, message) => {
+    issues.push({ code, file, message })
+  }
+  checkRootChain(report, state.roots)
+  if (issues.length > 0) return issues
+  checkThreshold(report, 'targets.json', state.targets, authorityOf(state, 'targets'))
+  checkKeyids(report, 'targets.json', state.targets.signed.delegations.keys)
+  return issues
+}

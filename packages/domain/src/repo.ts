@@ -55,7 +55,10 @@ const isTopLevel = (role: string): role is TopLevelRole =>
   (topLevelRoles as ReadonlyArray<string>).includes(role)
 
 /** Keys and threshold that may sign `role`, as the given state authorizes them. */
-export const authorityOf = (state: RepoState, role: string): Authority | undefined => {
+export const authorityOf = (
+  state: Pick<RepoState, 'roots' | 'targets'>,
+  role: string,
+): Authority | undefined => {
   if (isTopLevel(role)) {
     const root = currentRoot(state).signed
     return { keys: root.keys, ...root.roles[role] }

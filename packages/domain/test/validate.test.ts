@@ -8,9 +8,11 @@ import {
   type Repo,
   renewTargets,
   sha256Hex,
+  signatureFor,
   signItem,
   utf8,
   validateRepo,
+  validateTargets,
   withFreshness,
 } from '../src/index.ts'
 import { publicOf, signerOf } from './keys.ts'
@@ -168,6 +170,37 @@ describe('validateRepo', () => {
       const repo = yield* companyRepo
       const { offers: _authors, ...authors } = repo.authors
       expect(codes({ ...repo, authors }, { previous: repo })).toContain('metadata-removed')
+    }),
+  )
+})
+
+describe('validateTargets', () => {
+  it.effect('accepts targets.json signed by the root chain and nothing else', () =>
+    Effect.gen(function* () {
+      const repo = yield* companyRepo
+      expect(validateTargets(repo)).toEqual([])
+      const intruder = ed25519Key(publicOf('mallory'))
+      const { delegations } = repo.targets.signed
+      const forged = {
+        ...repo.targets.signed,
+        delegations: {
+          ...delegations,
+          keys: { ...delegations.keys, [keyid('mallory')]: intruder },
+        },
+      }
+      const unsigned = { signatures: [], signed: forged }
+      expect(validateTargets({ ...repo, targets: unsigned }).map((i) => i.code)).toEqual([
+        'signature-threshold',
+      ])
+      const byMallory = {
+        ...unsigned,
+        signatures: [yield* signatureFor(unsigned, signerOf('mallory'))],
+      }
+      expect(validateTargets({ ...repo, targets: byMallory }).map((i) => i.code)).toEqual([
+        'signature-threshold',
+      ])
+      const otherRoot = { ...repo, roots: [] }
+      expect(validateTargets(otherRoot).map((i) => i.code)).toEqual(['root-chain'])
     }),
   )
 })

@@ -87,4 +87,10 @@ export {
   signRole,
 } from './repo.ts'
 export * from './schema.ts'
-export { type Issue, type IssueCode, type ValidateOptions, validateRepo } from './validate.ts'
+export {
+  type Issue,
+  type IssueCode,
+  type ValidateOptions,
+  validateRepo,
+  validateTargets,
+} from './validate.ts'
