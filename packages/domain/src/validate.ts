@@ -48,9 +48,9 @@ export interface Issue {
 
 export interface ValidateOptions {
   /** The currently published repo: versions must move forward from it. */
-  readonly previous?: Repo
+  readonly previous?: Repo | undefined
   /** Reject expired metadata (as `pub validate --strict`). */
-  readonly now?: Date
+  readonly now?: Date | undefined
 }
 
 type Report = (code: IssueCode, file: string, message: string) => void

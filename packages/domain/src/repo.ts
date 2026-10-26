@@ -207,7 +207,10 @@ export const parseRepoFiles = (files: RepoFiles): Effect.Effect<Repo, Refused> =
     }
     const versioned = files.anchor[`${latest.signed.version}.root.json`]
     if (!versioned || !bytesEqual(versioned, files.anchor['root.json'] as Uint8Array)) {
-      return yield* refuse('invalid-repo', `root.json differs from ${latest.signed.version}.root.json`)
+      return yield* refuse(
+        'invalid-repo',
+        `root.json differs from ${latest.signed.version}.root.json`,
+      )
     }
     const targets = yield* decodeFile(TargetsMetadata, files.base, 'targets.json')
     const snapshot = yield* decodeFile(SnapshotMetadata, files.base, 'snapshot.json')

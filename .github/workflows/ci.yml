@@ -17,8 +17,11 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version-file: vendor/keryx/sdk/go.mod
-          cache-dependency-path: vendor/keryx/sdk/go.sum
+          cache-dependency-path: |
+            vendor/keryx/sdk/go.sum
+            tools/conformance/go.sum
       - run: bun install --frozen-lockfile
       - run: bun run lint
       - run: bun run typecheck
       - run: bun run test
+      - run: bun run conformance
