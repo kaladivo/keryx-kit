@@ -104,6 +104,22 @@ The landing page is at `http://localhost:3999`, the repo bases at
 `http://repo.localhost:3999/<slug>/`. Owner login keys are bound to the console origin, so a
 Trezor identity made on localhost never works in production and the other way round.
 
+## Check the console bundle hash
+
+`GET /api/release` reports the SHA-256 of the manifest of every file in
+`apps/console/dist` (§5.9). To rebuild it from a commit:
+
+```sh
+git checkout <sha> && bun install --frozen-lockfile
+bun run --filter @keryx-kit/console build
+bun apps/server/scripts/release.ts apps/console/dist <sha>
+```
+
+The console builds with `bun --bun vite build`, on Bun as in the image: Vite inlines
+helper functions from their runtime source text, which differs between Node and Bun.
+On Bun, macOS arm64 and the `linux/amd64` image give the same hash. `release.ts` fails
+when `dist` has no `index.html`, so an image without a console cannot be built.
+
 ## Roll back to a previous release
 
 Find the SHA of a good commit (`git log`, or the image tags in GHCR), then:

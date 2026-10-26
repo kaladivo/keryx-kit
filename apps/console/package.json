@@ -7,7 +7,7 @@
     "dev": "vite",
     "dev:mock": "KERYX_MOCK=demo vite",
     "dev:stub": "KERYX_TREZOR_STUB=1 vite",
-    "build": "vite build && bun scripts/check-dist.ts",
+    "build": "bun --bun vite build && bun scripts/check-dist.ts",
     "typecheck": "tsc --noEmit -p .",
     "test": "vitest run",
     "test:e2e": "playwright test"

@@ -12,15 +12,11 @@ if (!dir) throw new Error('usage: release.ts <console dist> <git sha>')
 
 const sha256 = (bytes: Uint8Array | string) => createHash('sha256').update(bytes).digest('hex')
 
-const files = (() => {
-  try {
-    return readdirSync(dir, { recursive: true, encoding: 'utf8' })
-      .map((entry) => join(dir, entry))
-      .filter((path) => statSync(path).isFile())
-  } catch {
-    return []
-  }
-})()
+const files = readdirSync(dir, { recursive: true, encoding: 'utf8' })
+  .map((entry) => join(dir, entry))
+  .filter((path) => statSync(path).isFile())
+if (!files.some((path) => relative(dir, path) === 'index.html'))
+  throw new Error(`${dir} has no built console (index.html missing)`)
 
 const manifest = files
   .map((path) => [relative(dir, path).split('\\').join('/'), sha256(readFileSync(path))] as const)
