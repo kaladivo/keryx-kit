@@ -1,5 +1,5 @@
 import { type Browser, type BrowserContext, expect, type Page, test } from '@playwright/test'
-import { addPasskeyAuthenticator, ownerLogin, photo, shoot } from './support.ts'
+import { addPasskeyAuthenticator, ownerLogin, photo, serveCompanyDomain, shoot } from './support.ts'
 
 /**
  * The demo script (mvp-spec §7) against the mock API: the owner signs with the stub
@@ -23,6 +23,10 @@ test.beforeAll(async ({ browser }) => {
   const authorSide = await open(browser)
   author = authorSide.page
   await addPasskeyAuthenticator(authorSide.context, author)
+  await serveCompanyDomain(authorSide.context, 'https://shop.example.com', async (name) => {
+    const response = await author.request.get(`/repo/demo-shop/.well-known/keryx/${name}`)
+    return response.ok() ? await response.body() : undefined
+  })
 })
 
 test.afterAll(async () => {

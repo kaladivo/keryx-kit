@@ -180,7 +180,7 @@ export const Editor = ({
     if (!size.fits) throw new Error('The post is over 1 MB. Remove or shrink an image.')
     const draft = buildItem(content, new Date(), editing?.item)
     const tasks = await call((api) => api.ceremonies.tasks())
-    const targets = await prepareTasks(tasks, company.repoBase)
+    const targets = await prepareTasks(tasks, company)
     const signed = await withAuthorKey(me, async (signer) => ({
       item: await runEffect(signItem(draft, signer)),
       tasks: await signTasks(tasks, signer, targets),

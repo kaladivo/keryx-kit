@@ -4,15 +4,15 @@
  * check the public key, sign, wipe. Network calls happen before or after, never while
  * the key is open.
  */
-import type { AuthorTask, Me, TaskCompletion } from '@keryx-kit/api'
-import { type Signer, seedSigner, TargetsMetadata } from '@keryx-kit/domain'
+import type { AuthorTask, Company, Me, TaskCompletion } from '@keryx-kit/api'
+import { RootMetadata, type Signer, seedSigner, TargetsMetadata } from '@keryx-kit/domain'
 import { Effect, Schema } from 'effect'
 import { ApiError, call } from './api.ts'
 import { AuthorKeyError, unwrapAuthorKey, wrappedFromWire } from './authorKey.ts'
 import { wipe } from './bytes.ts'
 import { runEffect } from './effect.ts'
 import { type PrfAssertion, PrfUnsupported, prfAssertion } from './passkey.ts'
-import { completeTask, describeTask } from './tasks.ts'
+import { completeTask, describeTask, type PublishedAuthors } from './tasks.ts'
 
 type MeData = typeof Me.Type
 
@@ -54,12 +54,32 @@ export const withAuthorKey = async <A>(
 ): Promise<A> =>
   unlockFromAssertion(me, await prfAssertion({ allowCredentials: me.credentialIds }), use)
 
-/** `targets.json` as published, which `ResignItems` tasks are checked against. */
-export const publishedTargets = async (repoBase: string): Promise<TargetsMetadata | undefined> => {
+const fetchJson = async (url: URL): Promise<unknown> => {
+  const response = await fetch(url, { cache: 'no-store' })
+  if (!response.ok) throw new Error(`${url} answered ${response.status}`)
+  return response.json()
+}
+
+const decodeRoot = Schema.decodeUnknownSync(RootMetadata)
+
+/** `targets.json` as the repo origin publishes it. */
+const publishedTargets = (repoBase: string): Promise<TargetsMetadata | undefined> =>
+  fetchJson(new URL('targets.json', repoBase))
+    .then(Schema.decodeUnknownSync(TargetsMetadata))
+    .catch(() => undefined)
+
+/** Every root the company's domain serves, `1.root.json` up to the current `root.json`. */
+const anchorRoots = async (
+  joinOrigin: string,
+): Promise<ReadonlyArray<RootMetadata> | undefined> => {
+  const file = (name: string) => fetchJson(new URL(`/.well-known/keryx/${name}`, joinOrigin))
   try {
-    const response = await fetch(new URL('targets.json', repoBase), { cache: 'no-store' })
-    if (!response.ok) return undefined
-    return Schema.decodeUnknownSync(TargetsMetadata)(await response.json())
+    const current = decodeRoot(await file('root.json'))
+    const versions = Array.from({ length: current.signed.version - 1 }, (_, i) => i + 1)
+    const older = await Promise.all(
+      versions.map(async (v) => decodeRoot(await file(`${v}.root.json`))),
+    )
+    return [...older, current]
   } catch {
     return undefined
   }
@@ -73,28 +93,76 @@ export interface TaskOutcome {
 }
 
 /** What signing pending tasks needs from the network, fetched before the key is opened. */
-export const prepareTasks = async (tasks: ReadonlyArray<AuthorTask>, repoBase: string) =>
-  tasks.some((task) => task._tag === 'ResignItems') ? await publishedTargets(repoBase) : undefined
+export const prepareTasks = async (
+  tasks: ReadonlyArray<AuthorTask>,
+  company: Pick<typeof Company.Type, 'joinOrigin' | 'repoBase'>,
+): Promise<PublishedAuthors | undefined> => {
+  if (!tasks.some((task) => task._tag === 'ResignItems')) return undefined
+  const [roots, targets] = await Promise.all([
+    anchorRoots(company.joinOrigin),
+    publishedTargets(company.repoBase),
+  ])
+  return { roots, targets }
+}
+
+/**
+ * The author list a removal needs re-signed applies the removal, which unpublishes every
+ * post nobody re-signed. So it waits while the same removal's `ResignItems` is not done.
+ */
+const removalBlocked = (task: AuthorTask, unfinished: ReadonlySet<string>) =>
+  task._tag === 'SignAuthorsMetadata' &&
+  task.ceremonyId !== undefined &&
+  unfinished.has(task.ceremonyId)
+
+const BLOCKED =
+  'Not signed because the posts of this removal were not re-signed: signing the author list now would unpublish them.'
+
+const sign = async (
+  task: AuthorTask,
+  signer: Signer,
+  published: PublishedAuthors | undefined,
+): Promise<Pick<TaskOutcome, 'completion' | 'error'>> => {
+  try {
+    const completion = await runEffect(
+      Effect.mapError(completeTask(task, signer, published), (e) => new Error(e.reason)),
+    )
+    return { completion }
+  } catch (error) {
+    return { error: (error as Error).message }
+  }
+}
 
 /** Signs every task it can; one refusal does not stop the rest. No network. */
 export const signTasks = async (
   tasks: ReadonlyArray<AuthorTask>,
   signer: Signer,
-  targets: TargetsMetadata | undefined,
+  published: PublishedAuthors | undefined,
 ): Promise<ReadonlyArray<TaskOutcome>> => {
   const outcomes: Array<TaskOutcome> = []
+  const unfinished = new Set<string>()
   for (const task of tasks) {
     const description = describeTask(task)
-    try {
-      const completion = await runEffect(
-        Effect.mapError(completeTask(task, signer, targets), (e) => new Error(e.reason)),
-      )
-      outcomes.push({ task, description, completion })
-    } catch (error) {
-      outcomes.push({ task, description, error: (error as Error).message })
-    }
+    const result = removalBlocked(task, unfinished)
+      ? { error: BLOCKED }
+      : await sign(task, signer, published)
+    if (result.error !== undefined && task._tag === 'ResignItems') unfinished.add(task.ceremonyId)
+    outcomes.push({ task, description, ...result })
   }
   return outcomes
+}
+
+const send = async (
+  task: AuthorTask,
+  completion: typeof TaskCompletion.Type,
+): Promise<string | undefined> => {
+  try {
+    await call((api) =>
+      api.ceremonies.completeTask({ params: { taskId: task.id }, payload: completion }),
+    )
+    return undefined
+  } catch (error) {
+    return (error as Error).message
+  }
 }
 
 /**
@@ -106,20 +174,18 @@ export const submitTasks = async (
   signed: ReadonlyArray<TaskOutcome>,
 ): Promise<ReadonlyArray<TaskOutcome>> => {
   const outcomes: Array<TaskOutcome> = []
+  const unfinished = new Set<string>()
   for (const outcome of signed) {
-    const { completion } = outcome
-    if (!completion) {
-      outcomes.push(outcome)
-      continue
-    }
-    try {
-      await call((api) =>
-        api.ceremonies.completeTask({ params: { taskId: outcome.task.id }, payload: completion }),
-      )
-      outcomes.push(outcome)
-    } catch (error) {
-      outcomes.push({ ...outcome, error: (error as Error).message })
-    }
+    const { task, completion } = outcome
+    const failure = removalBlocked(task, unfinished)
+      ? BLOCKED
+      : completion
+        ? await send(task, completion)
+        : outcome.error
+    if (failure !== undefined && task._tag === 'ResignItems') unfinished.add(task.ceremonyId)
+    outcomes.push(
+      failure === undefined ? outcome : { task, description: outcome.description, error: failure },
+    )
   }
   return outcomes
 }

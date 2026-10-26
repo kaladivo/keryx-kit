@@ -135,8 +135,13 @@ Remove:
 2. Remaining authors now get tasks: `ResignItems` (sign `itemSigningBytes(item)` of each
    item, complete with `{ _tag: 'ItemSignatures', signatures: [{ itemId, signature }] }`)
    and, if needed, `SignAuthorsMetadata` with `reason: 'author-removal'`.
-   `ResignItems` carries no `base`: the console checks each item against the published
-   `targets.json` at `company.repoBase`, which the console CSP allows in `connect-src`.
+   `ResignItems` carries no `base`. The console loads the published `targets.json` from
+   `company.repoBase` and the root chain from `<company.joinOrigin>/.well-known/keryx/`
+   (`root.json` and every `N.root.json`), and uses the author keys only when
+   `targets.json` verifies against those roots (`validateTargets`), because the service
+   controls the repo origin but not the company's domain. Without a live domain it refuses
+   the task, and the `SignAuthorsMetadata` of the same removal waits with it. The console
+   CSP allows `https:` in `connect-src` for this.
    `ceremonies.get` shows the impact shrinking as they do.
 3. The owner signs whenever ready. Items still signed only by the removed author are
    unpublished with the revocation. If the authors metadata still needs its re-sign, the

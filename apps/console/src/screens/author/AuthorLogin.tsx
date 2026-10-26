@@ -33,7 +33,7 @@ export const AuthorLogin = () => {
         call((api) => api.company.get()),
       ])
       if (tasks.length > 0 && assertion.prf) {
-        const targets = await prepareTasks(tasks, company.repoBase)
+        const targets = await prepareTasks(tasks, company)
         const signed = await unlockFromAssertion(me, assertion, (signer) =>
           signTasks(tasks, signer, targets),
         )

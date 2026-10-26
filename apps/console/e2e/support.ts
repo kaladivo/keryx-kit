@@ -22,6 +22,26 @@ export const addPasskeyAuthenticator = async (context: BrowserContext, page: Pag
   return cdp
 }
 
+/**
+ * Answers `<origin>/.well-known/keryx/<file>` like the company's web server after it
+ * uploaded the join kit (A3). `file` returns undefined for a missing file (404).
+ */
+export const serveCompanyDomain = (
+  context: BrowserContext,
+  origin: string,
+  file: (name: string) => Promise<Uint8Array | undefined>,
+) =>
+  context.route(`${origin}/.well-known/keryx/*`, async (route) => {
+    const name = new URL(route.request().url()).pathname.split('/').pop() ?? ''
+    const body = await file(name)
+    await route.fulfill({
+      status: body ? 200 : 404,
+      contentType: 'application/json',
+      headers: { 'access-control-allow-origin': '*' },
+      body: body ? Buffer.from(body) : 'not found',
+    })
+  })
+
 /** Owner login through the dev Trezor stub. */
 export const ownerLogin = async (page: Page) => {
   await page.goto('/login')

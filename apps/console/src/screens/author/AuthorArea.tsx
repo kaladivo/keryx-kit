@@ -92,7 +92,7 @@ const TaskQueue = () => {
     return shown
   })
   const sign = useAction(async () => {
-    const targets = await prepareTasks(tasks, company.repoBase)
+    const targets = await prepareTasks(tasks, company)
     const signed = await withAuthorKey(me, (signer) => signTasks(tasks, signer, targets))
     setOutcomes(await submitTasks(signed))
     await refresh()

@@ -1281,10 +1281,16 @@ export const createMock = (mode: string, origin: string) => {
     { disableLogger: true },
   )
 
-  /** Static repo files under `/repo/<slug>/`, as `repo.<service>` serves them. */
+  /**
+   * Static files under `/repo/<slug>/`, as `repo.<service>` serves them, and under
+   * `/repo/<slug>/.well-known/keryx/` the root chain the company's domain would serve.
+   */
   const repoFile = (slug: string, path: string): Uint8Array | undefined => {
     const found = state.companies.get(slug)
-    return found ? repoFiles(found.repo).base[path] : undefined
+    if (!found) return undefined
+    const files = repoFiles(found.repo)
+    const anchor = path.match(/^\.well-known\/keryx\/([^/]+)$/)?.[1]
+    return anchor === undefined ? files.base[path] : files.anchor[anchor]
   }
 
   return { handler, repoFile, operatorToken: state.operatorToken }

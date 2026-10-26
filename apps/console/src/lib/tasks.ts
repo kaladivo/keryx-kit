@@ -8,16 +8,20 @@ import {
   authorityOf,
   authorsRoleName,
   bytesEqual,
+  type DelegatedTargetsMetadata,
   fromBase64url,
   type Item,
   itemSignatureFor,
+  type RootMetadata,
   type Signer,
   signatureFor,
   signingBytes,
   type TargetsMetadata,
+  validateTargets,
   verifyItemSignatures,
 } from '@keryx-kit/domain'
 import { Data, Effect } from 'effect'
+import { verifiedBase } from './ceremony.ts'
 
 export class TaskRefused extends Data.TaggedError('TaskRefused')<{ readonly reason: string }> {}
 
@@ -44,6 +48,12 @@ const expectedOperation = {
   'author-removal': 'renewAuthors',
 } as const
 
+/** An authors role only authorizes item signers (spec feeds §2); it lists nothing itself. */
+const pinsOrDelegates = ({ signed }: DelegatedTargetsMetadata) =>
+  Object.keys(signed.targets).length > 0 ||
+  Object.keys(signed.delegations.keys).length > 0 ||
+  signed.delegations.roles.length > 0
+
 const signAuthorsMetadata = (
   task: Extract<AuthorTask, { _tag: 'SignAuthorsMetadata' }>,
   signer: Signer,
@@ -54,6 +64,7 @@ const signAuthorsMetadata = (
       return yield* refused('The task does not match the signature it asks for.')
     if (task.operation.params.channel !== task.channel)
       return yield* refused('The task names a different channel than its change.')
+    yield* verifiedBase(task.base).pipe(Effect.mapError(refused))
     const state = yield* rebuild(task.base, task.operation).pipe(
       Effect.mapError((e) => refused(`The change cannot be built: ${e.message}`)),
     )
@@ -61,6 +72,8 @@ const signAuthorsMetadata = (
     const authority = authorityOf(state, role)
     if (doc === undefined || authority === undefined)
       return yield* refused(`The rebuilt repo has no ${role}.`)
+    if (pinsOrDelegates(doc))
+      return yield* refused('The author list would pin files or delegate. Nothing was signed.')
     if (!authority.keyids.includes(signer.keyid) || !task.toSign.keyids.includes(signer.keyid))
       return yield* refused(`You are not an author of ${task.channel} in this change.`)
     const theirs = yield* Effect.try({
@@ -78,22 +91,51 @@ const signAuthorsMetadata = (
   })
 
 /**
- * `ResignItems` carries no repo, so the items are checked against the published
- * `targets.json`: each must already carry a valid signature by a listed author, which
- * keeps the console from signing content nobody on the team wrote.
+ * What `ResignItems` is checked against. The task carries no repo and the repo origin
+ * belongs to the service, so `targets.json` only counts once it verifies against the root
+ * chain from the company's own domain (`/.well-known/keryx/`), which the service cannot
+ * change. `roots` is undefined when the domain did not serve it.
+ */
+export interface PublishedAuthors {
+  readonly roots: ReadonlyArray<RootMetadata> | undefined
+  readonly targets: TargetsMetadata | undefined
+}
+
+const trustedTargets = (
+  published: PublishedAuthors | undefined,
+): Effect.Effect<TargetsMetadata, TaskRefused> =>
+  Effect.gen(function* () {
+    if (published?.roots === undefined)
+      return yield* refused(
+        "Re-signing needs your company's domain to be live: this browser could not load root.json from its /.well-known/keryx/. Nothing was signed.",
+      )
+    if (published.targets === undefined)
+      return yield* refused('Cannot load the published targets.json. Nothing was signed.')
+    const [issue] = validateTargets({ roots: published.roots, targets: published.targets })
+    if (issue)
+      return yield* refused(
+        `The published targets.json does not verify against your company's root.json (${issue.message}). Nothing was signed.`,
+      )
+    return published.targets
+  })
+
+/**
+ * Each item must already carry a valid signature by an author the verified
+ * `targets.json` lists, which keeps the console from signing content nobody on the team
+ * wrote.
  */
 const resignItems = (
   task: Extract<AuthorTask, { _tag: 'ResignItems' }>,
   signer: Signer,
-  published: TargetsMetadata | undefined,
+  published: PublishedAuthors | undefined,
 ): Effect.Effect<Completion, TaskRefused> =>
   Effect.gen(function* () {
     const [first, ...rest] = task.items
     if (first === undefined) return yield* refused('The task has no posts.')
-    const delegations = published?.signed.delegations
-    const role = delegations?.roles.find((r) => r.name === authorsRoleName(task.channel))
-    if (delegations === undefined || role === undefined)
-      return yield* refused(`Cannot load the published author list of ${task.channel}.`)
+    const { delegations } = (yield* trustedTargets(published)).signed
+    const role = delegations.roles.find((r) => r.name === authorsRoleName(task.channel))
+    if (role === undefined)
+      return yield* refused(`The published targets.json has no author list for ${task.channel}.`)
     if (!role.keyids.includes(signer.keyid))
       return yield* refused(`You are not an author of ${task.channel}.`)
     const authors: Authority = { keys: delegations.keys, keyids: role.keyids, threshold: 1 }
@@ -114,7 +156,7 @@ const resignItems = (
 export const completeTask = (
   task: AuthorTask,
   signer: Signer,
-  published?: TargetsMetadata,
+  published?: PublishedAuthors,
 ): Effect.Effect<Completion, TaskRefused> =>
   task._tag === 'SignAuthorsMetadata'
     ? signAuthorsMetadata(task, signer)
