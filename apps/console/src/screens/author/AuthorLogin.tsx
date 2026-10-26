@@ -51,7 +51,6 @@ export const AuthorLogin = () => {
     <Shell>
       <div className="page wrap">
         <div className="auth">
-          <p className="eyebrow">Author</p>
           <h1>Sign in with your passkey</h1>
           <p className="lead">
             Use the passkey you created from your invite link. Any signatures waiting for you are

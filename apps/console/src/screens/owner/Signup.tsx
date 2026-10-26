@@ -268,7 +268,6 @@ export const Signup = () => {
     <Shell>
       <div className="page wrap">
         <div className="auth auth-wide">
-          <p className="eyebrow">Sign up</p>
           <h1>Create your company on Keryx</h1>
           <p className="lead">
             You need an invite code and a Trezor. The Trezor holds your master key: nobody else,

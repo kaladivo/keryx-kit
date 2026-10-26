@@ -50,7 +50,6 @@ export const OwnerLogin = () => {
     <Shell>
       <div className="page wrap">
         <div className="auth">
-          <p className="eyebrow">Company owner</p>
           <h1>Sign in with Trezor</h1>
           <p className="lead">Your Trezor is your login. There is no password.</p>
           <Card>

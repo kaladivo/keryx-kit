@@ -136,7 +136,6 @@ export const Invite = () => {
           )}
           {invite.data && !me && (
             <>
-              <p className="eyebrow">Invitation</p>
               <h1>Join {invite.data.preview.companyName} as an author</h1>
               <p className="lead">
                 You will publish signed announcements for {invite.data.preview.companyName}. Your

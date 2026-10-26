@@ -1,4 +1,4 @@
-import '../../site/src/styles.css'
+import '../../site/src/tokens.css'
 import './console.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

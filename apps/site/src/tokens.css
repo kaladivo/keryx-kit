@@ -1,0 +1,74 @@
+/* The design tokens the site and the console share (DESIGN.md). */
+
+@import "@fontsource-variable/hanken-grotesk/wght.css";
+@import "@fontsource-variable/geist-mono/wght.css";
+
+:root {
+  color-scheme: light;
+  --canvas: #f5f5f3;
+  --surface: #ffffff;
+  --surface-2: #eeeff1;
+  --ink: #17181f;
+  --ink-2: #5a5d6b;
+  --ink-3: #686b78;
+  --line: #e2e3e7;
+  --line-2: #cfd1d8;
+  --accent: #4b5ce4;
+  --accent-hover: #3b4bcf;
+  --accent-text: #3f50d6;
+  --accent-soft: rgb(75 92 228 / 0.1);
+  --on-accent: #ffffff;
+  --bad: #b5452f;
+  --bad-soft: rgb(181 69 47 / 0.1);
+  --glass: rgb(255 255 255 / 0.55);
+  --glass-line: rgb(23 24 31 / 0.1);
+  --nav-bg: rgb(245 245 243 / 0.72);
+
+  --deep: #15161d;
+  --deep-card: #23252f;
+  --deep-ink: #ececf2;
+  --deep-ink-2: #a2a5b5;
+  --deep-line: #2f313c;
+
+  --app-bg: #ffffff;
+  --app-ink: #313131;
+
+  --shadow-float: 0 1px 2px rgb(23 24 31 / 0.06), 0 18px 40px -12px rgb(23 30 60 / 0.22);
+  --shadow-phone: 0 60px 90px -40px rgb(20 28 60 / 0.45), 0 30px 50px -30px rgb(0 0 0 / 0.35);
+
+  --sans: "Hanken Grotesk Variable", "Hanken Grotesk", system-ui, sans-serif;
+  --mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --canvas: #101117;
+    --surface: #181920;
+    --surface-2: #20212a;
+    --ink: #ececf2;
+    --ink-2: #a3a6b4;
+    --ink-3: #8a8d9b;
+    --line: #262832;
+    --line-2: #363844;
+    --accent: #5464e6;
+    --accent-hover: #4555d6;
+    --accent-text: #9aa4ff;
+    --accent-soft: rgb(141 152 255 / 0.13);
+    --bad: #f0846c;
+    --bad-soft: rgb(240 132 108 / 0.12);
+    --glass: rgb(255 255 255 / 0.07);
+    --glass-line: rgb(255 255 255 / 0.14);
+    --nav-bg: rgb(16 17 23 / 0.7);
+
+    --deep: #0b0c10;
+    --deep-line: #262833;
+
+    --app-bg: #101013;
+    --app-ink: #f2f2f4;
+
+    --shadow-float: 0 1px 2px rgb(0 0 0 / 0.3), 0 18px 40px -12px rgb(0 0 0 / 0.6);
+    --shadow-phone: 0 60px 90px -40px rgb(0 0 0 / 0.8), 0 30px 50px -30px rgb(0 0 0 / 0.6);
+  }
+}

@@ -286,7 +286,6 @@ export const OperatorLogin = () => {
     <Shell>
       <div className="page wrap">
         <div className="auth">
-          <p className="eyebrow">Operator</p>
           <h1>Operator sign-in</h1>
           <p className="lead">Use the token from the server’s operator secret file.</p>
           <Card>

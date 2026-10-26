@@ -19,7 +19,6 @@ export const Home = () => {
   return (
     <Shell>
       <div className="page wrap">
-        <p className="eyebrow">Keryx publisher console</p>
         <h1>Signed announcements for your customers</h1>
         <p className="lead" style={{ maxWidth: '44rem' }}>
           Owners hold the company’s master key on a Trezor. Authors write and sign posts with a

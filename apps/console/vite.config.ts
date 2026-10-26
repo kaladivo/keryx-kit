@@ -22,7 +22,13 @@ export default defineConfig(({ command }) => {
       strictPort: true,
       proxy: mock ? {} : { '/api': { target: api, changeOrigin: true } },
     },
-    build: { outDir: 'dist', sourcemap: false, chunkSizeWarningLimit: 800 },
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
+      chunkSizeWarningLimit: 800,
+      // The CSP's font-src is 'self': no font subset may be inlined as a data: URL.
+      assetsInlineLimit: (file: string) => (file.endsWith('.woff2') ? false : undefined),
+    },
     test: {
       environment: 'jsdom',
       include: ['test/**/*.test.ts'],

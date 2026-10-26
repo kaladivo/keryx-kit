@@ -13,13 +13,6 @@ const Icon = (props: SVGProps<SVGSVGElement>) => (
   />
 )
 
-export const BrandMark = () => (
-  <svg className="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-    <rect width="32" height="32" rx="8" />
-    <rect x="8" y="8" width="16" height="16" rx="5" />
-  </svg>
-)
-
 export const TrezorIcon = () => (
   <Icon>
     <path d="M8 8V6.5a4 4 0 0 1 8 0V8" />

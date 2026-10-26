@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { loadRelease } from '../lib/release.ts'
 import { Link, usePath } from '../lib/router.tsx'
 import { useAsync } from '../lib/useAsync.ts'
-import { BrandMark } from './icons.tsx'
 
 export interface NavItem {
   readonly to: string
@@ -36,7 +35,6 @@ export const Shell = ({
       <header className="app-header">
         <div className="wrap app-header-inner">
           <Link className="brand" to={home} aria-label="Keryx console home">
-            <BrandMark />
             <span>Keryx</span>
             <span className="brand-tag">Console</span>
           </Link>

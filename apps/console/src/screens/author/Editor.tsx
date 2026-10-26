@@ -427,7 +427,7 @@ export const Editor = ({
           </Card>
         </form>
         <aside className="editor-preview" aria-label="Preview">
-          <p className="eyebrow">Subscriber preview</p>
+          <p>Subscriber preview</p>
           <div className="phone">
             <div className="phone-screen">
               <div className="phone-bar">
@@ -440,19 +440,19 @@ export const Editor = ({
               {preview.image && <img className="article-hero" src={preview.image} alt="" />}
               <article className="article">
                 <h2>{preview.title || 'Untitled post'}</h2>
-                <div className="article-meta">{formatDate(preview.date_published)}</div>
+                <div className="article-meta">
+                  <span className="article-date">{formatDate(preview.date_published)}</span>
+                  {preview.tags?.map((tag) => (
+                    <span key={tag} className="chip">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
                 <div
                   className="article-body"
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: content_html is already run through the subscriber app's sanitizer
                   dangerouslySetInnerHTML={{ __html: preview.content_html }}
                 />
-                {preview.tags && (
-                  <div className="tags">
-                    {preview.tags.map((tag) => (
-                      <span key={tag}>{tag}</span>
-                    ))}
-                  </div>
-                )}
               </article>
             </div>
           </div>
