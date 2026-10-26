@@ -3,10 +3,9 @@
   "private": true,
   "license": "GPL-3.0-only",
   "type": "module",
-  "packageManager": "pnpm@10.20.0",
   "scripts": {
-    "typecheck": "pnpm -r --parallel typecheck",
-    "test": "pnpm -r test",
+    "typecheck": "bun run --filter '*' typecheck",
+    "test": "bun run --filter '*' test",
     "lint": "biome check .",
     "format": "biome check --write .",
     "conformance": "cd tools/conformance && go run . ../../tmp/conformance"
@@ -14,5 +13,9 @@
   "devDependencies": {
     "@biomejs/biome": "2.6.3",
     "typescript": "7.0.2"
-  }
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
 }
