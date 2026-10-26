@@ -119,8 +119,10 @@ const serveConsole = (config: ServerConfigShape, pathname: string) =>
   })
 
 /**
- * mvp-spec §5.9. Trezor Connect talks to Suite Web and to Suite desktop on the loopback;
- * author tasks read the published `targets.json` from the repo origin.
+ * mvp-spec §5.9. Trezor Connect talks to Suite Web and to Suite desktop on the loopback.
+ * Author re-sign tasks read `targets.json` from the repo origin and the root chain from
+ * the company's own domain. Session cookies are scoped to `/api`, so the page response
+ * cannot name that one domain, and `connect-src` allows any `https:` origin.
  */
 export const consoleHeaders = (config: ServerConfigShape): Record<string, string> => ({
   'content-security-policy': [
@@ -128,7 +130,7 @@ export const consoleHeaders = (config: ServerConfigShape): Record<string, string
     "script-src 'self'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
-    `connect-src 'self' ${config.repoOrigin} https://suite.trezor.io ws://127.0.0.1:21335`,
+    `connect-src 'self' ${config.repoOrigin} https: ws://127.0.0.1:21335`,
     'frame-src https://suite.trezor.io',
     "object-src 'none'",
     "base-uri 'none'",

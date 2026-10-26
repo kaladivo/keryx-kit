@@ -532,7 +532,7 @@ describe('hosting (§5.2, §5.9)', () => {
       'frame-src https://suite.trezor.io',
     )
     expect(spa.headers.get('content-security-policy')).toContain(
-      "connect-src 'self' https://repo.keryx.test ",
+      "connect-src 'self' https://repo.keryx.test https: ws://127.0.0.1:21335;",
     )
     expect(spa.headers.get('cross-origin-opener-policy')).toBe('same-origin-allow-popups')
     expect((await get('https://console.keryx.test/assets/missing.js')).status).toBe(404)
