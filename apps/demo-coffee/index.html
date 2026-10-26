@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#17352d" />
+    <title>Kindlewood Coffee · Small-batch roastery in Brno</title>
+    <meta
+      name="description"
+      content="Single origins and blends roasted twice a week in the oven room of an old Brno bakery, shipped the morning after roasting."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <p class="notice-bar">
+      <span>Roasted Tuesday and Friday, shipped the next morning</span>
+      <span>Free EU shipping over €40</span>
+    </p>
+
+    <header class="masthead">
+      <a class="logo" href="/" aria-label="Kindlewood Coffee home">
+        <img src="/src/assets/mark.svg" alt="" width="40" height="40" />
+        <span>Kindlewood</span>
+      </a>
+      <nav aria-label="Main">
+        <a href="#coffee">Coffee</a>
+        <a href="#story">Roastery</a>
+        <a href="#news">News</a>
+      </nav>
+      <a class="basket" href="#coffee">Basket <span>0</span></a>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="kicker">New single origin · Ethiopia</p>
+          <h1 id="hero-title">Guji Hambela</h1>
+          <p class="notes">Bergamot · White peach · Jasmine</p>
+          <p class="lead">
+            A washed lot from smallholders around Hambela Wamena, grown at 2,100 metres. We roast it
+            light, so it tastes like tea with honey in it. Best as filter.
+          </p>
+          <div class="hero-buy">
+            <a class="button" href="#guji">Add to basket · €16.50</a>
+            <span class="hero-size">250 g · whole bean or ground</span>
+          </div>
+        </div>
+        <figure class="hero-art">
+          <img
+            src="/src/assets/hero-guji.svg"
+            alt="A bag of Guji Hambela in front of the brick arch of an old bread oven"
+            width="600"
+            height="560"
+          />
+        </figure>
+      </section>
+
+      <ul class="facts" aria-label="How we work">
+        <li>
+          <strong>Roasted to order</strong>
+          Tuesday and Friday, in batches of 12 kg. Your bag ships the next morning.
+        </li>
+        <li>
+          <strong>Six farms, one price list</strong>
+          We buy from the same growers every year and publish what we paid them.
+        </li>
+        <li>
+          <strong>Bags that compost</strong>
+          Paper and plant film. The tin tie is the only part for the recycling bin.
+        </li>
+      </ul>
+
+      <section class="coffee" id="coffee" aria-labelledby="coffee-title">
+        <div class="section-head">
+          <h2 id="coffee-title">On the shelf this week</h2>
+          <p>Four coffees, roasted in small batches. When a lot runs out, it is gone until next harvest.</p>
+        </div>
+        <div class="grid">
+          <article class="product" id="guji">
+            <div class="product-art tint-saffron">
+              <span class="badge">New</span>
+              <img src="/src/assets/bag-guji.svg" alt="Bag of Guji Hambela" width="320" height="420" loading="lazy" />
+            </div>
+            <p class="origin">Ethiopia · Washed</p>
+            <h3>Guji Hambela</h3>
+            <p class="tasting">Bergamot, white peach, jasmine</p>
+            <div class="buy">
+              <span class="roast" role="img" aria-label="Light roast"><i class="on"></i><i></i><i></i></span>
+              <span class="price">€16.50</span>
+            </div>
+          </article>
+          <article class="product">
+            <div class="product-art tint-ember">
+              <img src="/src/assets/bag-kindling.svg" alt="Bag of Kindling house espresso" width="320" height="420" loading="lazy" />
+            </div>
+            <p class="origin">Brazil and Colombia · Blend</p>
+            <h3>Kindling Espresso</h3>
+            <p class="tasting">Milk chocolate, hazelnut, brown sugar</p>
+            <div class="buy">
+              <span class="roast" role="img" aria-label="Medium-dark roast"><i class="on"></i><i class="on"></i><i class="on"></i></span>
+              <span class="price">€13.00</span>
+            </div>
+          </article>
+          <article class="product">
+            <div class="product-art tint-teal">
+              <img src="/src/assets/bag-huila.svg" alt="Bag of Los Naranjos from Huila, Colombia" width="320" height="420" loading="lazy" />
+            </div>
+            <p class="origin">Colombia · Huila · Honey</p>
+            <h3>Los Naranjos</h3>
+            <p class="tasting">Red apple, caramel, orange zest</p>
+            <div class="buy">
+              <span class="roast" role="img" aria-label="Medium roast"><i class="on"></i><i class="on"></i><i></i></span>
+              <span class="price">€14.50</span>
+            </div>
+          </article>
+          <article class="product">
+            <div class="product-art tint-plum">
+              <img src="/src/assets/bag-decaf.svg" alt="Bag of Low Embers decaf from Peru" width="320" height="420" loading="lazy" />
+            </div>
+            <p class="origin">Peru · Water-process decaf</p>
+            <h3>Low Embers Decaf</h3>
+            <p class="tasting">Cocoa, toasted almond, dried fig</p>
+            <div class="buy">
+              <span class="roast" role="img" aria-label="Medium roast"><i class="on"></i><i class="on"></i><i></i></span>
+              <span class="price">€14.00</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="story" id="story" aria-labelledby="story-title">
+        <figure class="story-art">
+          <img
+            src="/src/assets/roaster.svg"
+            alt="Our drum roaster under the brick arch of the old bread oven"
+            width="520"
+            height="420"
+            loading="lazy"
+          />
+        </figure>
+        <div class="story-copy">
+          <p class="kicker">Since 2019</p>
+          <h2 id="story-title">We roast in an old bakery.</h2>
+          <p>
+            Marta and Jakub took over the back room of a closed bakery in Brno with a secondhand
+            12-kilo roaster and a plan to sell coffee to the neighbours. The bread oven was too
+            heavy to move, so it stayed. Its arch now shelters the roaster, and our green coffee
+            sacks dry out where the loaves used to.
+          </p>
+          <p>
+            We are five people now. We still roast twice a week, taste every batch before it is
+            bagged, and write the roast date on every bag by hand.
+          </p>
+          <a class="text-link" href="#coffee">See what we are roasting</a>
+        </div>
+      </section>
+
+      <section class="keryx" id="news" aria-labelledby="news-title">
+        <div class="keryx-copy">
+          <h2 id="news-title">Get our news in Keryx, no email needed</h2>
+          <p>
+            New roasts, holiday blends and notices about your orders arrive in the free Keryx app.
+            You do not need an email address, a phone number or an account. Unsubscribe with one
+            tap.
+          </p>
+          <p>
+            Every message is signed by us, and the app checks it against this website. Nobody can
+            send you a fake Kindlewood message there. We will never ask you for card details or a
+            password in a message.
+          </p>
+          <div class="keryx-actions">
+            <a class="button button-light" href="/join">Get Kindlewood news in Keryx</a>
+            <a class="text-link text-link-light" href="https://keryx-kit.roguedave.codes/subscribers">What is Keryx?</a>
+          </div>
+        </div>
+        <figure class="keryx-art">
+          <img
+            src="/src/assets/phone.svg"
+            alt="A phone showing Kindlewood messages in the Keryx app"
+            width="300"
+            height="520"
+            loading="lazy"
+          />
+        </figure>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-brand">
+        <a class="logo" href="/">
+          <img src="/src/assets/mark.svg" alt="" width="32" height="32" />
+          <span>Kindlewood</span>
+        </a>
+        <p>Small-batch roastery in Brno.</p>
+      </div>
+      <nav aria-label="Footer">
+        <a href="#coffee">Coffee</a>
+        <a href="#story">Roastery</a>
+        <a href="/join">News in Keryx</a>
+      </nav>
+      <p class="fiction">
+        Kindlewood Coffee is a fictional roastery, made up to demo
+        <a href="https://keryx-kit.roguedave.codes">keryx-kit</a>. There is no shop and nothing here
+        is for sale.
+      </p>
+    </footer>
+  </body>
+</html>
