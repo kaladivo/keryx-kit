@@ -352,7 +352,7 @@ code {
   margin-bottom: 2rem;
 }
 
-.prose > * {
+.prose {
   max-width: 46rem;
 }
 
