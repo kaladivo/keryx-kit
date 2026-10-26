@@ -821,7 +821,7 @@ a:hover {
   grid-template-rows: 1fr;
   transition:
     grid-template-rows 700ms var(--ease),
-    opacity 400ms var(--ease) 500ms;
+    opacity 400ms var(--ease);
 }
 
 .check[data-check-state="hidden"] .mini-post {
@@ -878,6 +878,19 @@ a:hover {
   color: var(--app-ink);
   font-size: calc(12 * var(--u));
   font-weight: 600;
+}
+
+/* The loop's reset: verdict, title and feed fade out, swap while hidden, fade back in together. */
+.verdict-word,
+.verdict-line,
+.check-edit,
+.mini-rest {
+  transition: opacity 400ms var(--ease);
+}
+
+.check.is-resetting :is(.verdict-word, .verdict-line, .check-edit, .mini-post, .mini-rest) {
+  opacity: 0;
+  transition: opacity 300ms var(--ease);
 }
 
 @media (max-width: 900px) {

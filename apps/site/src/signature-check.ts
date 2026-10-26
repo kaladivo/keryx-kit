@@ -65,6 +65,7 @@ const parts = (check: HTMLElement) => {
 
 const reset = (check: HTMLElement, isSigned: IsSigned) => {
   const { cursor, edit } = parts(check)
+  check.classList.remove('is-resetting')
   cursor.classList.remove('is-visible')
   edit.classList.remove('is-selected', 'is-typing')
   setTitlePart(check, ORIGINAL, isSigned)
@@ -103,6 +104,10 @@ const playLoop = async (check: HTMLElement, isSigned: IsSigned, signal: AbortSig
     cursor.classList.remove('is-visible')
     moveTo(rest(), 900)
     await sleep(4200, signal)
+    check.classList.add('is-resetting')
+    await sleep(350, signal)
+    setTitlePart(check, ORIGINAL, isSigned)
+    await sleep(60, signal)
   }
 }
 

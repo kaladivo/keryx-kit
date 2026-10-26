@@ -203,7 +203,7 @@ Three 4:5 cards on the dark band, each a generated frosted object (hardware devi
 
 ## Motion
 
-Two authored moments. The story: the phone's screen change and the step copy fading in as each step reaches the middle of the viewport. The signature check: a calm loop (about 10 seconds) of pointer, selection, typing, verdict flip, the post fading and collapsing out of the feed, a pause and a reset; it plays only while the card is at least half on screen and the tab is visible, and starts over from the signed state. Under `prefers-reduced-motion: reduce` there are no transitions and no smooth scrolling, and the signature check shows a static pair instead: the signed post ("Shown") above the edited one ("Not shown"). Without JavaScript all step copy is visible and the phone shows the first state.
+Two authored moments. The story: the phone's screen change and the step copy fading in as each step reaches the middle of the viewport. The signature check: a calm loop (about 10 seconds) of pointer, selection, typing, verdict flip, the post fading and collapsing out of the feed, a pause, and a reset in which the title, verdict and feed fade out and return together; it plays only while the card is at least half on screen and the tab is visible, and starts over from the signed state. Under `prefers-reduced-motion: reduce` there are no transitions and no smooth scrolling, and the signature check shows a static pair instead: the signed post ("Shown") above the edited one ("Not shown"). Without JavaScript all step copy is visible and the phone shows the first state.
 
 ## Do's and Don'ts
 
