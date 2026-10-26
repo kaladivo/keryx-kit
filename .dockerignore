@@ -1,0 +1,16 @@
+**/node_modules
+**/dist
+.git
+.github
+.dockerignore
+Dockerfile
+deploy
+docs
+vendor
+tmp
+data
+coverage
+*.log
+*.sqlite
+*.sqlite-*
+.env

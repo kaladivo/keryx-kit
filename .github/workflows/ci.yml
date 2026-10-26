@@ -25,3 +25,73 @@ jobs:
       - run: bun run typecheck
       - run: bun run test
       - run: bun run conformance
+
+  release:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE: ghcr.io/kaladivo/keryx-kit
+      SSH_TARGET: deploy@${{ secrets.DEPLOY_HOST }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Image summary
+        run: |
+          {
+            echo "### Image"
+            echo "- Tag: \`$IMAGE:${{ github.sha }}\`"
+            echo "- Digest: \`${{ steps.build.outputs.digest }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519
+      - name: Deploy
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tar -C deploy -cf - . | ssh -o BatchMode=yes "$SSH_TARGET" 'tar --no-overwrite-dir -C /srv/keryx-kit -xf -'
+          printf '%s' "$GHCR_TOKEN" | ssh -o BatchMode=yes "$SSH_TARGET" 'docker login ghcr.io -u ${{ github.actor }} --password-stdin'
+          ssh -o BatchMode=yes "$SSH_TARGET" '/srv/keryx-kit/release.sh ${{ github.sha }}'
+      - name: Log out of GHCR on the droplet
+        if: always()
+        run: ssh -o BatchMode=yes "$SSH_TARGET" 'docker logout ghcr.io' || true
+      - name: Wait for healthz
+        run: |
+          for _ in $(seq 1 36); do
+            if curl -fsS --max-time 5 https://console.keryx-kit.roguedave.codes/healthz; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "healthz did not return 200 within 3 minutes" >&2
+          exit 1

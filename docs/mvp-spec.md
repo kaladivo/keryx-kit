@@ -321,38 +321,67 @@ no-cache` on `timestamp.json`.
 The master key is never stored. The browser derives it each time through
 Trezor Connect `cipherKeyValue`:
 
-- `path`: a SLIP-0011 path such as `m/10016'/0`
-- `key`: `"Keryx master key " + company_id`
-- `value`: a fixed 32-byte constant from `packages/domain`
-- `encrypt: true`, `askOnEncrypt: true`, `askOnDecrypt: true`
+- `path`: `m/10016'/0`
+- `key`: `"Keryx master key " + company_slug`
+- `value`: SHA-256(`"keryx/master-key/v1"`) =
+  `c845593e08a1c9220cc24513f68fa275e370381e5704cb666af129b435ebf470`
+- `encrypt: true`, `askOnEncrypt: true`, `askOnDecrypt: true`, no `iv`
+
+These parameters are frozen. The device mixes all of them into the result, so
+changing any of them changes every company's master key. The company slug is
+therefore immutable after sign-up. The Safe 7 shows it on screen (`Encrypt
+value / Keryx master key <slug>`), so it is short and readable, never a UUID.
 
 The 32-byte output is the Ed25519 seed. The result is deterministic, so the
-Trezor recovery seed is the full backup and no wrapped blob exists. Including
-`company_id` in `key` means one Trezor can own several companies with
-unrelated keys.
+Trezor recovery seed is the full backup and no wrapped blob exists. One Trezor
+can own several companies with unrelated keys.
+
+The output also depends on the active Suite wallet: a passphrase (hidden)
+wallet gives a different key. Before signing, the browser computes the keyid
+and refuses unless it equals the master keyid in the current `root.json`,
+telling the owner to switch Suite to the wallet used at sign-up.
 
 The browser keeps the seed only for the duration of one ceremony and
 overwrites the buffer afterwards.
 
-Owner login is a separate Trezor Connect `requestLogin` (SLIP-0013) with a
-server challenge. It never derives the master key.
+Transport: `@trezor/connect-web` 10 with `coreMode: 'auto'`. Connect 10 always
+goes through Trezor Suite: Suite desktop on any browser, or Suite Web
+(`suite.trezor.io`) in a popup on Chromium over WebUSB. Each ceremony costs one
+Suite permission prompt and one device confirmation. The first connection from
+a browser also needs pairing (confirm on the device, type a code into Suite).
 
-Spike first: confirm in Chrome and with Trezor Suite on Firefox that
-`cipherKeyValue` behaves as above on the Trezor Safe 7 (the device we demo with) and in the emulator.
+Owner login is a separate `requestLogin` (SLIP-0013) with a server challenge.
+It never derives the master key. Suite binds the login to the real caller
+origin, so the identity key is specific to
+`https://console.keryx-kit.roguedave.codes`. A phishing page gets a different
+key, local development gets a different key, and moving the console to another
+origin breaks owner login. The server verifies each login signature against
+the identity key stored at sign-up (verification code:
+`apps/spike/src/ownerLogin.ts`).
+
+Spike results, including the manual test still to run on a real Safe 7:
+`docs/spikes.md`.
 
 ### 5.4 Author key wrapping
 
-- Registration creates a discoverable passkey with the `prf` extension.
-- The wrapping key is `HKDF-SHA256(prf(salt = "keryx/author-key/v1"))`. The
-  author key is encrypted with AES-256-GCM.
-- The server stores the credential id, the public key, and the ciphertext.
+- Registration creates a discoverable passkey (`residentKey: 'required'`,
+  `userVerification: 'required'`) with the `prf` extension and requires
+  `prf.enabled`.
+- PRF input: `eval.first` = UTF-8 bytes of `"keryx/author-key/v1"`.
+- Wrapping key: HKDF-SHA256 over the PRF output, salt = 32 zero bytes, info =
+  `"keryx/author-key/v1/aes-256-gcm"`.
+- The author key is encrypted with AES-256-GCM, a random 12-byte IV, and the
+  author public key as additional authenticated data, so a ciphertext cannot be
+  moved to another author.
+- The server stores the credential id, the public key, the IV and the
+  ciphertext.
 - Signing runs one WebAuthn assertion with PRF, unwraps, signs, and
   overwrites the key buffer.
 - A lost passkey means a lost author key. The owner removes the author (B5)
   and the member registers again (B2).
 
-Spike first: confirm PRF in Chrome, Edge and Safari 18+, with iCloud Keychain,
-Google Password Manager, 1Password and a YubiKey. Record what Firefox does.
+PRF passed with Chrome's virtual authenticator. Real authenticators and phones
+are still to test (`docs/spikes.md`).
 
 ### 5.5 Ceremonies
 
@@ -412,7 +441,9 @@ relay after each publish or unpublish, signed with the channel key
 - The ops and channel keys are encrypted at rest with a KEK read from a file
   outside the database and the repo directory (mode 0400).
 - Console CSP: `script-src 'self'`, no inline scripts, no third-party scripts.
-  `frame-src` and `connect-src` allow only Trezor Connect.
+  `frame-src https://suite.trezor.io` for Trezor Connect.
+  `Cross-Origin-Opener-Policy: same-origin-allow-popups`, because
+  `same-origin` breaks the Suite Web popup handshake.
 - Console sessions use `HttpOnly`, `Secure`, `SameSite=Strict` cookies.
   Login endpoints are rate limited.
 - Each console release publishes the bundle hash, so a changed bundle is at

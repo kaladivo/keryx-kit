@@ -1,0 +1,51 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+nav {
+  display: inline;
+}
+
+nav a {
+  margin-right: 0.75rem;
+}
+
+nav a[aria-current] {
+  font-weight: bold;
+}
+
+section {
+  border: 1px solid #8884;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  padding: 0 1rem 1rem;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-size: 0.8rem;
+}
+
+[data-status="running"] .status::after {
+  content: "running…";
+}
+
+[data-status="pass"] .status::after {
+  content: "PASS";
+  color: green;
+  font-weight: bold;
+}
+
+[data-status="fail"] .status::after {
+  content: "FAIL";
+  color: crimson;
+  font-weight: bold;
+}

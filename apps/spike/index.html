@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>keryx-kit custody spike</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>keryx-kit custody spike</h1>
+      <p>
+        Trezor mode: <nav id="modes"></nav>
+      </p>
+      <label>company_id <input id="company-id" value="acme-spike" /></label>
+      <form id="pairing" hidden>
+        <label>Trezor pairing code <input id="pairing-code" inputmode="numeric" /></label>
+        <button type="submit">Pair</button>
+      </form>
+    </header>
+    <main>
+      <section data-test="owner-login" data-status="idle">
+        <h2>1. Owner login (requestLogin, SLIP-0013)</h2>
+        <button type="button">Run</button> <span class="status"></span>
+        <pre></pre>
+      </section>
+      <section data-test="master-key" data-status="idle">
+        <h2>2. Master key (cipherKeyValue, SLIP-0011)</h2>
+        <button type="button">Run</button> <span class="status"></span>
+        <pre></pre>
+      </section>
+      <section data-test="passkey-prf" data-status="idle">
+        <h2>3. Passkey PRF author key wrapping</h2>
+        <button type="button">Run</button> <span class="status"></span>
+        <pre></pre>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

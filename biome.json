@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
-    "includes": ["**", "!vendor", "!**/dist", "!**/*.md", "!packages/domain/test/fixtures"]
+    "includes": ["**", "!vendor", "!**/dist", "!**/*.md", "!packages/domain/test/fixtures", "!packages/join-kit/src/qrcode.min.js"]
   },
   "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
   "javascript": { "formatter": { "quoteStyle": "single", "semicolons": "asNeeded" } },
