@@ -1,0 +1,599 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-26T12:30:56.061Z",
+  "title": "Design System: Keryx site",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "White Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Specimen Grey",
+        "canonical": "#f2f2f7",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Blue-Black Ink",
+        "canonical": "#0e0e1a",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Slate Ink",
+        "canonical": "#4b4b5f",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline Grey",
+        "canonical": "#d5d5e0",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "rule-strong": {
+        "role": "neutral",
+        "displayName": "Strong Rule",
+        "canonical": "#0e0e1a",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Signal Blue",
+        "canonical": "#0000e0",
+        "tonalRamp": [
+          "oklch(15% 0.159 264)",
+          "oklch(26% 0.240 264)",
+          "oklch(37% 0.284 264)",
+          "oklch(48% 0.284 264)",
+          "oklch(59% 0.284 264)",
+          "oklch(70% 0.262 264)",
+          "oklch(82% 0.184 264)",
+          "oklch(95% 0.059 264)"
+        ]
+      },
+      "field": {
+        "role": "primary",
+        "displayName": "Signal Blue Field",
+        "canonical": "#0000e0",
+        "tonalRamp": [
+          "oklch(15% 0.159 264)",
+          "oklch(26% 0.240 264)",
+          "oklch(37% 0.284 264)",
+          "oklch(48% 0.284 264)",
+          "oklch(59% 0.284 264)",
+          "oklch(70% 0.262 264)",
+          "oklch(82% 0.184 264)",
+          "oklch(95% 0.059 264)"
+        ]
+      },
+      "on-field": {
+        "role": "primary",
+        "displayName": "Field White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "on-field-2": {
+        "role": "primary",
+        "displayName": "Pale Field Blue",
+        "canonical": "#d6d8ff",
+        "tonalRamp": [
+          "oklch(15% 0.030 283)",
+          "oklch(26% 0.045 283)",
+          "oklch(37% 0.053 283)",
+          "oklch(48% 0.053 283)",
+          "oklch(59% 0.053 283)",
+          "oklch(70% 0.049 283)",
+          "oklch(82% 0.035 283)",
+          "oklch(95% 0.011 283)"
+        ]
+      },
+      "bad": {
+        "role": "tertiary",
+        "displayName": "Reject Red",
+        "canonical": "#c3102e",
+        "tonalRamp": [
+          "oklch(15% 0.114 22)",
+          "oklch(26% 0.172 22)",
+          "oklch(37% 0.203 22)",
+          "oklch(48% 0.203 22)",
+          "oklch(59% 0.203 22)",
+          "oklch(70% 0.188 22)",
+          "oklch(82% 0.132 22)",
+          "oklch(95% 0.042 22)"
+        ]
+      },
+      "bad-wash": {
+        "role": "tertiary",
+        "displayName": "Reject Wash",
+        "canonical": "#fde8eb",
+        "tonalRamp": [
+          "oklch(15% 0.013 8)",
+          "oklch(26% 0.020 8)",
+          "oklch(37% 0.023 8)",
+          "oklch(48% 0.023 8)",
+          "oklch(59% 0.023 8)",
+          "oklch(70% 0.021 8)",
+          "oklch(82% 0.015 8)",
+          "oklch(95% 0.005 8)"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "White Paper (dark)",
+        "canonical": "#0b0b12",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "paper-2-dark": {
+        "role": "neutral",
+        "displayName": "Specimen Grey (dark)",
+        "canonical": "#16161f",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Blue-Black Ink (dark)",
+        "canonical": "#ececf3",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "ink-2-dark": {
+        "role": "neutral",
+        "displayName": "Slate Ink (dark)",
+        "canonical": "#a9a9bc",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "rule-dark": {
+        "role": "neutral",
+        "displayName": "Hairline Grey (dark)",
+        "canonical": "#2d2d3c",
+        "tonalRamp": [
+          "oklch(15% 0.008 285)",
+          "oklch(26% 0.013 285)",
+          "oklch(37% 0.015 285)",
+          "oklch(48% 0.015 285)",
+          "oklch(59% 0.015 285)",
+          "oklch(70% 0.014 285)",
+          "oklch(82% 0.01 285)",
+          "oklch(95% 0.003 285)"
+        ]
+      },
+      "blue-dark": {
+        "role": "primary",
+        "displayName": "Lifted Blue",
+        "canonical": "#9ea1ff",
+        "tonalRamp": [
+          "oklch(15% 0.075 281)",
+          "oklch(26% 0.114 281)",
+          "oklch(37% 0.135 281)",
+          "oklch(48% 0.135 281)",
+          "oklch(59% 0.135 281)",
+          "oklch(70% 0.124 281)",
+          "oklch(82% 0.087 281)",
+          "oklch(95% 0.028 281)"
+        ]
+      },
+      "link-dark": {
+        "role": "primary",
+        "displayName": "Lifted Link Blue",
+        "canonical": "#a9acff",
+        "tonalRamp": [
+          "oklch(15% 0.075 281)",
+          "oklch(26% 0.114 281)",
+          "oklch(37% 0.135 281)",
+          "oklch(48% 0.135 281)",
+          "oklch(59% 0.135 281)",
+          "oklch(70% 0.124 281)",
+          "oklch(82% 0.087 281)",
+          "oklch(95% 0.028 281)"
+        ]
+      },
+      "field-dark": {
+        "role": "primary",
+        "displayName": "Night Field Blue",
+        "canonical": "#1414b4",
+        "tonalRamp": [
+          "oklch(15% 0.129 267)",
+          "oklch(26% 0.194 267)",
+          "oklch(37% 0.229 267)",
+          "oklch(48% 0.229 267)",
+          "oklch(59% 0.229 267)",
+          "oklch(70% 0.212 267)",
+          "oklch(82% 0.149 267)",
+          "oklch(95% 0.048 267)"
+        ]
+      },
+      "on-field-2-dark": {
+        "role": "primary",
+        "displayName": "Pale Field Blue (dark)",
+        "canonical": "#d2d4ff",
+        "tonalRamp": [
+          "oklch(15% 0.030 283)",
+          "oklch(26% 0.045 283)",
+          "oklch(37% 0.053 283)",
+          "oklch(48% 0.053 283)",
+          "oklch(59% 0.053 283)",
+          "oklch(70% 0.049 283)",
+          "oklch(82% 0.035 283)",
+          "oklch(95% 0.011 283)"
+        ]
+      },
+      "bad-dark": {
+        "role": "tertiary",
+        "displayName": "Reject Red (dark)",
+        "canonical": "#ff7186",
+        "tonalRamp": [
+          "oklch(15% 0.097 13)",
+          "oklch(26% 0.147 13)",
+          "oklch(37% 0.173 13)",
+          "oklch(48% 0.173 13)",
+          "oklch(59% 0.173 13)",
+          "oklch(70% 0.160 13)",
+          "oklch(82% 0.113 13)",
+          "oklch(95% 0.036 13)"
+        ]
+      },
+      "bad-wash-dark": {
+        "role": "tertiary",
+        "displayName": "Reject Wash (dark)",
+        "canonical": "#3a1219",
+        "tonalRamp": [
+          "oklch(15% 0.013 8)",
+          "oklch(26% 0.020 8)",
+          "oklch(37% 0.023 8)",
+          "oklch(48% 0.023 8)",
+          "oklch(59% 0.023 8)",
+          "oklch(70% 0.021 8)",
+          "oklch(82% 0.015 8)",
+          "oklch(95% 0.005 8)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The hero headline on both pages, on the blue field."
+      },
+      "verdict": {
+        "displayName": "Verdict",
+        "purpose": "The Shown / Not shown word in the signature specimen."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings, as plain labels or plain sentences."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Step, role, caveat and ledger column headings."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Hero lede, section intros and comparison table cells."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, including limits stated beside claims."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Navigation, table heads, captions, errors, footer. Sentence case."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Real data only: domains, paths, file names, key IDs, fingerprints."
+      }
+    },
+    "shadows": [
+      {
+        "name": "screen-on-field",
+        "value": "0 24px 48px -24px rgb(0 0 40 / 0.55)",
+        "purpose": "Only under an app screenshot placed on the blue field."
+      },
+      {
+        "name": "invalid-field",
+        "value": "inset 0 0 0 1px var(--bad)",
+        "purpose": "Thickens an invalid input's red border to 2px. A border treatment, not elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Easing for the verdict wipe and button colour changes."
+      },
+      {
+        "name": "verdict-wipe",
+        "value": "420ms clip-path inset(0 100% 0 0) to inset(0 0 0 0)",
+        "purpose": "The one motion moment: reveals the new verdict word left to right. Off under prefers-reduced-motion."
+      },
+      {
+        "name": "button-color",
+        "value": "160ms background-color",
+        "purpose": "Button hover fill change. Off under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "container",
+        "value": "1360px"
+      },
+      {
+        "name": "lg",
+        "value": "1100px"
+      },
+      {
+        "name": "md",
+        "value": "860px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one primary action in an area on paper, such as Send request.",
+      "html": "<button class=\"ds-btn\" type=\"button\">Send request</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border: 0; border-radius: 0; background: var(--blue, #0000e0); color: var(--paper, #ffffff); font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); font-size: 1.125rem; font-weight: 700; cursor: pointer; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn:hover { background: var(--ink, #0e0e1a); } .ds-btn:focus-visible { outline: 3px solid var(--focus, #0000e0); outline-offset: 3px; } .ds-btn:disabled { background: var(--ink-2, #4b4b5f); cursor: progress; }"
+    },
+    {
+      "name": "Button on Field",
+      "kind": "button",
+      "refersTo": "button-on-field",
+      "description": "The primary action on the blue field: Request a pilot in the masthead and hero.",
+      "html": "<div class=\"ds-field\"><a class=\"ds-btn-field\" href=\"#pilot\">Request a pilot</a></div>",
+      "css": ".ds-field { padding: 24px; background: var(--field, #0000e0); } .ds-btn-field { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; background: var(--on-field, #ffffff); color: var(--field, #0000e0); font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); font-size: 1.125rem; font-weight: 700; text-decoration: none; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-field:hover { background: var(--on-field-2, #d6d8ff); } .ds-btn-field:focus-visible { outline: 3px solid var(--on-field, #ffffff); outline-offset: 3px; }"
+    },
+    {
+      "name": "Text Link",
+      "kind": "button",
+      "refersTo": "text-link",
+      "description": "The secondary action beside a primary button, or an inline action like Restore the original title.",
+      "html": "<a class=\"ds-text-link\" href=\"#try\">Edit a signed message</a>",
+      "css": ".ds-text-link { color: var(--link, #0000e0); font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); font-size: 1.125rem; font-weight: 600; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.25em; } .ds-text-link:hover { text-decoration-thickness: 2px; } .ds-text-link:focus-visible { outline: 3px solid var(--focus, #0000e0); outline-offset: 3px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Square form field with the label above and a red error line below when invalid.",
+      "html": "<div class=\"ds-row\"><label class=\"ds-label\" for=\"ds-email\">Work email</label><input class=\"ds-input\" id=\"ds-email\" type=\"email\" aria-invalid=\"true\"><p class=\"ds-error\">Enter a valid email address.</p></div>",
+      "css": ".ds-row { font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); color: var(--ink, #0e0e1a); } .ds-label { display: block; margin-bottom: 6px; font-weight: 700; } .ds-input { display: block; width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--ink-2, #4b4b5f); border-radius: 0; background: var(--paper, #ffffff); color: var(--ink, #0e0e1a); font: inherit; font-size: 1.125rem; } .ds-input:focus-visible { outline: 3px solid var(--focus, #0000e0); outline-offset: 3px; } .ds-input[aria-invalid=\"true\"] { border-color: var(--bad, #c3102e); box-shadow: inset 0 0 0 1px var(--bad, #c3102e); } .ds-error { margin: 6px 0 0; color: var(--bad, #c3102e); font-size: 0.9375rem; font-weight: 600; }"
+    },
+    {
+      "name": "Masthead",
+      "kind": "nav",
+      "description": "Wordmark left, label-size links and the small primary button right, on the blue field.",
+      "html": "<header class=\"ds-mast\"><a class=\"ds-word\" href=\"/\">Keryx</a><nav><ul class=\"ds-nav\"><li><a href=\"#how\">How it works</a></li><li><a href=\"#security\">Security</a></li><li><a class=\"ds-btn-small\" href=\"#pilot\">Request a pilot</a></li></ul></nav></header>",
+      "css": ".ds-mast { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; background: var(--field, #0000e0); color: var(--on-field, #ffffff); font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); } .ds-word { color: inherit; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; text-decoration: none; } .ds-nav { display: flex; align-items: center; gap: clamp(12px, 2vw, 28px); margin: 0; padding: 0; list-style: none; } .ds-nav a:not(.ds-btn-small) { color: inherit; font-size: 0.9375rem; font-weight: 600; text-decoration: none; } .ds-nav a:not(.ds-btn-small):hover { text-decoration: underline; text-underline-offset: 0.25em; } .ds-nav a:focus-visible { outline: 3px solid var(--on-field, #ffffff); outline-offset: 3px; } .ds-btn-small { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; background: var(--on-field, #ffffff); color: var(--field, #0000e0); font-size: 0.9375rem; font-weight: 700; text-decoration: none; } .ds-btn-small:hover { background: var(--on-field-2, #d6d8ff); }"
+    },
+    {
+      "name": "Step Chain",
+      "kind": "custom",
+      "refersTo": "step-marker",
+      "description": "Sequential steps hanging from a 3px blue line, each numbered by a filled blue square on the line.",
+      "html": "<ol class=\"ds-steps\"><li><h3>Your team signs</h3><p>Authors write in the browser.</p></li><li><h3>Customers scan once</h3><p>They confirm your domain.</p></li><li><h3>Only signed messages show</h3><p>A failed check never appears.</p></li></ol>",
+      "css": ".ds-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 18px 0 0; padding: 0; list-style: none; border-top: 3px solid var(--blue, #0000e0); counter-reset: step; font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); color: var(--ink, #0e0e1a); } .ds-steps li { position: relative; padding-top: 40px; counter-increment: step; } .ds-steps li::before { content: counter(step); position: absolute; top: -18px; left: 0; display: grid; place-items: center; width: 34px; height: 34px; background: var(--blue, #0000e0); color: var(--paper, #ffffff); font-weight: 750; font-variant-numeric: tabular-nums; } .ds-steps h3 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; } .ds-steps p { margin: 10px 0 0; color: var(--ink-2, #4b4b5f); }"
+    },
+    {
+      "name": "Signature Verdict",
+      "kind": "custom",
+      "refersTo": "specimen",
+      "description": "The signature panel of the live specimen: author rows with mono key IDs, then the verdict word. Hover to see the rejected state.",
+      "html": "<div class=\"ds-check\"><ul class=\"ds-sigs\"><li><span>author-security-a <span class=\"ds-mono\">key 11a71290…a95e7a</span></span><b class=\"ds-ok\">Valid</b></li><li><span>author-security-b <span class=\"ds-mono\">key 00fed46d…63f34b</span></span><b class=\"ds-ok\">Valid</b></li></ul><p class=\"ds-verdict\">Shown</p></div>",
+      "css": ".ds-check { padding: clamp(20px, 3vw, 40px); border: 1px solid var(--rule-strong, #0e0e1a); background: var(--paper, #ffffff); color: var(--ink, #0e0e1a); font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); font-size: 1.125rem; } .ds-sigs { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule, #d5d5e0); } .ds-sigs li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding-block: 12px; border-bottom: 1px solid var(--rule, #d5d5e0); } .ds-mono { display: block; color: var(--ink-2, #4b4b5f); font-family: var(--mono, 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace); font-size: 0.8125rem; } .ds-ok { color: var(--blue, #0000e0); } .ds-verdict { margin: 24px 0 0; color: var(--blue, #0000e0); font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3.75rem); font-weight: 750; line-height: 1; letter-spacing: -0.035em; } .ds-check:hover { background: var(--bad-wash, #fde8eb); } .ds-check:hover .ds-ok, .ds-check:hover .ds-verdict { color: var(--bad, #c3102e); } .ds-check:hover .ds-verdict { animation: ds-wipe 420ms cubic-bezier(0.16, 1, 0.3, 1); } @keyframes ds-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } } @media (prefers-reduced-motion: reduce) { .ds-check:hover .ds-verdict { animation: none; } }"
+    },
+    {
+      "name": "Look-alike Domains",
+      "kind": "custom",
+      "description": "Real address beside look-alikes, with only the substituted characters marked in red on the reject wash.",
+      "html": "<dl class=\"ds-looks\"><div><dt>example.com</dt><dd>The company's real address</dd></div><div><dt>examp<mark>1</mark>e.com</dt><dd>Look-alike: the digit 1 instead of the letter l</dd></div></dl>",
+      "css": ".ds-looks { margin: 0; border-top: 1px solid var(--rule, #d5d5e0); font-family: var(--sans, 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif); } .ds-looks div { padding-block: 12px; border-bottom: 1px solid var(--rule, #d5d5e0); } .ds-looks dt { color: var(--ink, #0e0e1a); font-family: var(--mono, 'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace); font-size: 1.375rem; font-weight: 700; } .ds-looks dd { margin: 0; color: var(--ink-2, #4b4b5f); font-size: 0.9375rem; } .ds-looks mark { background: var(--bad-wash, #fde8eb); color: var(--bad, #c3102e); text-decoration: underline 2px; text-underline-offset: 0.2em; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Proof Sheet",
+    "overview": "The site reads like a Swiss identity-program page that has been turned into a test report. White paper, near-black ink and one saturated blue do all the work. The argument is carried by real things: a screenshot of the actual app, the actual signed JSON file, a signature check that runs in the visitor's browser, the join kit file list, the key custody table. Prose describes them in short sentences and states the limits in the same breath.\n\nType size and weight make the hierarchy. Headings are plain labels or plain sentences in a heavy grotesk, set flush left on a 12-column grid. There is nothing above a heading: no kicker, no section number, no badge, no icon. Rules are hairlines; corners are square; the page is flat. Colour changes only where it means something: blue for the opening and the close and for things that check out, red for things that fail or deceive.\n\nThis system replaces an earlier round the owner rejected as generic: italic serif display lines, kicker labels, numbered section labels, a beige and terracotta palette, and decorative herald illustration. None of that comes back.",
+    "keyCharacteristics": [
+      "White paper, blue-black ink, one saturated blue; red reserved for failure.",
+      "Two blue fields only: the opening (masthead and hero) and the close (pilot request).",
+      "One grey band directly under the hero: the live signature specimen.",
+      "Atkinson Hyperlegible Next for everything; Atkinson Hyperlegible Mono only for real data.",
+      "Real app screenshots, never illustrations or device mockups.",
+      "Limits sit beside the claims they qualify, at body size.",
+      "Square corners, 1px hairlines, 3px strong rules. One motion moment."
+    ],
+    "rules": [
+      {
+        "name": "The Two Fields Rule",
+        "body": "The blue field appears twice per page: behind the masthead and hero, and behind the closing pilot request. Everything between sits on paper. Never use the blue field for a mid-page section, a card or a callout.",
+        "section": "colors"
+      },
+      {
+        "name": "The Red Means Rejected Rule",
+        "body": "Red appears only for a rejected or deceptive state: a failed signature, a hidden message, a look-alike character, an invalid field. It is never emphasis, decoration or a brand accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The Blue Means Valid Rule",
+        "body": "Inside the specimen, blue is the colour of a signature that checks out and a message that is shown. Do not use green for success.",
+        "section": "colors"
+      },
+      {
+        "name": "The Real Data Rule",
+        "body": "Monospace is reserved for strings a person might copy or compare: `example.com`, `/.well-known/keryx/root.json`, `key 11a71290…a95e7a`, a SHA-256 fingerprint. Never set headings, labels, numbers-for-effect or decorative \"code\" in mono.",
+        "section": "typography"
+      },
+      {
+        "name": "The Plain Label Rule",
+        "body": "A heading is a plain label (\"Install the app\") or a plain sentence (\"Email can't prove who sent it.\"). Nothing sits above it: no kicker, no eyebrow, no section number. Hierarchy comes from size and weight alone.",
+        "section": "typography"
+      },
+      {
+        "name": "The Limits at Claim Size Rule",
+        "body": "A limit sits next to the claim it qualifies, in the same type size. The \"What this does not cover\" caveat stands beside the key table at body size; \"Can't protect\" is a full column beside \"Protects\", with identical type. Never move limits to a footnote or shrink them.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Band Rule",
+        "body": "Between the two blue fields, the only full-width change of tone is the Specimen Grey band holding the live check. Do not add more banded sections.",
+        "section": "layout"
+      },
+      {
+        "name": "The Chain Rule",
+        "body": "Sequential steps hang from one 3px Signal Blue line: across the top of the row on wide screens, down the left as a spine under 860px. Each step number is a small filled blue square sitting on that line.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Paper Rule",
+        "body": "Nothing on paper casts a shadow: no cards, no lifted panels, no hover lift. The only shadow in the system is the screen-on-field shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Square Corner Rule",
+        "body": "Border radius is 0 everywhere, including form controls (set explicitly to override browser defaults).",
+        "section": "shapes"
+      },
+      {
+        "name": "The Top Rule Rule",
+        "body": "A group of content opens with a rule across its top, never with a box around it or a stripe down its side.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Real Screen Rule",
+        "body": "Imagery is real app screenshots in a figure with a caption saying so. No illustrations, no device mockups, no stock or generated art.",
+        "section": "components"
+      },
+      {
+        "name": "The One Motion Rule",
+        "body": "The only motion is the verdict wipe: when the verdict changes, the word is revealed left to right with a clip-path over 420ms on `cubic-bezier(0.16, 1, 0.3, 1)`. Button colour transitions are 160ms. Under `prefers-reduced-motion: reduce`, both are off and smooth scrolling is disabled.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do keep the blue field to the opening and the close, with white type and Pale Field Blue secondary text on it.",
+      "Do put the real thing first: the real screen, the real signed file, the live check, the actual file names.",
+      "Do set domains, paths, key IDs and fingerprints in Atkinson Hyperlegible Mono, and nothing else.",
+      "Do write headings as plain labels or plain sentences, flush left, weight 750.",
+      "Do state each limit beside the claim it qualifies, at the same type size.",
+      "Do open a group with a top rule (3px ink, or 3px blue for a step chain) and divide rows with 1px hairlines.",
+      "Do keep corners square, including inputs and textareas.",
+      "Do provide both light and dark values for every colour, honouring `prefers-color-scheme` and the `data-theme` toggle."
+    ],
+    "donts": [
+      "Don't reintroduce the rejected look: italic serif display lines, kicker or eyebrow labels, numbered section labels, beige or terracotta, decorative illustration.",
+      "Don't use red for anything but rejected, failed or look-alike states.",
+      "Don't add icons, badges or glyph decorations; the theme toggle is the only drawn mark.",
+      "Don't use cards, rounded corners, side-stripe borders, hard offset shadows or gradient text.",
+      "Don't show device mockups or illustrations in place of real screenshots.",
+      "Don't add a second motion moment, scroll-triggered reveals or hover lift.",
+      "Don't add a second grey band or a mid-page blue section.",
+      "Don't shrink a limit into a footnote or fine print."
+    ]
+  }
+}

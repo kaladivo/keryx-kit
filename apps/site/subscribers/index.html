@@ -4,143 +4,177 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>Keryx for subscribers: announcements you can verify</title>
-  <meta name="description" content="What Keryx is, how to install it, how to subscribe to a company safely, and what it does not protect you from.">
+  <title>Keryx for subscribers: company news you can trust</title>
+  <meta name="description" content="How to install Keryx, join a company safely, why you can trust what you read, and what Keryx cannot protect you from.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/src/styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap site-header-inner">
-      <a class="brand" href="/" aria-label="Keryx home">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><rect x="8" y="8" width="16" height="16" rx="5"/></svg>
-        <span>Keryx</span>
-      </a>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="wordmark" href="/">Keryx</a>
       <nav aria-label="Main">
-        <ul class="nav-list">
-          <li><a href="#install">Install</a></li>
-          <li><a href="#join">Join</a></li>
+        <ul class="nav-links">
+          <li class="nav-optional"><a href="#join">Join</a></li>
+          <li class="nav-optional"><a href="#trust">Why trust it</a></li>
           <li class="nav-optional"><a href="#limits">Limits</a></li>
+          <li><a class="pill pill-accent pill-small" href="#install">Install the app</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero hero-compact">
-      <div class="wrap">
-        <p class="eyebrow">For subscribers</p>
-        <h1>Announcements from companies, without email</h1>
-        <p class="lead">A company you deal with invited you to follow its announcements in Keryx, probably through a newsletter or a QR code. This page explains what Keryx is, how to set it up, and what it does and does not protect you from.</p>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="backdrop" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <h1 id="hero-title">Company news, without giving your email.</h1>
+        <p class="lede">Follow a company in Keryx with no email address, phone number or account. Messages it didn't sign never show.</p>
+        <p class="actions">
+          <a class="pill pill-accent" href="#install">Install the app</a>
+          <a class="pill pill-glass" href="#join">How to join</a>
+        </p>
       </div>
-    </section>
-
-    <section class="section" aria-labelledby="what-title">
-      <div class="wrap"><div class="prose">
-        <h2 id="what-title">What Keryx is</h2>
-        <p>Keryx is an app that receives announcements from companies: offers, product news, security alerts. The company signs every announcement, and the app checks the signature before it shows anything.</p>
-        <p>You subscribe by scanning a QR code. You do not give the company an email address, a phone number or your name, and you do not create an account. The company is not told that you subscribed.</p>
-      </div></div>
-    </section>
-
-    <section class="section section-alt" id="install" aria-labelledby="install-title">
-      <div class="wrap">
-        <h2 id="install-title">Install the app</h2>
-        <div class="grid grid-2">
-          <article class="card">
-            <h3>Web app, on any device</h3>
-            <p>Open <a href="https://v1b3coder.github.io/keryx/">v1b3coder.github.io/keryx</a> in your browser. It works on phones and computers, and you can add it to your home screen. On an iPhone, use the web app in Safari. There is no App Store app yet.</p>
-            <p><a class="button" href="https://v1b3coder.github.io/keryx/">Open the web app</a></p>
-          </article>
-          <article class="card" id="android">
-            <h3>Android app</h3>
-            <p>The Android app is published as a signed APK on GitHub. The easiest way to install it and keep it updated is <a href="https://github.com/ImranR98/Obtainium">Obtainium</a>:</p>
-            <ol>
-              <li>Install Obtainium.</li>
-              <li>In Obtainium, add an app with this source: <code>https://github.com/v1b3coder/keryx</code></li>
-              <li>Obtainium installs the newest release and updates it in place.</li>
-            </ol>
-            <details>
-              <summary>Check the signing certificate</summary>
-              <p>Every release is signed with the same key. Tools such as AppVerifier can check this SHA-256 fingerprint before the first install:</p>
-              <p class="fingerprint"><code>5E:5A:CD:AF:31:88:49:F9:6D:C4:F5:08:A0:DA:A5:A4:74:BC:60:B2:3A:2C:63:9D:33:75:85:FF:F5:E7:C8:A1</code></p>
-              <p>On phones without Google services, the app uses ntfy for notifications and asks you to install it the first time you join a company.</p>
-            </details>
-          </article>
+      <figure class="phone" aria-label="The Keryx app, choosing what to follow from Scuffwell, a demo shoe brand">
+        <div class="phone-screen">
+          <div class="phone-status" aria-hidden="true">
+            <span>9:41</span>
+            <svg viewBox="0 0 66 12" aria-hidden="true"><path d="M1 9h3v3H1zM6 6.5h3V12H6zM11 4h3v8h-3zM16 1h3v11h-3z"/><path d="M31 3.2a9.5 9.5 0 0 1 12.6 0l-1.5 1.6a7.3 7.3 0 0 0-9.6 0zM33.4 5.8a6 6 0 0 1 7.8 0l-1.6 1.6a3.8 3.8 0 0 0-4.6 0zM37.3 11.6l-2.2-2.3a3.1 3.1 0 0 1 4.4 0z"/><rect x="48.5" y="1.5" width="14" height="9" rx="2.6" fill="none" stroke="currentColor" opacity=".45"/><rect x="50" y="3" width="11" height="6" rx="1.4"/><path d="M64 4.5v3a1.6 1.6 0 0 0 0-3z" opacity=".45"/></svg>
+          </div>
+          <picture class="shot is-active">
+            <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-feed-dark.webp">
+            <img src="/src/assets/phone-feed-light.webp" width="600" height="1226" fetchpriority="high" alt="Scuffwell's feed in the Keryx app. The newest post is Autumn Field is here: the Rambler in Moss and Rust.">
+          </picture>
         </div>
-        <p class="note">Install Keryx only from these links. A fake app could show you anything, because the checks described here happen inside the app.</p>
+      </figure>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="head">
+        <h2 id="install-title">Install Keryx</h2>
+        <p>Free and open source. Install it only from these two places: the app does the checking, so a fake app could show you anything.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <h3>Web app, on any phone</h3>
+          <p>Open it in your browser and add it to your home screen. On an iPhone, use Safari: tap Share, then Add to Home Screen.</p>
+          <p class="source mono">v1b3coder.github.io/keryx</p>
+          <a class="pill pill-accent" href="https://v1b3coder.github.io/keryx/">Open the web app</a>
+        </div>
+        <div class="card" id="android">
+          <h3>Android, through Obtainium</h3>
+          <p>Install <a href="https://github.com/ImranR98/Obtainium">Obtainium</a>, then add Keryx with this source. Obtainium installs it and keeps it updated.</p>
+          <p class="source mono">https://github.com/v1b3coder/keryx</p>
+          <details>
+            <summary>Check the signing certificate</summary>
+            <p>Every release is signed with the same key. Tools such as AppVerifier can check this SHA-256 fingerprint before the first install:</p>
+            <p class="mono fingerprint">5E:5A:CD:AF:31:88:49:F9:6D:C4:F5:08:A0:DA:A5:A4:74:BC:60:B2:3A:2C:63:9D:33:75:85:FF:F5:E7:C8:A1</p>
+          </details>
+        </div>
       </div>
     </section>
 
     <section class="section" id="join" aria-labelledby="join-title">
-      <div class="wrap">
-        <h2 id="join-title">Join a company</h2>
-        <ol class="steps">
-          <li class="step">
-            <h3>Scan the code</h3>
-            <p>Scan the company's QR code with Keryx, or open its join link. You find these in the company's newsletter, on its website, or on a receipt.</p>
-          </li>
-          <li class="step">
-            <h3>Check the address</h3>
-            <p>Keryx shows a website address and asks you to confirm it. Check that it is exactly the company's own address, letter by letter. <code>examp1e.com</code> or <code>example-shop.com</code> is not <code>example.com</code>. If you are not sure, tap Cancel.</p>
-          </li>
-          <li class="step">
-            <h3>Pick your channels</h3>
-            <p>Keryx loads the company's name, logo and channels, all signed by the company. Suggested channels are preselected, but nothing is subscribed until you tap Subscribe.</p>
-          </li>
-        </ol>
-        <p class="note">Checking the address is the only decision Keryx asks of you. Everything after it is checked by the app.</p>
+      <div class="head">
+        <h2 id="join-title">Join a company in three steps.</h2>
+        <p>The address check is the only decision Keryx asks of you. The app checks everything else.</p>
       </div>
+      <ol class="trio">
+        <li>
+          <picture class="step-phone">
+            <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-scan-dark.webp">
+            <img src="/src/assets/phone-scan-light.webp" width="600" height="1226" loading="lazy" alt="The Keryx app scanning a printed QR code.">
+          </picture>
+          <h3>Scan the company's QR code</h3>
+          <p>In the app, tap Add a company and scan it. Or open the company's join link from a newsletter, a receipt or its website.</p>
+        </li>
+        <li>
+          <picture class="step-phone">
+            <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-confirm-dark.webp">
+            <img src="/src/assets/phone-confirm-light.webp" width="600" height="1226" loading="lazy" alt="The Keryx app asking to confirm a website address before continuing.">
+          </picture>
+          <h3>Check the address, letter by letter</h3>
+          <p>It must be exactly the company's own website, the one you would type yourself. Not sure? Tap Cancel.</p>
+          <ul class="mini-domains" aria-label="Example: a real address and a look-alike">
+            <li><span class="mono">shoe.roguedave.codes</span> <span class="ok">Real</span></li>
+            <li><span class="mono">sh<mark>0</mark>e.roguedave.codes</span> <span class="no">Look-alike</span></li>
+          </ul>
+        </li>
+        <li>
+          <picture class="step-phone">
+            <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-consent-dark.webp">
+            <img src="/src/assets/phone-consent-light.webp" width="600" height="1226" loading="lazy" alt="The Keryx app's Choose what to follow screen with News and Security advisories switched on.">
+          </picture>
+          <h3>Pick what to follow</h3>
+          <p>Nothing is subscribed until you tap Subscribe. Leave any time by removing the company.</p>
+        </li>
+      </ol>
+      <p class="aside">The screens show Scuffwell, a demo shoe brand. You will see the company's own address.</p>
     </section>
 
-    <section class="section section-alt" aria-labelledby="trust-title">
-      <div class="wrap">
-        <h2 id="trust-title">Why you can trust it</h2>
-        <div class="grid grid-2">
-          <article class="card">
-            <h3>Nothing about you to leak</h3>
-            <p>No email address, no phone number, no account. The company keeps no list of its subscribers, so there is no list to steal.</p>
-          </article>
-          <article class="card">
-            <h3>Every message is signed</h3>
-            <p>The app checks each announcement against keys the company published on its own website. A message that fails the check is not shown. You never see a "maybe" warning.</p>
-          </article>
-          <article class="card">
-            <h3>No passwords, ever</h3>
-            <p>This channel will never ask you for a password, a seed phrase or a code. Announcements are one way: you cannot reply, and the app removes forms and scripts from every message. Links show where they really go.</p>
-          </article>
-          <article class="card">
-            <h3>Open source</h3>
-            <p>The app and the protocol are public under the GPL-3.0 license at <a href="https://github.com/v1b3coder/keryx">github.com/v1b3coder/keryx</a>. Anyone can read how the checks work.</p>
-          </article>
+    <section class="band" id="trust" aria-labelledby="trust-title">
+      <div class="band-inner trust">
+        <img class="trust-art" src="/src/assets/obj-seal.webp" width="720" height="900" loading="lazy" alt="">
+        <div>
+          <h2 id="trust-title">Why you can trust what you read</h2>
+          <dl class="trust-list">
+            <div>
+              <dt>Every message is checked</dt>
+              <dd>The app checks the company's signature before it shows a message. If the check fails, you never see it.</dd>
+            </div>
+            <div>
+              <dt>Nothing to give away</dt>
+              <dd>No email, no phone number, no account. The company keeps no list of you.</dd>
+            </div>
+            <div>
+              <dt>Nothing to answer</dt>
+              <dd>You can't reply and messages have no forms. This channel never asks for a password, a seed or a code.</dd>
+            </div>
+            <div>
+              <dt>Open source</dt>
+              <dd>The app and the protocol are public at <a href="https://github.com/v1b3coder/keryx">github.com/v1b3coder/keryx</a>.</dd>
+            </div>
+          </dl>
         </div>
-        <p class="note">To leave, turn off a channel or remove the company in the app. Removing a company deletes its messages from your phone. You do not have to ask anyone.</p>
       </div>
     </section>
 
-    <section class="section" id="limits" aria-labelledby="limits-title">
-      <div class="wrap"><div class="prose">
-        <h2 id="limits-title">What Keryx does not protect you from</h2>
-        <h3>The moment you join</h3>
-        <p>You trust the company's website address once, when you confirm it. If you confirm a look-alike address, or an attacker controls the company's website at that moment, you subscribe to the attacker. That is why checking the address matters.</p>
-        <h3>An attack on the publishing service</h3>
-        <p>The company may publish through a hosted service, like the one that runs this site. The service cannot write a message your app accepts on its own, because signing needs keys held by the company's own staff. But an attacker who took over the service could hold back or remove messages, and could send modified software to the company's staff to capture a signing key the next time they publish.</p>
-        <h3>If something changes</h3>
-        <p>If a company's keys can no longer be verified, the app stops showing its messages and warns you. It will not ask you to scan a new code, because after a website takeover that code could come from the attacker. The app offers to remove the company instead.</p>
-        <h3>Your own phone</h3>
-        <p>Someone with access to your unlocked phone, or malware on it, can read the messages stored there.</p>
-        <h3>Connection data</h3>
-        <p>To check for news, the app downloads files from the company's servers. Like any website visit, those servers see your IP address and the time. They get no name, email address or account to connect it to.</p>
-      </div></div>
+    <section class="section closing" id="limits" aria-labelledby="limits-title">
+      <div class="head">
+        <h2 id="limits-title">What Keryx can't protect</h2>
+      </div>
+      <dl class="limits">
+        <div>
+          <dt>The moment you join</dt>
+          <dd>Confirm a look-alike address, or join while an attacker controls the company's website, and you follow the attacker.</dd>
+        </div>
+        <div>
+          <dt>The publishing service</dt>
+          <dd>The company may publish through a hosted service. It can't write messages on its own, but an attacker there could hold messages back or ship altered software to steal a staff member's signing key.</dd>
+        </div>
+        <div>
+          <dt>Your own phone</dt>
+          <dd>Anyone with your unlocked phone, or malware on it, can read stored messages.</dd>
+        </div>
+        <div>
+          <dt>Connection data</dt>
+          <dd>Like any website, the servers that host the messages see your IP address when the app checks for news. There is no name or account to tie it to.</dd>
+        </div>
+      </dl>
+      <p class="aside">If a company's signatures ever stop checking out, the app stops showing its messages and warns you. It never asks you to scan a new code.</p>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap site-footer-inner">
-      <p>This page is the same for every company. It never shows a company name, so nobody can use it to pose as a company.</p>
-      <p><a href="/">Keryx for businesses</a></p>
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="wordmark">Keryx</p>
+      <ul>
+        <li><a href="/">Keryx for businesses</a></li>
+        <li><a href="https://github.com/v1b3coder/keryx">Protocol and app on GitHub</a></li>
+      </ul>
+      <p class="footer-note">This page is the same for every company. It never shows a company name from a link, so nobody can use it to pose as one.</p>
     </div>
   </footer>
 </body>

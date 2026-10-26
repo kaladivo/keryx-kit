@@ -7,6 +7,11 @@ import {
   submit,
   validate,
 } from './pilot-request.ts'
+import { setupSignatureCheck } from './signature-check.ts'
+import { setupStory } from './story.ts'
+
+setupStory()
+setupSignatureCheck()
 
 const FIELDS = Object.keys(MAX_LENGTH) as PilotField[]
 
@@ -78,6 +83,7 @@ form.addEventListener('submit', async (event) => {
   setSending(false)
 
   if (result.ok) {
+    showStatus('', 'info')
     form.hidden = true
     done.hidden = false
     done.focus()

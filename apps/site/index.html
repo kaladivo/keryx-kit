@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>Keryx: company announcements without email</title>
-  <meta name="description" content="Keryx sends signed announcements from your company to your customers' phones. No email addresses, no customer list, no phishing in your name.">
+  <title>Keryx: company announcements only you can sign</title>
+  <meta name="description" content="Keryx replaces email for what your company tells its customers. Every message is signed and checked on the customer's phone. No email addresses, no customer list, nothing to phish with.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/src/styles.css">
   <script type="module" src="/src/landing.ts"></script>
@@ -13,207 +13,285 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap site-header-inner">
-      <a class="brand" href="/" aria-label="Keryx home">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><rect x="8" y="8" width="16" height="16" rx="5"/></svg>
-        <span>Keryx</span>
-      </a>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="wordmark" href="/">Keryx</a>
       <nav aria-label="Main">
-        <ul class="nav-list">
+        <ul class="nav-links">
           <li class="nav-optional"><a href="#how">How it works</a></li>
+          <li class="nav-optional"><a href="#team">Your team</a></li>
           <li class="nav-optional"><a href="#security">Security</a></li>
           <li class="nav-optional"><a href="/subscribers">For subscribers</a></li>
-          <li><a class="button button-small" href="#pilot">Request a pilot</a></li>
+          <li><a class="pill pill-accent pill-small" href="#pilot">Request a pilot</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero">
-      <div class="wrap hero-inner">
-        <div class="hero-text">
-          <p class="eyebrow">Signed announcements for companies</p>
-          <h1>Reach your customers without email</h1>
-          <p class="lead">Keryx delivers signed announcements from your company to your customers' phones. Customers subscribe by scanning a QR code. They give you no email address, no phone number and no account, so there is no customer list to leak. A message without your company's signature never reaches them.</p>
-          <div class="actions">
-            <a class="button" href="#pilot">Request a pilot</a>
-            <a class="button button-quiet" href="#how">How it works</a>
-          </div>
-        </div>
-        <figure class="hero-art">
-          <img src="/src/assets/herald.jpg" width="1200" height="508" alt="Engraving of a Greek herald with a winged staff, blowing a trumpet over a scroll.">
-        </figure>
+    <section class="story" id="how" aria-labelledby="hero-title">
+      <div class="backdrop" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <h1 id="hero-title">Announcements only you can sign.</h1>
+        <p class="lede">Keryx replaces email for what your company tells its customers. Every message is signed and checked on their phone.</p>
+        <p class="actions">
+          <a class="pill pill-accent" href="#pilot">Request a pilot</a>
+          <a class="pill pill-glass" href="#step-scan">See how it works</a>
+        </p>
       </div>
-    </section>
 
-    <section class="section" aria-labelledby="problem-title">
-      <div class="wrap">
-        <h2 id="problem-title">Email puts your customers at risk</h2>
-        <p class="section-lead">Phishers do not need to break into your systems. They only need to look like you, and email makes that easy. In finance and crypto, one convincing email can empty a customer's wallet.</p>
-        <div class="grid grid-3">
-          <article class="card">
-            <h3>Anyone can send email in your name</h3>
-            <p>Spoofed senders, look-alike domains and compromised partner mailboxes all reach your customers. SPF, DKIM and DMARC help, but customers never see them. Telling a real email from a fake is left to them.</p>
-          </article>
-          <article class="card">
-            <h3>Every customer list is a phishing list</h3>
-            <p>To send email you have to store addresses, and usually names and order history too. When that database leaks, it becomes the target list for the next phishing campaign.</p>
-          </article>
-          <article class="card">
-            <h3>Your email provider holds a copy</h3>
-            <p>Most companies outsource sending. The provider needs your addresses and segments, so your customer data also sits on systems you do not control. Breaches at email providers are a recurring source of leaked lists.</p>
-          </article>
+      <div class="stage">
+        <div class="rail">
+          <figure class="phone" aria-label="The Keryx app on a phone, following Scuffwell, a demo shoe brand">
+            <div class="phone-screen">
+              <div class="phone-status" aria-hidden="true">
+                <span>9:41</span>
+                <svg viewBox="0 0 66 12" aria-hidden="true"><path d="M1 9h3v3H1zM6 6.5h3V12H6zM11 4h3v8h-3zM16 1h3v11h-3z"/><path d="M31 3.2a9.5 9.5 0 0 1 12.6 0l-1.5 1.6a7.3 7.3 0 0 0-9.6 0zM33.4 5.8a6 6 0 0 1 7.8 0l-1.6 1.6a3.8 3.8 0 0 0-4.6 0zM37.3 11.6l-2.2-2.3a3.1 3.1 0 0 1 4.4 0z"/><rect x="48.5" y="1.5" width="14" height="9" rx="2.6" fill="none" stroke="currentColor" opacity=".45"/><rect x="50" y="3" width="11" height="6" rx="1.4"/><path d="M64 4.5v3a1.6 1.6 0 0 0 0-3z" opacity=".45"/></svg>
+              </div>
+              <picture class="shot is-active" data-shot="scan">
+                <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-scan-dark.webp">
+                <img src="/src/assets/phone-scan-light.webp" width="600" height="1226" fetchpriority="high" alt="The Keryx app's Scan QR code screen. The camera shows a printed Scuffwell card with a QR code and the address shoe.roguedave.codes/join.">
+              </picture>
+              <picture class="shot" data-shot="confirm">
+                <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-confirm-dark.webp">
+                <img src="/src/assets/phone-confirm-light.webp" width="600" height="1226" loading="lazy" alt="The Keryx app's Confirm this website screen, showing https://shoe.roguedave.codes with Continue and Cancel.">
+              </picture>
+              <picture class="shot" data-shot="feed">
+                <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-feed-dark.webp">
+                <img src="/src/assets/phone-feed-light.webp" width="600" height="1226" loading="lazy" alt="Scuffwell's feed in the Keryx app. The newest post is Autumn Field is here: the Rambler in Moss and Rust.">
+              </picture>
+              <picture class="shot" data-shot="spoof">
+                <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-spoof-dark.webp">
+                <img src="/src/assets/phone-spoof-light.webp" width="600" height="1226" loading="lazy" alt="Illustration: a greyed-out fake post, Scuffwell Cloud Insoles: 70% off, from sh0e.roguedave.codes, labelled Not signed, never displayed.">
+              </picture>
+            </div>
+            <figcaption class="note note-signed" data-note="feed">
+              <svg class="note-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5 12.2 3l2.7-.2.9 2.5 2.3 1.4-.6 2.6.9 2.6-2.2 1.5-.8 2.6-2.7-.1L10 18.5 7.8 17l-2.7.2-.9-2.5-2.3-1.4.6-2.6-.9-2.6 2.2-1.5.8-2.6 2.7.1z"/><path class="note-tick" d="m6.6 10.2 2.3 2.3 4.6-4.9"/></svg>
+              <span><strong>Signed by shoe.roguedave.codes</strong><br>Checked on this phone</span>
+            </figcaption>
+          </figure>
         </div>
-      </div>
-    </section>
 
-    <section class="section section-alt" id="how" aria-labelledby="how-title">
-      <div class="wrap">
-        <h2 id="how-title">How it works</h2>
         <ol class="steps">
-          <li class="step">
-            <h3>Your team publishes</h3>
-            <p>An author writes an announcement in the web console and signs it with their passkey. The service publishes it as signed static files.</p>
+          <li class="step" id="step-scan" data-step="scan">
+            <div class="step-copy">
+              <h2>Scan your code.</h2>
+              <p>Customers scan the QR code on your receipt, newsletter or website, without giving you an email address.</p>
+            </div>
+            <picture class="step-phone">
+              <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-scan-dark.webp">
+              <img src="/src/assets/phone-scan-light.webp" width="600" height="1226" loading="lazy" alt="The Keryx app scanning Scuffwell's QR code.">
+            </picture>
           </li>
-          <li class="step">
-            <h3>Customers scan once</h3>
-            <p>A customer scans your QR code, confirms your domain in the Keryx app, and picks the channels they want, such as offers or security alerts.</p>
+          <li class="step" data-step="confirm">
+            <div class="step-copy">
+              <h2>Confirm your domain, once.</h2>
+              <p>The app shows <span class="mono">shoe.roguedave.codes</span> and asks for one check. It is the only one they make.</p>
+            </div>
+            <picture class="step-phone">
+              <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-confirm-dark.webp">
+              <img src="/src/assets/phone-confirm-light.webp" width="600" height="1226" loading="lazy" alt="The Keryx app asking to confirm https://shoe.roguedave.codes.">
+            </picture>
           </li>
-          <li class="step">
-            <h3>The app checks every message</h3>
-            <p>The app verifies each announcement against keys your company authorized. If the check fails, the message is not shown. There is no warning to click through and nothing for the customer to judge.</p>
+          <li class="step" data-step="feed">
+            <div class="step-copy">
+              <h2>Every message is signed.</h2>
+              <p>Your announcement arrives carrying your signature, and the phone checks it before showing a word.</p>
+            </div>
+            <picture class="step-phone">
+              <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-feed-dark.webp">
+              <img src="/src/assets/phone-feed-light.webp" width="600" height="1226" loading="lazy" alt="A signed Scuffwell post in the Keryx app.">
+            </picture>
+          </li>
+          <li class="step" data-step="spoof">
+            <div class="step-copy">
+              <h2>Fakes never show.</h2>
+              <p>A message from <span class="mono">sh0e.roguedave.codes</span>, or with a broken signature, is dropped. There is no warning to click through.</p>
+            </div>
+            <picture class="step-phone">
+              <source media="(prefers-color-scheme: dark)" srcset="/src/assets/phone-spoof-dark.webp">
+              <img src="/src/assets/phone-spoof-light.webp" width="600" height="1226" loading="lazy" alt="Illustration: a greyed-out fake post labelled Not signed, never displayed.">
+            </picture>
           </li>
         </ol>
-        <p class="note">Announcements are one way. Customers cannot reply, and the app removes forms and scripts from every message, so a message cannot collect a password. Unsubscribing happens on the customer's phone, and you are never told.</p>
       </div>
+      <p class="story-source">Screens from the Keryx app following Scuffwell, a demo shoe brand. The greyed-out fake is an illustration: the app never displays it.</p>
     </section>
 
-    <section class="section" aria-labelledby="todo-title">
-      <div class="wrap">
-        <h2 id="todo-title">What your company does</h2>
-        <p class="section-lead">We run the publishing infrastructure. You keep control of who may publish in your name.</p>
-        <div class="grid grid-3">
-          <article class="card">
-            <p class="card-step">1</p>
-            <h3>The owner gets a Trezor</h3>
-            <p>One person holds your company's master key on a Trezor hardware wallet. The device confirms every change to who may publish. The Trezor recovery seed is the backup. If both the device and the seed are lost, you start over with a new identity and every subscriber has to scan again.</p>
-          </article>
-          <article class="card">
-            <p class="card-step">2</p>
-            <h3>Your web admin uploads the join kit</h3>
-            <p>You download a zip with two small files for <code>/.well-known/keryx/</code> and a <code>/join</code> page. Uploading them makes your domain the anchor customers confirm. The console tells you when the setup is live.</p>
-          </article>
-          <article class="card">
-            <p class="card-step">3</p>
-            <h3>You share the QR code</h3>
-            <p>Put the join link or QR code in your newsletter, on receipts and packaging, or on your website. The console generates the QR code and a snippet for your newsletter.</p>
-          </article>
+    <section class="section facts" aria-label="What Keryx removes">
+      <dl class="facts-row">
+        <div>
+          <dt>No email addresses</dt>
+          <dd>Customers join by scanning. You never learn who they are.</dd>
         </div>
-        <p class="note">Authors join with an invite link and a passkey. Nobody on your team needs a command line or a server. For your customers there is a plain explanation at <a href="/subscribers">/subscribers</a> that you can link from your newsletter.</p>
-      </div>
+        <div>
+          <dt>No customer list</dt>
+          <dd>Nothing to leak, and nothing to hand to an email provider.</dd>
+        </div>
+        <div>
+          <dt>Nothing to answer</dt>
+          <dd>No replies and no forms, so the channel can't collect a password.</dd>
+        </div>
+      </dl>
     </section>
 
-    <section class="section section-alt" id="security" aria-labelledby="security-title">
-      <div class="wrap">
-        <h2 id="security-title">The security model, in plain words</h2>
-        <p class="section-lead">Keys are split by job, so no single party can publish in your name.</p>
+    <section class="section" id="lookalikes" aria-labelledby="lookalikes-title">
+      <div class="head">
+        <h2 id="lookalikes-title">A look-alike can copy your logo. Not your key.</h2>
+        <p>Keryx checks signatures, not appearances.</p>
+      </div>
+      <ul class="domains">
+        <li class="domain domain-real">
+          <p class="domain-name mono">shoe.roguedave.codes</p>
+          <p class="domain-what">Scuffwell's own domain</p>
+          <p class="domain-verdict"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.3 3 3 6-6.3"/></svg>Signed, shown</p>
+        </li>
+        <li class="domain domain-fake">
+          <p class="domain-name mono">sh<mark>0</mark>e.roguedave.codes</p>
+          <p class="domain-what">A zero for the letter o</p>
+          <p class="domain-verdict"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6.5 6.5 7 7m0-7-7 7"/></svg>No signature, never shown</p>
+        </li>
+        <li class="domain domain-fake">
+          <p class="domain-name mono">shoe<mark>-</mark>roguedave<mark>.support</mark></p>
+          <p class="domain-what">A new ending</p>
+          <p class="domain-verdict"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6.5 6.5 7 7m0-7-7 7"/></svg>No signature, never shown</p>
+        </li>
+      </ul>
+    </section>
 
-        <div class="table-wrap">
-          <table class="keys">
-            <caption>Who holds which key</caption>
-            <thead>
-              <tr><th scope="col">Key</th><th scope="col">Where it lives</th><th scope="col">What it controls</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Master key</th>
-                <td data-label="Where it lives">Nowhere. Your Trezor derives it for each change and asks you to confirm on the device.</td>
-                <td data-label="What it controls">Who may publish, your company name and logo.</td>
-              </tr>
-              <tr>
-                <th scope="row">Author keys</th>
-                <td data-label="Where it lives">One per author. The service stores it encrypted with the author's passkey. It is decrypted only in the author's browser, for one signature.</td>
-                <td data-label="What it controls">The content of each announcement.</td>
-              </tr>
-              <tr>
-                <th scope="row">Channel and publishing keys</th>
-                <td data-label="Where it lives">On the service, encrypted at rest.</td>
-                <td data-label="What it controls">Which signed announcements are published, and keeping the published data fresh.</td>
-              </tr>
-            </tbody>
-          </table>
+    <section class="section" id="try" aria-labelledby="try-title">
+      <div class="head">
+        <h2 id="try-title">Change one character. The signature breaks.</h2>
+        <p>A Scuffwell post signed with a demo author key. Your browser checks it the way the app does.</p>
+      </div>
+      <div class="check" data-check-state="checking">
+        <div class="check-post">
+          <img src="/src/assets/post-puddle.webp" width="800" height="420" loading="lazy" alt="Scuffwell's Puddle season sale artwork: 20% off every pair of boots, code PUDDLE20.">
+          <label class="check-label" for="check-title">Title <span>Try changing 20% to 70%</span></label>
+          <textarea id="check-title" rows="2" spellcheck="false" aria-describedby="check-verdict">Puddle season: 20% off every pair of boots</textarea>
+          <p class="check-excerpt">Until Monday 16 November, every pair of Puddle boots is 20% off with the code PUDDLE20.</p>
+          <button class="link-button check-reset" type="button" hidden>Restore the original</button>
         </div>
-
-        <div class="grid grid-2">
-          <article class="card">
-            <h3>What the service can do</h3>
-            <p>It can delay, hold back or unpublish announcements, and it can go offline. It cannot write an announcement your customers' apps accept, because that takes an author key. It cannot add authors, because that takes your Trezor.</p>
-          </article>
-          <article class="card card-caveat">
-            <h3>The caveat you should know</h3>
-            <p>The console runs in your browser, and the service sends it its JavaScript. If an attacker took over the service, they could send modified code that captures an author key or your master key the next time someone signs. We accept this risk for the pilot. Each console release publishes the hash of its code, so a changed version can be detected.</p>
-          </article>
-          <article class="card">
-            <h3>Your domain is the anchor</h3>
-            <p>Customers trust your domain once, when they pair. If an attacker controls your website at that moment, or a customer confirms a look-alike address, that customer pairs with the attacker. Print QR codes only on surfaces you control.</p>
-          </article>
-          <article class="card">
-            <h3>No customer data</h3>
-            <p>There are no subscriber accounts, and the service does not know who your subscribers are. Like any web server, the hosts see connection data such as IP addresses when apps download updates. The subscriber app is open source and hosted separately from this service.</p>
-          </article>
+        <div class="check-verdict" id="check-verdict" role="status">
+          <p class="verdict-word">Checking</p>
+          <p class="verdict-line">Verifying the signature in your browser.</p>
+          <p class="verdict-key"><span>Author key</span> <span class="mono">c68e4453…90f285</span></p>
         </div>
       </div>
     </section>
 
-    <section class="section" id="pilot" aria-labelledby="pilot-title">
-      <div class="wrap pilot">
-        <div class="pilot-intro">
+    <section class="section" id="team" aria-labelledby="team-title">
+      <div class="head">
+        <h2 id="team-title">Your marketing team writes. A passkey signs.</h2>
+        <p>Authors write in the browser, see what subscribers will see, and publish with one passkey prompt.</p>
+      </div>
+      <figure class="product">
+        <div class="product-stage">
+        <div class="product-backdrop" aria-hidden="true"></div>
+        <div class="window">
+          <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span>console.keryx-kit.roguedave.codes</span></div>
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="/src/assets/editor-dark.webp">
+            <img src="/src/assets/editor-light.webp" width="1800" height="1300" loading="lazy" alt="The keryx-kit console's Write a post screen. Marta is writing Scuffwell's post Our first pop-up opens in Karlín, Prague, in the News channel, with a live subscriber preview on the right.">
+          </picture>
+        </div>
+        <picture class="product-fragment">
+          <source media="(prefers-color-scheme: dark)" srcset="/src/assets/editor-sign-dark.webp">
+          <img src="/src/assets/editor-sign-light.webp" width="928" height="298" loading="lazy" alt="The editor's Sign and publish button. One passkey prompt unlocks your key, signs this post and any pending signatures, and erases the key again.">
+        </picture>
+        </div>
+        <figcaption>The keryx-kit console, writing a post for Scuffwell.</figcaption>
+      </figure>
+      <ul class="features">
+        <li><strong>Markdown and images</strong> Resized in the browser and signed into the post.</li>
+        <li><strong>The subscriber's view</strong> The preview uses the app's own sanitizer.</li>
+        <li><strong>No command line</strong> Invite authors by link. They sign in with a passkey.</li>
+      </ul>
+    </section>
+
+    <section class="band" id="security" aria-labelledby="security-title">
+      <div class="band-inner">
+        <div class="head">
+          <h2 id="security-title">We can hold back a message. We can't write one.</h2>
+          <p>Every key has one job. The keys that write messages are only ever unlocked by the people who hold them.</p>
+        </div>
+        <ul class="keys">
+          <li>
+            <img src="/src/assets/obj-key.webp" width="720" height="900" loading="lazy" alt="">
+            <h3>Who may publish</h3>
+            <p>The master key comes from the owner's Trezor, confirmed on the device. It is never stored.</p>
+          </li>
+          <li>
+            <img src="/src/assets/obj-passkey.webp" width="720" height="900" loading="lazy" alt="">
+            <h3>What a message says</h3>
+            <p>Each author's key is stored locked to their passkey and unlocked only in their browser.</p>
+          </li>
+          <li>
+            <img src="/src/assets/obj-seal.webp" width="720" height="900" loading="lazy" alt="">
+            <h3>What customers see</h3>
+            <p>Every phone checks each signature against the keys your domain publishes. No match, no message.</p>
+          </li>
+        </ul>
+        <div class="fine-print">
+          <p><strong>What our server holds.</strong> Encrypted channel and publishing keys. They let us list, delay or withdraw a message. They can't sign one.</p>
+          <p><strong>The caveat.</strong> Our service sends the console its JavaScript. If our server were compromised, modified code could capture a key the next time someone signs. We accept this for the pilot.</p>
+          <p class="sources">Read the <a href="https://github.com/v1b3coder/keryx/blob/main/spec/core.md">protocol spec</a> and the <a href="https://github.com/v1b3coder/keryx/blob/main/design/threats.md">threat model</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="pilot" id="pilot" aria-labelledby="pilot-title">
+      <div class="pilot-inner">
+        <div class="pilot-copy">
           <h2 id="pilot-title">Request a pilot</h2>
-          <p>We are taking on a small number of pilot companies. Tell us who you are and what you want to announce, and we will get back to you.</p>
-          <p class="muted">We use these details only to reply to your request.</p>
+          <p>We run it on our hosted service with your domain, your owner's Trezor and your team's passkeys.</p>
         </div>
-
-        <form class="card form" id="pilot-form" novalidate>
-          <div class="field">
-            <label for="pilot-company">Company</label>
-            <input id="pilot-company" name="company" type="text" autocomplete="organization" required maxlength="200">
-            <p class="field-error" id="pilot-company-error" hidden></p>
+        <div class="panel">
+          <form class="form" id="pilot-form" novalidate>
+            <div class="field">
+              <label for="pilot-company">Company</label>
+              <input id="pilot-company" name="company" type="text" autocomplete="organization" required maxlength="200">
+              <p class="field-error" id="pilot-company-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="pilot-name">Your name</label>
+              <input id="pilot-name" name="name" type="text" autocomplete="name" required maxlength="200">
+              <p class="field-error" id="pilot-name-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="pilot-email">Work email</label>
+              <input id="pilot-email" name="email" type="email" autocomplete="email" required maxlength="254">
+              <p class="field-error" id="pilot-email-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="pilot-message">What would you announce? <span class="optional">Optional</span></label>
+              <textarea id="pilot-message" name="message" rows="3" maxlength="4000"></textarea>
+              <p class="field-error" id="pilot-message-error" hidden></p>
+            </div>
+            <div class="form-actions">
+              <button class="pill pill-accent" type="submit">Send request</button>
+              <p class="form-status" id="pilot-status" role="status"></p>
+            </div>
+            <p class="form-note">We use these details only to reply to you.</p>
+          </form>
+          <div class="form-done" id="pilot-done" tabindex="-1" hidden>
+            <h3>Thanks, we have your request.</h3>
+            <p>We will reply to the email address you gave us.</p>
           </div>
-          <div class="field">
-            <label for="pilot-name">Your name</label>
-            <input id="pilot-name" name="name" type="text" autocomplete="name" required maxlength="200">
-            <p class="field-error" id="pilot-name-error" hidden></p>
-          </div>
-          <div class="field">
-            <label for="pilot-email">Work email</label>
-            <input id="pilot-email" name="email" type="email" autocomplete="email" required maxlength="254">
-            <p class="field-error" id="pilot-email-error" hidden></p>
-          </div>
-          <div class="field">
-            <label for="pilot-message">What would you announce? <span class="optional">(optional)</span></label>
-            <textarea id="pilot-message" name="message" rows="4" maxlength="4000"></textarea>
-            <p class="field-error" id="pilot-message-error" hidden></p>
-          </div>
-          <div class="form-actions">
-            <button class="button" type="submit">Send request</button>
-            <p class="form-status" id="pilot-status" role="status"></p>
-          </div>
-        </form>
-
-        <div class="card form-done" id="pilot-done" tabindex="-1" hidden>
-          <h3>Thanks, we have your request</h3>
-          <p>We will reply to the email address you gave us.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap site-footer-inner">
-      <p>Keryx is an open protocol. The subscriber app and the protocol are open source under GPL-3.0 on <a href="https://github.com/v1b3coder/keryx">GitHub</a>.</p>
-      <p><a href="/subscribers">Keryx for subscribers</a></p>
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="wordmark">Keryx</p>
+      <ul>
+        <li><a href="/subscribers">Keryx for subscribers</a></li>
+        <li><a href="https://github.com/v1b3coder/keryx">Protocol and app on GitHub</a></li>
+        <li><a href="https://github.com/v1b3coder/keryx/blob/main/design/threats.md">Threat model</a></li>
+      </ul>
+      <p class="footer-note">The Keryx protocol and subscriber app are open source under GPL-3.0. Scuffwell is a demo brand.</p>
     </div>
   </footer>
 </body>
