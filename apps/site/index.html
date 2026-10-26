@@ -5,177 +5,296 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>Keryx: company announcements without email</title>
-  <meta name="description" content="Keryx sends signed announcements from your company to your customers' phones. No email addresses, no customer list, no phishing in your name.">
+  <meta name="description" content="Keryx replaces email with signed announcements on your customers' phones. No email addresses, no customer list, no phishing in your name.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/src/styles.css">
   <script type="module" src="/src/landing.ts"></script>
 </head>
 <body>
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="seal" viewBox="0 0 64 64">
+      <path class="seal-wax" d="M61.4 32L63.7 39.2L58.3 44.7L56.1 51.2L50.6 55.3L46 61.1L38.4 60L32 63L25.3 61.4L18.1 60.8L14.2 54.3L7.4 51.6L4.7 45.1L1.3 39L3.5 32L.9 24.9L4.8 18.9L7.7 12.6L14.1 9.5L18 2.9L25.4 2.9L32 1.2L38.5 3.6L46.1 2.7L50.4 9L56 12.9L58.7 19.2L63.6 24.8Z"/>
+      <circle class="seal-ring" cx="32" cy="32" r="21"/>
+      <path class="seal-check" d="M22 33l7 7 14-15"/>
+    </symbol>
+    <symbol id="cross" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="key" viewBox="0 0 48 48"><circle cx="15" cy="24" r="9"/><circle cx="15" cy="24" r="3"/><path d="M24 24h20M37 24v7M43 24v5"/></symbol>
+  </svg>
+
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap site-header-inner">
-      <a class="brand" href="/" aria-label="Keryx home">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8"/><rect x="8" y="8" width="16" height="16" rx="5"/></svg>
-        <span>Keryx</span>
-      </a>
-      <nav aria-label="Main">
-        <ul class="nav-list">
-          <li class="nav-optional"><a href="#how">How it works</a></li>
-          <li class="nav-optional"><a href="#security">Security</a></li>
-          <li class="nav-optional"><a href="/subscribers">For subscribers</a></li>
-          <li><a class="button button-small" href="#pilot">Request a pilot</a></li>
-        </ul>
-      </nav>
-    </div>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Keryx home">
+      <svg class="seal" aria-hidden="true"><use href="#seal"/></svg>
+      <span>Keryx</span>
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav-list">
+        <li class="nav-optional"><a href="#how">How it works</a></li>
+        <li class="nav-optional"><a href="#security">Security</a></li>
+        <li class="nav-optional"><a href="/subscribers">For subscribers</a></li>
+        <li><button class="theme-toggle" type="button" aria-label="Switch between light and dark"><span class="theme-icon" aria-hidden="true"></span></button></li>
+        <li><a class="btn btn-seal btn-sm" href="#pilot">Request a pilot</a></li>
+      </ul>
+    </nav>
   </header>
 
+  <nav class="slide-nav" aria-label="Sections">
+    <ol>
+      <li><a href="#top"><span>Intro</span></a></li>
+      <li><a href="#problem"><span>The problem</span></a></li>
+      <li><a href="#compare"><span>Email vs. Keryx</span></a></li>
+      <li><a href="#how"><span>How it works</span></a></li>
+      <li><a href="#nothing"><span>Nothing to leak</span></a></li>
+      <li><a href="#setup"><span>Your part</span></a></li>
+      <li><a href="#security"><span>Security</span></a></li>
+      <li><a href="#pilot"><span>Pilot</span></a></li>
+    </ol>
+  </nav>
+
   <main id="main">
-    <section class="hero">
-      <div class="wrap hero-inner">
-        <div class="hero-text">
-          <p class="eyebrow">Signed announcements for companies</p>
-          <h1>Reach your customers without email</h1>
-          <p class="lead">Keryx delivers signed announcements from your company to your customers' phones. Customers subscribe by scanning a QR code. They give you no email address, no phone number and no account, so there is no customer list to leak. A message without your company's signature never reaches them.</p>
-          <div class="actions">
-            <a class="button" href="#pilot">Request a pilot</a>
-            <a class="button button-quiet" href="#how">How it works</a>
+    <section class="slide hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-copy reveal">
+        <p class="kicker">Keryx <span aria-hidden="true">·</span> signed announcements</p>
+        <h1 id="hero-title">Anyone can email in your name. <em>Only you can sign.</em></h1>
+        <p class="lede">Replace email with signed messages on your customers' phones. A message without your signature never shows up.</p>
+        <div class="actions">
+          <a class="btn btn-seal" href="#pilot">Request a pilot</a>
+          <a class="btn btn-ghost" href="#how">See how it works</a>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <div class="hero-disk" aria-hidden="true"></div>
+        <div class="herald" role="img" aria-label="Engraving of a Greek herald blowing a trumpet, a winged staff in his hand and scrolls at his feet."></div>
+        <div class="notice" aria-hidden="true">
+          <div class="notice-head">
+            <span class="notice-logo">Y</span>
+            <span class="notice-from">Your Company</span>
+            <span class="notice-time">now</span>
           </div>
+          <p class="notice-title">Security alert</p>
+          <p class="notice-body">We will never ask for your password or recovery seed.</p>
+          <p class="signed-badge"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>Signed by yourcompany.com</p>
         </div>
-        <figure class="hero-art">
-          <img src="/src/assets/herald.jpg" width="1200" height="508" alt="Engraving of a Greek herald with a winged staff, blowing a trumpet over a scroll.">
-        </figure>
-      </div>
+      </figure>
     </section>
 
-    <section class="section" aria-labelledby="problem-title">
-      <div class="wrap">
-        <h2 id="problem-title">Email puts your customers at risk</h2>
-        <p class="section-lead">Phishers do not need to break into your systems. They only need to look like you, and email makes that easy. In finance and crypto, one convincing email can empty a customer's wallet.</p>
-        <div class="grid grid-3">
-          <article class="card">
-            <h3>Anyone can send email in your name</h3>
-            <p>Spoofed senders, look-alike domains and compromised partner mailboxes all reach your customers. SPF, DKIM and DMARC help, but customers never see them. Telling a real email from a fake is left to them.</p>
-          </article>
-          <article class="card">
-            <h3>Every customer list is a phishing list</h3>
-            <p>To send email you have to store addresses, and usually names and order history too. When that database leaks, it becomes the target list for the next phishing campaign.</p>
-          </article>
-          <article class="card">
-            <h3>Your email provider holds a copy</h3>
-            <p>Most companies outsource sending. The provider needs your addresses and segments, so your customer data also sits on systems you do not control. Breaches at email providers are a recurring source of leaked lists.</p>
-          </article>
-        </div>
+    <section class="slide problem" id="problem" aria-labelledby="problem-title">
+      <div class="slide-head reveal">
+        <p class="kicker"><span class="num">01</span> The problem</p>
+        <h2 id="problem-title">One convincing email can empty a customer's wallet.</h2>
+        <p class="caption">Phishers never break into your systems. They only need to look like you.</p>
       </div>
-    </section>
-
-    <section class="section section-alt" id="how" aria-labelledby="how-title">
-      <div class="wrap">
-        <h2 id="how-title">How it works</h2>
-        <ol class="steps">
-          <li class="step">
-            <h3>Your team publishes</h3>
-            <p>An author writes an announcement in the web console and signs it with their passkey. The service publishes it as signed static files.</p>
-          </li>
-          <li class="step">
-            <h3>Customers scan once</h3>
-            <p>A customer scans your QR code, confirms your domain in the Keryx app, and picks the channels they want, such as offers or security alerts.</p>
-          </li>
-          <li class="step">
-            <h3>The app checks every message</h3>
-            <p>The app verifies each announcement against keys your company authorized. If the check fails, the message is not shown. There is no warning to click through and nothing for the customer to judge.</p>
-          </li>
+      <div class="phish reveal">
+        <div class="phish-mail" aria-hidden="true">
+          <div class="phish-row"><span class="phish-label">From</span><span>Your Company &lt;security@yourc<mark>0</mark>mpany.com&gt;</span><i class="pin">1</i></div>
+          <div class="phish-row"><span class="phish-label">Subject</span><strong>Urgent: verify your wallet within 24 hours</strong><i class="pin">2</i></div>
+          <div class="phish-body">
+            <span class="bar" style="--w: 92%"></span>
+            <span class="bar" style="--w: 78%"></span>
+            <span class="bar" style="--w: 64%"></span>
+          </div>
+          <div class="phish-cta"><span>Enter your recovery seed</span><i class="pin">3</i></div>
+          <div class="stamp stamp-forged">Forged</div>
+        </div>
+        <ol class="phish-legend">
+          <li><i class="pin">1</i> A look-alike sender</li>
+          <li><i class="pin">2</i> Fake urgency</li>
+          <li><i class="pin">3</i> It asks for the seed</li>
         </ol>
-        <p class="note">Announcements are one way. Customers cannot reply, and the app removes forms and scripts from every message, so a message cannot collect a password. Unsubscribing happens on the customer's phone, and you are never told.</p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="todo-title">
-      <div class="wrap">
-        <h2 id="todo-title">What your company does</h2>
-        <p class="section-lead">We run the publishing infrastructure. You keep control of who may publish in your name.</p>
-        <div class="grid grid-3">
-          <article class="card">
-            <p class="card-step">1</p>
-            <h3>The owner gets a Trezor</h3>
-            <p>One person holds your company's master key on a Trezor hardware wallet. The device confirms every change to who may publish. The Trezor recovery seed is the backup. If both the device and the seed are lost, you start over with a new identity and every subscriber has to scan again.</p>
-          </article>
-          <article class="card">
-            <p class="card-step">2</p>
-            <h3>Your web admin uploads the join kit</h3>
-            <p>You download a zip with two small files for <code>/.well-known/keryx/</code> and a <code>/join</code> page. Uploading them makes your domain the anchor customers confirm. The console tells you when the setup is live.</p>
-          </article>
-          <article class="card">
-            <p class="card-step">3</p>
-            <h3>You share the QR code</h3>
-            <p>Put the join link or QR code in your newsletter, on receipts and packaging, or on your website. The console generates the QR code and a snippet for your newsletter.</p>
-          </article>
-        </div>
-        <p class="note">Authors join with an invite link and a passkey. Nobody on your team needs a command line or a server. For your customers there is a plain explanation at <a href="/subscribers">/subscribers</a> that you can link from your newsletter.</p>
+    <section class="slide compare" id="compare" aria-labelledby="compare-title">
+      <div class="slide-head reveal">
+        <p class="kicker"><span class="num">02</span> The switch</p>
+        <h2 id="compare-title">Email vs. Keryx</h2>
+      </div>
+      <table class="versus reveal">
+        <caption class="visually-hidden">Email compared with Keryx</caption>
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="col" class="col-email">Email</th>
+            <th scope="col" class="col-keryx">Keryx</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Who can send as you</th>
+            <td class="col-email" data-label="Email"><svg class="mark-x" aria-hidden="true"><use href="#cross"/></svg>Anyone who looks like you</td>
+            <td class="col-keryx" data-label="Keryx"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>Only keys you authorize</td>
+          </tr>
+          <tr>
+            <th scope="row">Customer data you keep</th>
+            <td class="col-email" data-label="Email"><svg class="mark-x" aria-hidden="true"><use href="#cross"/></svg>Every address, often names and orders</td>
+            <td class="col-keryx" data-label="Keryx"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>None. There is no list</td>
+          </tr>
+          <tr>
+            <th scope="row">Who else holds it</th>
+            <td class="col-email" data-label="Email"><svg class="mark-x" aria-hidden="true"><use href="#cross"/></svg>Your email provider</td>
+            <td class="col-keryx" data-label="Keryx"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>Nobody</td>
+          </tr>
+          <tr>
+            <th scope="row">What customers must check</th>
+            <td class="col-email" data-label="Email"><svg class="mark-x" aria-hidden="true"><use href="#cross"/></svg>Every sender, every time</td>
+            <td class="col-keryx" data-label="Keryx"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg>Your domain, once</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="slide how" id="how" aria-labelledby="how-title">
+      <div class="slide-head reveal">
+        <p class="kicker"><span class="num">03</span> How it works</p>
+        <h2 id="how-title">Signed. Scanned. <em>Shown.</em></h2>
+      </div>
+      <ol class="flow">
+        <li class="flow-step reveal">
+          <div class="flow-art art-sign" aria-hidden="true">
+            <div class="doc">
+              <span class="bar" style="--w: 70%"></span>
+              <span class="bar" style="--w: 90%"></span>
+              <span class="bar" style="--w: 55%"></span>
+              <svg class="seal stamp-seal" aria-hidden="true"><use href="#seal"/></svg>
+            </div>
+            <span class="passkey">Passkey</span>
+          </div>
+          <p class="flow-num">1</p>
+          <h3>Your team signs</h3>
+          <p class="sub">Write in the browser, sign with a passkey.</p>
+        </li>
+        <li class="flow-step reveal">
+          <div class="flow-art art-scan" aria-hidden="true">
+            <div class="qr"><span class="scanline"></span></div>
+            <div class="confirm">
+              <span class="confirm-q">Subscribe to</span>
+              <span class="confirm-domain">yourcompany.com</span>
+              <span class="confirm-btn">Confirm</span>
+            </div>
+          </div>
+          <p class="flow-num">2</p>
+          <h3>Customers scan once</h3>
+          <p class="sub">Scan your QR, confirm your domain, pick channels.</p>
+        </li>
+        <li class="flow-step reveal">
+          <div class="flow-art art-show" aria-hidden="true">
+            <div class="feed">
+              <div class="msg msg-ok"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg><span class="bar" style="--w: 80%"></span></div>
+              <div class="msg msg-bad"><svg class="mark-x" aria-hidden="true"><use href="#cross"/></svg><span class="bar" style="--w: 66%"></span><span class="msg-tag">Rejected</span></div>
+              <div class="msg msg-ok"><svg class="seal" aria-hidden="true"><use href="#seal"/></svg><span class="bar" style="--w: 58%"></span></div>
+            </div>
+          </div>
+          <p class="flow-num">3</p>
+          <h3>Only signed messages show up</h3>
+          <p class="sub">No valid signature, no message. No warning to click through.</p>
+        </li>
+      </ol>
+      <p class="footnote reveal">One way only: no replies, no forms, no scripts. Nothing that can collect a password.</p>
+    </section>
+
+    <section class="slide zero" id="nothing" aria-labelledby="zero-title">
+      <div class="slide-head reveal">
+        <p class="kicker"><span class="num">04</span> Nothing to leak</p>
+        <h2 id="zero-title">What you store about your subscribers:</h2>
+      </div>
+      <ul class="zeros">
+        <li class="reveal"><span class="zero-num">0</span><span class="zero-label">email addresses</span></li>
+        <li class="reveal"><span class="zero-num">0</span><span class="zero-label">phone numbers</span></li>
+        <li class="reveal"><span class="zero-num">0</span><span class="zero-label">accounts</span></li>
+      </ul>
+      <p class="footnote reveal">Subscribing happens on the phone. Like any website, the servers still see IP addresses when apps fetch updates.</p>
+    </section>
+
+    <section class="slide setup" id="setup" aria-labelledby="setup-title">
+      <div class="slide-head reveal">
+        <p class="kicker"><span class="num">05</span> Your part</p>
+        <h2 id="setup-title">A Trezor, a few files, <em>a QR code.</em></h2>
+      </div>
+      <ol class="tiles">
+        <li class="tile reveal">
+          <div class="tile-art" aria-hidden="true">
+            <div class="trezor">
+              <span class="trezor-screen"><span>Allow new author?</span></span>
+              <span class="trezor-btns"><i></i><i></i></span>
+            </div>
+          </div>
+          <h3>The owner holds the master key</h3>
+          <p class="sub">On a Trezor. It confirms every change to who may publish.</p>
+        </li>
+        <li class="tile reveal">
+          <div class="tile-art" aria-hidden="true">
+            <pre class="tree"><b>yourcompany.com</b>
+├─ .well-known/keryx/
+│  ├─ root.json
+│  └─ 1.root.json
+└─ join/index.html</pre>
+          </div>
+          <h3>Your web admin uploads the join kit</h3>
+          <p class="sub">Your domain becomes the anchor customers confirm.</p>
+        </li>
+        <li class="tile reveal">
+          <div class="tile-art" aria-hidden="true">
+            <div class="qr qr-lg"></div>
+          </div>
+          <h3>You share the QR code</h3>
+          <p class="sub">In the newsletter, on receipts, on your website.</p>
+        </li>
+      </ol>
+      <p class="footnote reveal">Authors publish from the browser with a passkey. No command line, no servers to run.</p>
+    </section>
+
+    <section class="slide security" id="security" aria-labelledby="security-title">
+      <div class="slide-head reveal">
+        <p class="kicker"><span class="num">06</span> Security</p>
+        <h2 id="security-title">Keys split by job.</h2>
+      </div>
+      <ul class="keys">
+        <li class="key-card reveal">
+          <svg class="key-icon" aria-hidden="true"><use href="#key"/></svg>
+          <h3>Master key</h3>
+          <dl>
+            <dt>Lives</dt><dd>On your owner's Trezor</dd>
+            <dt>Controls</dt><dd>Who may publish</dd>
+          </dl>
+        </li>
+        <li class="key-card key-card-accent reveal">
+          <svg class="key-icon" aria-hidden="true"><use href="#key"/></svg>
+          <h3>Author keys</h3>
+          <dl>
+            <dt>Lives</dt><dd>Locked by each author's passkey, opened only in their browser</dd>
+            <dt>Controls</dt><dd>What every message says</dd>
+          </dl>
+        </li>
+        <li class="key-card reveal">
+          <svg class="key-icon" aria-hidden="true"><use href="#key"/></svg>
+          <h3>Channel and publishing keys</h3>
+          <dl>
+            <dt>Lives</dt><dd>On our service, encrypted</dd>
+            <dt>Controls</dt><dd>Publishing and freshness</dd>
+          </dl>
+        </li>
+      </ul>
+      <div class="verdict reveal">
+        <p class="verdict-line"><span>We can hold back a message.</span> <em>We can't write one your customers accept.</em></p>
+        <aside class="caveat" aria-labelledby="caveat-title">
+          <h3 id="caveat-title">The honest caveat</h3>
+          <p>Our service sends the console its JavaScript. If we were breached, modified code could capture a key the next time someone signs. We accept this risk for the pilot, and every release publishes the hash of its code.</p>
+        </aside>
       </div>
     </section>
 
-    <section class="section section-alt" id="security" aria-labelledby="security-title">
-      <div class="wrap">
-        <h2 id="security-title">The security model, in plain words</h2>
-        <p class="section-lead">Keys are split by job, so no single party can publish in your name.</p>
-
-        <div class="table-wrap">
-          <table class="keys">
-            <caption>Who holds which key</caption>
-            <thead>
-              <tr><th scope="col">Key</th><th scope="col">Where it lives</th><th scope="col">What it controls</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">Master key</th>
-                <td data-label="Where it lives">Nowhere. Your Trezor derives it for each change and asks you to confirm on the device.</td>
-                <td data-label="What it controls">Who may publish, your company name and logo.</td>
-              </tr>
-              <tr>
-                <th scope="row">Author keys</th>
-                <td data-label="Where it lives">One per author. The service stores it encrypted with the author's passkey. It is decrypted only in the author's browser, for one signature.</td>
-                <td data-label="What it controls">The content of each announcement.</td>
-              </tr>
-              <tr>
-                <th scope="row">Channel and publishing keys</th>
-                <td data-label="Where it lives">On the service, encrypted at rest.</td>
-                <td data-label="What it controls">Which signed announcements are published, and keeping the published data fresh.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="grid grid-2">
-          <article class="card">
-            <h3>What the service can do</h3>
-            <p>It can delay, hold back or unpublish announcements, and it can go offline. It cannot write an announcement your customers' apps accept, because that takes an author key. It cannot add authors, because that takes your Trezor.</p>
-          </article>
-          <article class="card card-caveat">
-            <h3>The caveat you should know</h3>
-            <p>The console runs in your browser, and the service sends it its JavaScript. If an attacker took over the service, they could send modified code that captures an author key or your master key the next time someone signs. We accept this risk for the pilot. Each console release publishes the hash of its code, so a changed version can be detected.</p>
-          </article>
-          <article class="card">
-            <h3>Your domain is the anchor</h3>
-            <p>Customers trust your domain once, when they pair. If an attacker controls your website at that moment, or a customer confirms a look-alike address, that customer pairs with the attacker. Print QR codes only on surfaces you control.</p>
-          </article>
-          <article class="card">
-            <h3>No customer data</h3>
-            <p>There are no subscriber accounts, and the service does not know who your subscribers are. Like any web server, the hosts see connection data such as IP addresses when apps download updates. The subscriber app is open source and hosted separately from this service.</p>
-          </article>
-        </div>
+    <section class="slide pilot" id="pilot" aria-labelledby="pilot-title">
+      <div class="pilot-intro reveal">
+        <p class="kicker"><span class="num">07</span> Pilot</p>
+        <h2 id="pilot-title">Run a <em>pilot.</em></h2>
+        <p class="lede">We are taking on a small number of pilot companies. Tell us what you would announce.</p>
+        <p class="fine">We use these details only to reply to your request.</p>
+        <div class="herald herald-coda" aria-hidden="true"></div>
       </div>
-    </section>
 
-    <section class="section" id="pilot" aria-labelledby="pilot-title">
-      <div class="wrap pilot">
-        <div class="pilot-intro">
-          <h2 id="pilot-title">Request a pilot</h2>
-          <p>We are taking on a small number of pilot companies. Tell us who you are and what you want to announce, and we will get back to you.</p>
-          <p class="muted">We use these details only to reply to your request.</p>
-        </div>
-
-        <form class="card form" id="pilot-form" novalidate>
+      <div class="pilot-panel reveal">
+        <form class="form" id="pilot-form" novalidate>
           <div class="field">
             <label for="pilot-company">Company</label>
             <input id="pilot-company" name="company" type="text" autocomplete="organization" required maxlength="200">
@@ -193,16 +312,17 @@
           </div>
           <div class="field">
             <label for="pilot-message">What would you announce? <span class="optional">(optional)</span></label>
-            <textarea id="pilot-message" name="message" rows="4" maxlength="4000"></textarea>
+            <textarea id="pilot-message" name="message" rows="3" maxlength="4000"></textarea>
             <p class="field-error" id="pilot-message-error" hidden></p>
           </div>
           <div class="form-actions">
-            <button class="button" type="submit">Send request</button>
+            <button class="btn btn-seal" type="submit">Send request</button>
             <p class="form-status" id="pilot-status" role="status"></p>
           </div>
         </form>
 
-        <div class="card form-done" id="pilot-done" tabindex="-1" hidden>
+        <div class="form-done" id="pilot-done" tabindex="-1" hidden>
+          <svg class="seal" aria-hidden="true"><use href="#seal"/></svg>
           <h3>Thanks, we have your request</h3>
           <p>We will reply to the email address you gave us.</p>
         </div>
@@ -211,10 +331,8 @@
   </main>
 
   <footer class="site-footer">
-    <div class="wrap site-footer-inner">
-      <p>Keryx is an open protocol. The subscriber app and the protocol are open source under GPL-3.0 on <a href="https://github.com/v1b3coder/keryx">GitHub</a>.</p>
-      <p><a href="/subscribers">Keryx for subscribers</a></p>
-    </div>
+    <p>The Keryx protocol and subscriber app are open source under GPL-3.0 on <a href="https://github.com/v1b3coder/keryx">GitHub</a>.</p>
+    <p><a href="/subscribers">Keryx for subscribers</a></p>
   </footer>
 </body>
 </html>

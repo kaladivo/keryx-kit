@@ -7,6 +7,9 @@ import {
   submit,
   validate,
 } from './pilot-request.ts'
+import { setupSite } from './site.ts'
+
+setupSite()
 
 const FIELDS = Object.keys(MAX_LENGTH) as PilotField[]
 
